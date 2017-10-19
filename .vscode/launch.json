@@ -7,17 +7,10 @@
 
         {
             "type": "java",
-            "name": "Debug (Launch)",
+            "name": "Debug Cars",
             "request": "launch",
             "mainClass": "Cars",
             "args": ""
-        },
-        {
-            "type": "java",
-            "name": "Debug (Attach)",
-            "request": "attach",
-            "hostName": "localhost",
-            "port": 0
         }
     ]
 }
