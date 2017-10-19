@@ -1,10 +1,3 @@
-//Implementation of classical, Dijkstra Semaphore
-//Weakly Fair
-
-//Course 02220 Concurrent Programming
-
-//Hans Henrik Lovengreen   Sep 13, 2002
-
 public class Semaphore {
 
     private int s = 0;

@@ -1,9 +1,3 @@
-//Specification of Car Display interface 
-//Mandatory assignment
-//Course 02158 Concurrent Programming, DTU, Fall 2017
-
-//Hans Henrik Løvengreen     Oct 9, 2017
-
 import java.awt.Color;
 
 interface CarDisplayI {

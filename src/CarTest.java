@@ -1,9 +1,3 @@
-//Prototype implementation of Car Test class
-//Mandatory assignment
-//Course 02158 Concurrent Programming, DTU, Fall 2017
-
-//Hans Henrik Lovengreen     Oct 9, 2017
-
 public class CarTest extends Thread {
 
     CarTestingI cars;

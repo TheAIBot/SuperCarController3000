@@ -7,7 +7,7 @@
 
         {
             "type": "java",
-            "name": "Debug (Launch)",
+            "name": "Debug Cars",
             "request": "launch",
             "mainClass": "Cars",
             "args": ""
