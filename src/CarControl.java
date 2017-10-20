@@ -104,6 +104,14 @@ class Car extends Thread {
         return pos.equals(startpos);
     }
 
+    private static Semaphore[] isCarThere = new Semaphore[11* 12];
+    static {
+        for(int i = 0; i < isCarThere.length; i++)
+        {
+            isCarThere[i] = new Semaphore(1);
+        }
+    }
+
    public void run() {
         try {
 
@@ -114,13 +122,17 @@ class Car extends Thread {
             while (true) { 
                 sleep(speed());
   
+
                 if (atGate(curpos)) { 
-                    mygate.pass(); 
+                    mygate.pass();
                     speed = chooseSpeed();
                 }
                 	
                 newpos = nextPos(curpos);
-                
+
+                isCarThere[newpos.col * 11 + newpos.row].P();     
+                isCarThere[curpos.col * 11 + curpos.row].V(); 
+                      
                 //  Move to new position 
                 cd.clear(curpos);
                 cd.mark(curpos,newpos,col,no);
