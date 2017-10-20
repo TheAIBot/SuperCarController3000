@@ -44,7 +44,6 @@ class Car extends Thread {
 
     int speed;                       // Current car speed
     Pos curpos;                      // Current position 
-    Pos newpos;                      // New position to go to
 
     public Car(int no, CarDisplayI cd, Gate g) {
 
@@ -111,6 +110,7 @@ class Car extends Thread {
             isCarThere[i] = new Semaphore(1);
         }
     }
+    private Pos oldPos = null;
 
    public void run() {
         try {
@@ -128,11 +128,14 @@ class Car extends Thread {
                     speed = chooseSpeed();
                 }
                 	
-                newpos = nextPos(curpos);
+                Pos newpos = nextPos(curpos);
 
-                isCarThere[newpos.col * 11 + newpos.row].P();     
-                isCarThere[curpos.col * 11 + curpos.row].V(); 
-                      
+                isCarThere[newpos.col * 11 + newpos.row].P();  
+                if(oldPos != null)
+                {   
+                    isCarThere[oldPos.col * 11 + oldPos.row].V(); 
+                }
+
                 //  Move to new position 
                 cd.clear(curpos);
                 cd.mark(curpos,newpos,col,no);
@@ -140,6 +143,7 @@ class Car extends Thread {
                 cd.clear(curpos,newpos);
                 cd.mark(newpos,col,no);
 
+                oldPos = curpos;
                 curpos = newpos;
             }
 
