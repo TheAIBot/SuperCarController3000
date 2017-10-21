@@ -116,7 +116,7 @@ class Car extends Thread {
 
         ArrayList<Pos> bEntryPoints = new ArrayList<Pos>();
         bEntryPoints.add(new Pos(9 , 1));
-        bEntryPoints.add(new Pos(10, 1));
+        bEntryPoints.add(new Pos(10, 0));
 
         CriticalRegion cRegion = new CriticalRegion(4, aEntryPoints, bEntryPoints);
         criticalRegions[0 * 11 + 1] = cRegion;
@@ -132,7 +132,6 @@ class Car extends Thread {
         criticalRegions[0 * 11 + 7] = cRegion;
         criticalRegions[0 * 11 + 8] = cRegion;
         criticalRegions[0 * 11 + 9] = cRegion;
-        criticalRegions[0 * 11 +10] = cRegion;
 
         for(int i = 0; i < isCarThere.length; i++)
         {

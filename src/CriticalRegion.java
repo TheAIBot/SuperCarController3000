@@ -19,7 +19,6 @@ public class CriticalRegion
 
     public boolean enter(Pos currentPos) throws InterruptedException
     {
-        System.out.println("" + carsInRegion);
         if(aEnterPoints.contains(currentPos))
         {
             return enterFromPointA();
@@ -71,8 +70,7 @@ public class CriticalRegion
         
         carsInRegion--;
 
-        lock.V();  
-        System.out.println("" + carsInRegion);
+        lock.V();
     }
 
 
