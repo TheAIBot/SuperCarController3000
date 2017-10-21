@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.util.ArrayList;
 
 class Gate {
 
@@ -104,7 +105,35 @@ class Car extends Thread {
     }
 
     private static Semaphore[] isCarThere = new Semaphore[11* 12];
-    static {
+    private static CriticalRegion[] criticalRegions = new CriticalRegion[11 * 12];
+    private CriticalRegion carCarIsIn;
+
+    static 
+    {
+        ArrayList<Pos> aEntryPoints = new ArrayList<Pos>();
+        aEntryPoints.add(new Pos(1, 3));
+        aEntryPoints.add(new Pos(2, 1));
+
+        ArrayList<Pos> bEntryPoints = new ArrayList<Pos>();
+        bEntryPoints.add(new Pos(9 , 1));
+        bEntryPoints.add(new Pos(10, 1));
+
+        CriticalRegion cRegion = new CriticalRegion(4, aEntryPoints, bEntryPoints);
+        criticalRegions[0 * 11 + 1] = cRegion;
+        criticalRegions[1 * 11 + 1] = cRegion;
+        criticalRegions[2 * 11 + 1] = cRegion;
+
+        criticalRegions[0 * 11 + 1] = cRegion;
+        criticalRegions[0 * 11 + 2] = cRegion;
+        criticalRegions[0 * 11 + 3] = cRegion;
+        criticalRegions[0 * 11 + 4] = cRegion;
+        criticalRegions[0 * 11 + 5] = cRegion;
+        criticalRegions[0 * 11 + 6] = cRegion;
+        criticalRegions[0 * 11 + 7] = cRegion;
+        criticalRegions[0 * 11 + 8] = cRegion;
+        criticalRegions[0 * 11 + 9] = cRegion;
+        criticalRegions[0 * 11 +10] = cRegion;
+
         for(int i = 0; i < isCarThere.length; i++)
         {
             isCarThere[i] = new Semaphore(1);
@@ -119,6 +148,7 @@ class Car extends Thread {
             curpos = startpos;
             cd.mark(curpos,col,no);
 
+            boolean canGoForward = true;
             while (true) { 
                 sleep(speed());
   
@@ -130,21 +160,46 @@ class Car extends Thread {
                 	
                 Pos newpos = nextPos(curpos);
 
-                isCarThere[newpos.col * 11 + newpos.row].P();  
-                if(oldPos != null)
+
+                if(oldPos != null && canGoForward)
                 {   
                     isCarThere[oldPos.col * 11 + oldPos.row].V(); 
                 }
 
-                //  Move to new position 
-                cd.clear(curpos);
-                cd.mark(curpos,newpos,col,no);
-                sleep(speed());
-                cd.clear(curpos,newpos);
-                cd.mark(newpos,col,no);
+                final CriticalRegion newRegion = criticalRegions[newpos.col * 11 + newpos.row];
+                if(newRegion != carCarIsIn)
+                {
+                    if(newRegion != null)
+                    {
+                        canGoForward = newRegion.enter(curpos);
+                    }
 
-                oldPos = curpos;
-                curpos = newpos;
+                    if(carCarIsIn != null)
+                    {
+                        carCarIsIn.exit();
+                    }
+
+                    if(canGoForward)
+                    {
+                        carCarIsIn = newRegion;
+                    }
+
+                }
+
+                if(canGoForward)
+                {
+                    isCarThere[newpos.col * 11 + newpos.row].P();  
+                    
+                    //  Move to new position 
+                    cd.clear(curpos);
+                    cd.mark(curpos,newpos,col,no);
+                    sleep(speed());
+                    cd.clear(curpos,newpos);
+                    cd.mark(newpos,col,no);
+
+                    oldPos = curpos;
+                    curpos = newpos;
+                }
             }
 
         } catch (Exception e) {
