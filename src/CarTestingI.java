@@ -1,3 +1,10 @@
+//Specification of Car Testing interface 
+//Mandatory assignment
+//Course 02158 Concurrent Programming, DTU, Fall 2017
+
+//Hans Henrik Lovengreen     Oct 9, 2017
+
+
 interface CarTestingI {
     /*
      * The test methods must be called sequentially. 

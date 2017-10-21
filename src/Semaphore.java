@@ -1,3 +1,10 @@
+//Implementation of classical, Dijkstra Semaphore
+//Weakly Fair
+
+//Course 02220 Concurrent Programming
+
+//Hans Henrik Lovengreen   Sep 13, 2002
+
 public class Semaphore {
 
     private int s = 0;
@@ -9,8 +16,7 @@ public class Semaphore {
             throw new Error("Semaphore initialized to negative value: " + s0);
     }
 
-    public synchronized void P() 
-    throws InterruptedException {
+    public synchronized void P() throws InterruptedException {
         while (s == 0) wait();
         s--;
     }

@@ -1,3 +1,9 @@
+//Specification of Car Control interface 
+//Mandatory assignment
+//Course 02158 Concurrent Programming, DTU, Fall 2017
+
+//Hans Henrik Lovengreen     Oct 9, 2017
+
 interface CarControlI {
 
     /*  
