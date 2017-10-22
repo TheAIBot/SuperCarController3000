@@ -11,12 +11,10 @@ class Gate {
     Semaphore g = new Semaphore(0);
     Semaphore e = new Semaphore(1);
     
-    Semaphore kage;
     boolean isopen = false;
     boolean hasLeftGates = false;
     
-    public Gate(Semaphore kage, int carID) {
-    	this.kage = kage;
+    public Gate(int carID) {
     	this.carID = carID;
     }
 
@@ -64,6 +62,7 @@ class Car extends Thread {
 
     int speed;                       // Current car speed
     Pos curpos;                      // Current position
+    Pos newpos;
 
     public Car(int no, CarDisplayI cd, Gate g, CriticalRegion[][] mapCriticalRegions, Semaphore[][] mapOfCars) {
 
@@ -128,25 +127,37 @@ class Car extends Thread {
 
     
     
-   public void run() {
+    public void run() {
         try {
-        	//Spørgsmål: Er man garanteret, at bilerne altid kører med den angivne hastighed, konstant, hele vejen rundt?
-        	//Min umiddelbare tanke er nej, da de kører på forskellige tråde.
-        	
-        	//Cannot start in a critical region, so that is not neccessary to check here.
+            //Spørgsmål: Er man garanteret, at bilerne altid kører med den angivne hastighed, konstant, hele vejen rundt?
+            //Min umiddelbare tanke er nej, da de kører på forskellige tråde.
+            
+            //Cannot start in a critical region, so that is not neccessary to check here.
             speed = chooseSpeed();
             curpos = startpos;
             cd.mark(curpos,col,num);
 
             while (true) { 
-                sleep(speed());
-  
+                try {
+                    sleep(speed());
+                } catch (InterruptedException e) {
+                    cd.clear(curpos);
+                    mapOfCars[curpos.row][curpos.col].V();
+                    break;
+                }
+
                 if (atGate(curpos)) { 
-                    mygate.pass(); 
+                    try {
+                        mygate.pass();
+                    } catch (InterruptedException e) {
+                        cd.clear(curpos);
+                        mapOfCars[curpos.row][curpos.col].V();
+                        break;
+                    }
                     speed = chooseSpeed();
                 }
 
-                final Pos newpos = nextPos(curpos);
+                newpos = nextPos(curpos);
                 
                 final CriticalRegion nextCriticalRegion = mapCriticalRegions[newpos.row][newpos.col];
                 
@@ -154,17 +165,35 @@ class Car extends Thread {
                 //Entering another critical region:
                 //TODO ville det være bedre at bruge noget kode ligesom med gatesne? I forhold til semaforene
                 if (nextCriticalRegion != null && !nextCriticalRegion.equals(currentCriticalRegion)) {
-                	//System.out.println("Enter car no " + no);
-					nextCriticalRegion.enter(num);
-				}
+                    //System.out.println("Enter car no " + no);
+                    try {
+                        nextCriticalRegion.enter(num);
+                    } catch (InterruptedException e) {
+                        cd.clear(curpos);
+                        mapOfCars[curpos.row][curpos.col].V();
+                        break;
+                    }
+                }
                 
-                mapOfCars[newpos.row][newpos.col].P();
-                	
+                try {
+                    mapOfCars[newpos.row][newpos.col].P();
+                } catch (InterruptedException e) {
+                    cd.clear(curpos);
+                    mapOfCars[curpos.row][curpos.col].V();
+                    break;
+                }                	
                 
                 //  Move to new position 
                 cd.clear(curpos);
                 cd.mark(curpos,newpos,col,num);
-                sleep(speed());
+                try {
+                    sleep(speed());
+                } catch (InterruptedException e) {
+                    cd.clear(curpos,newpos);
+                    mapOfCars[newpos.row][newpos.col].V();
+                    mapOfCars[curpos.row][curpos.col].V();
+                    break;
+                }
                 cd.clear(curpos,newpos);
                 cd.mark(newpos,col,num);     
                 
@@ -176,14 +205,22 @@ class Car extends Thread {
                 //Leaving current critical region:
                 
                 if (currentCriticalRegion != null && !currentCriticalRegion.equals(nextCriticalRegion)) {
-					currentCriticalRegion.leave(num);
-				}
-				currentCriticalRegion = nextCriticalRegion;
-				
-
+                    try {
+                        currentCriticalRegion.leave(num);
+                    } catch (InterruptedException e) {
+                        cd.mark(curpos,col,num);   
+                        mapOfCars[newpos.row][newpos.col].V();
+                        break;
+                    }
+                }
+                currentCriticalRegion = nextCriticalRegion;
             }
 
-        } catch (Exception e) {
+            if (currentCriticalRegion != null) {
+                currentCriticalRegion.leave(num);
+            }
+        }
+        catch (Exception e) {
             cd.println("Exception in Car no. " + num);
             System.err.println("Exception in Car no. " + num + ":" + e);
             e.printStackTrace();
@@ -200,14 +237,8 @@ public class CarControl implements CarControlI{
     Gate[] gate;              // Gates
     CriticalRegion[][] mapOfCriticalRegions = new CriticalRegion[11][12];
     Semaphore[][] mapOfCars = new Semaphore[11][12];
-    
-    
-    
-    Semaphore allowedNoCars	= new Semaphore(1);
-    
-        
-    Semaphore allClockwise	= new Semaphore(0);
-    Semaphore allCounterClockwise = new Semaphore(1);
+    boolean[] isCarRunning = new boolean[NUMBER_OF_CARS];
+    Semaphore changeACar = new Semaphore(1);
 
     public CarControl(CarDisplayI cd) {
         this.cd = cd;
@@ -215,11 +246,19 @@ public class CarControl implements CarControlI{
         gate = new Gate[NUMBER_OF_CARS];
         initializeCriticalRegions();
 
-        for (int no = 0; no < NUMBER_OF_CARS; no++) {
-            gate[no] = new Gate(allowedNoCars, no);
-            car[no]  = new Car(no,cd,gate[no], mapOfCriticalRegions, mapOfCars);
-            car[no].start();
-        } 
+        try {
+            //just to be safe, block here aswell.
+            //you might be able to call other methods while the constructor is running
+            changeACar.P();
+            for (int no = 0; no < NUMBER_OF_CARS; no++) {
+                gate[no] = new Gate(no);
+                car[no]  = new Car(no,cd,gate[no], mapOfCriticalRegions, mapOfCars);
+                car[no].start();
+                isCarRunning[no] = true;
+            } 
+            changeACar.V();   
+        } catch (InterruptedException e) {
+        }
     }
     
     private void initializeCriticalRegions() {
@@ -278,17 +317,38 @@ public class CarControl implements CarControlI{
        //   If not implemented call barrier.off() instead to make graphics consistent
    }
 
-   public void setLimit(int k) { 
-       cd.println("Setting of bridge limit not implemented in this version");
-   }
+    public void setLimit(int k) { 
+        cd.println("Setting of bridge limit not implemented in this version");
+    }
 
-   public void removeCar(int no) { 
-       cd.println("Remove Car not implemented in this version");
-   }
+    public void removeCar(int no) { 
+        try {
+            changeACar.P();
 
-   public void restoreCar(int no) { 
-       cd.println("Restore Car not implemented in this version");
-   }
+            if(isCarRunning[no]) {
+                car[no].interrupt();
+                isCarRunning[no] = false;
+            }
+
+            changeACar.V();
+        } catch (InterruptedException e) {
+        }
+    }
+
+    public void restoreCar(int no) { 
+        try {
+            changeACar.P();
+
+            if(!isCarRunning[no]) {
+                car[no]  = new Car(no,cd,gate[no], mapOfCriticalRegions, mapOfCars);
+                car[no].start();
+                isCarRunning[no] = true;
+            }
+
+            changeACar.V();
+        } catch (InterruptedException e) {
+        }
+    }
 
    /* Speed settings for testing purposes */
 

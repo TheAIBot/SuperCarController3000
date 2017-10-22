@@ -9,6 +9,9 @@ public class CriticalRegion {
 	private final Semaphore entryExitProtocol = new Semaphore(1);
 	private final Semaphore waitUpCars 		  = new Semaphore(0);
 	private final Semaphore waitDownCars 	  = new Semaphore(0);
+	private final Object lock = new Object();
+
+
 	
 	public void enter(int num) throws InterruptedException {
 		//TODO it is a variant of the reader/writer problem. It is implemented with the passing the baton technique.
@@ -21,11 +24,18 @@ public class CriticalRegion {
 	
 	private void enterDownCar() throws InterruptedException {
 		//<await (noUpCars == 0) noDownCars++;>
-        entryExitProtocol.P();
+		entryExitProtocol.P();	
         if (upCarsCount > 0) {	
-            delayedDownCarsCount++;
-            entryExitProtocol.V();
-            waitDownCars.P();
+			delayedDownCarsCount++;
+			entryExitProtocol.V();
+			try {
+				waitDownCars.P();	
+			} catch (InterruptedException e) {
+				entryExitProtocol.P();
+				delayedDownCarsCount--;
+				entryExitProtocol.V();
+				return;
+			}
         }
         downCarsCount++;
         signal();
@@ -34,10 +44,17 @@ public class CriticalRegion {
 	private void enterUpCar() throws InterruptedException  {
 		//<await (noDownCars == 0) noUpCars++;>
         entryExitProtocol.P();
-        if (downCarsCount > 0) {	
-            delayedUpCarsCount++;
-            entryExitProtocol.V();
-            waitUpCars.P();
+        if (downCarsCount > 0) {
+			delayedUpCarsCount++;
+			entryExitProtocol.V();
+			try {
+				waitUpCars.P();
+			} catch (Exception e) {
+				entryExitProtocol.P();
+				delayedUpCarsCount--;
+				entryExitProtocol.V();
+				return;
+			}
         }
         upCarsCount++;
         signal();
@@ -53,16 +70,22 @@ public class CriticalRegion {
 	
 	private void leaveDownCar() throws InterruptedException  {
 		//<noDownCars--;>
-        entryExitProtocol.P();
-        downCarsCount--;
-        signal();
+		try {
+			entryExitProtocol.P();
+		} finally {
+			downCarsCount--;
+			signal();
+		}
 	}
 
 	private void leaveUpCar() throws InterruptedException  {
 		//<noUpCars--;>
-        entryExitProtocol.P();
-        upCarsCount--;
-        signal();
+		try {
+			entryExitProtocol.P();
+		} finally {
+			upCarsCount--;
+			signal();
+		}
 	}
 
 	private void signal() {
