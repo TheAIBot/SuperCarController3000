@@ -83,7 +83,8 @@ crit1:
                 skip; //Here they are in the crit section.
 exitDown:
                 P(entryExitProtocol);
-                noDownCars--;
+	   temp = noDownCars - 1;
+	   noDownCars = temp;
                 signal();
         ::  type == UP   ->
 entryUp:
