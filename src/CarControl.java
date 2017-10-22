@@ -55,7 +55,7 @@ class Car extends Thread {
     CriticalRegion[][] mapCriticalRegions;
     Semaphore[][] mapOfCars;
 
-    int no;                          // Car number
+    int num;                          // Car number
     Pos startpos;                    // Startpositon (provided by GUI)
     Pos barpos;                      // Barrierpositon (provided by GUI)
     Color col;                       // Car  color
@@ -63,12 +63,11 @@ class Car extends Thread {
 
 
     int speed;                       // Current car speed
-    Pos curpos;                      // Current position 
-    Pos newpos;                      // New position to go to
+    Pos curpos;                      // Current position
 
     public Car(int no, CarDisplayI cd, Gate g, CriticalRegion[][] mapCriticalRegions, Semaphore[][] mapOfCars) {
 
-        this.no = no;
+        this.num = no;
         this.cd = cd;
         mygate = g;
         startpos = cd.getStartPos(no);
@@ -88,7 +87,7 @@ class Car extends Thread {
     }
 
     public synchronized void setSpeed(int speed) { 
-        if (no != 0 && speed >= 0) {
+        if (num != 0 && speed >= 0) {
             basespeed = speed;
         }
         else
@@ -96,7 +95,7 @@ class Car extends Thread {
     }
 
     public synchronized void setVariation(int var) { 
-        if (no != 0 && 0 <= var && var <= 100) {
+        if (num != 0 && 0 <= var && var <= 100) {
             variation = var;
         }
         else
@@ -120,7 +119,7 @@ class Car extends Thread {
 
     Pos nextPos(Pos pos) {
         // Get my track from display
-        return cd.nextPos(no,pos);
+        return cd.nextPos(num,pos);
     }
 
     boolean atGate(Pos pos) {
@@ -137,7 +136,7 @@ class Car extends Thread {
         	//Cannot start in a critical region, so that is not neccessary to check here.
             speed = chooseSpeed();
             curpos = startpos;
-            cd.mark(curpos,col,no);
+            cd.mark(curpos,col,num);
 
             while (true) { 
                 sleep(speed());
@@ -146,32 +145,28 @@ class Car extends Thread {
                     mygate.pass(); 
                     speed = chooseSpeed();
                 }
-                
 
-                newpos = nextPos(curpos);
+                final Pos newpos = nextPos(curpos);
                 
-                CriticalRegion nextCriticalRegion = mapCriticalRegions[newpos.row][newpos.col];
+                final CriticalRegion nextCriticalRegion = mapCriticalRegions[newpos.row][newpos.col];
                 
                 //TODO is this the correct placement of the code?
                 //Entering another critical region:
                 //TODO ville det være bedre at bruge noget kode ligesom med gatesne? I forhold til semaforene
                 if (nextCriticalRegion != null && !nextCriticalRegion.equals(currentCriticalRegion)) {
                 	//System.out.println("Enter car no " + no);
-					nextCriticalRegion.enter(no);
+					nextCriticalRegion.enter(num);
 				}
                 
                 mapOfCars[newpos.row][newpos.col].P();
-                
-				                
-                
                 	
                 
                 //  Move to new position 
                 cd.clear(curpos);
-                cd.mark(curpos,newpos,col,no);
+                cd.mark(curpos,newpos,col,num);
                 sleep(speed());
                 cd.clear(curpos,newpos);
-                cd.mark(newpos,col,no);     
+                cd.mark(newpos,col,num);     
                 
 
                 mapOfCars[curpos.row][curpos.col].V();
@@ -181,8 +176,7 @@ class Car extends Thread {
                 //Leaving current critical region:
                 
                 if (currentCriticalRegion != null && !currentCriticalRegion.equals(nextCriticalRegion)) {
-                	//System.out.println("Leave car no " + no);
-					currentCriticalRegion.leave(no);
+					currentCriticalRegion.leave(num);
 				}
 				currentCriticalRegion = nextCriticalRegion;
 				
@@ -190,17 +184,11 @@ class Car extends Thread {
             }
 
         } catch (Exception e) {
-            cd.println("Exception in Car no. " + no);
-            System.err.println("Exception in Car no. " + no + ":" + e);
+            cd.println("Exception in Car no. " + num);
+            System.err.println("Exception in Car no. " + num + ":" + e);
             e.printStackTrace();
         }
     }
-
-private boolean isEnteringAlley() {
-	// TODO Auto-generated method stub
-	return false;
-}
-
 }
 
 public class CarControl implements CarControlI{
@@ -235,41 +223,37 @@ public class CarControl implements CarControlI{
     }
     
     private void initializeCriticalRegions() {
-	    CriticalRegion alley = new CriticalRegion(new Pos[] {new Pos(0, 1), new Pos(0, 2), new Pos(0, 3), new Pos(0, 4), new Pos(0,  5),
-	 		   						 			 			 new Pos(0, 6), new Pos(0, 7), new Pos(0, 8), new Pos(0, 9), new Pos(0, 10),
-	 		   						 			 			 new Pos(1,1), new Pos(2, 1)}, mapOfCriticalRegions);
-	    //CriticalRegion alleyEntrance = new CriticalRegion(new Pos[] {new Pos(1,1), new Pos(2, 1)}, mapOfCriticalRegions);
-	    
-	    CriticalRegion[] alleyDependence = new CriticalRegion[] {};//{alleyEntrance};	    
-	    alley.setDependentCriticalRegions(5, alleyDependence);
-	    alley.setDependentCriticalRegions(6, alleyDependence);
-	    alley.setDependentCriticalRegions(7, alleyDependence);
-	    alley.setDependentCriticalRegions(8, alleyDependence);
-	    
-	    /*
-	    CriticalRegion[] alleyEntranceDependence = new CriticalRegion[]{alley};	     
-	    alleyEntrance.setDependentCriticalRegions(3, alleyEntranceDependence);
-	    alleyEntrance.setDependentCriticalRegions(4, alleyEntranceDependence);
-	    */
+
+        CriticalRegion alley = new CriticalRegion();
+        Pos[] criticalRegionArea = new Pos[]
+        {
+            new Pos(0, 1), 
+            new Pos(0, 2), 
+            new Pos(0, 3), 
+            new Pos(0, 4), 
+            new Pos(0, 5),
+            new Pos(0, 6), 
+            new Pos(0, 7), 
+            new Pos(0, 8), 
+            new Pos(0, 9), 
+            //new Pos(0,10),
+            new Pos(1, 1), 
+            new Pos(2, 1)
+        };
+
+        for (int i = 0; i < criticalRegionArea.length; i++) {
+			mapOfCriticalRegions[criticalRegionArea[i].col][criticalRegionArea[i].row] = alley;
+		}
 	    
 	    for (int i = 0; i < mapOfCars.length; i++) {
 	    	for (int j = 0; j < mapOfCars[i].length; j++) {
 				mapOfCars[i][j] = new Semaphore(1);
 			}
 	    }
-	    
-	    // TODO Auto-generated method stub
-	    //throw new Error("Make this");
 	   
    	}
-   	
 
-//private void hasPassedGate(int carID) {
-	   //oneCarAtATime.V();
-   //}
-
-   public void startCar(int no) { //Hvorfor glitcher den, hvis man sætter en semafor her?
-	   //try {	oneCarAtATime.P(); } catch (InterruptedException e) {e.printStackTrace();} //Skal vi bekymre os om disse? (*)
+   public void startCar(int no) {
        gate[no].open();
    }
 
