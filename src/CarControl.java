@@ -54,6 +54,7 @@ class Car extends Thread {
     CriticalRegion currentCriticalRegion;
     CriticalRegion[][] mapCriticalRegions;
     Semaphore[][] mapOfCars;
+    Barrier barrier;
 
     int num;                          // Car number
     Pos startpos;                    // Startpositon (provided by GUI)
@@ -65,7 +66,7 @@ class Car extends Thread {
     int speed;                       // Current car speed
     Pos curpos;                      // Current position
 
-    public Car(int no, CarDisplayI cd, Gate g, CriticalRegion[][] mapCriticalRegions, Semaphore[][] mapOfCars) {
+    public Car(int no, CarDisplayI cd, Gate g, CriticalRegion[][] mapCriticalRegions, Semaphore[][] mapOfCars, Barrier barrier) {
 
         this.num = no;
         this.cd = cd;
@@ -75,6 +76,7 @@ class Car extends Thread {
         
         this.mapCriticalRegions = mapCriticalRegions;
         this.mapOfCars = mapOfCars;
+        this.barrier = barrier;
        
         col = chooseColor();
 
@@ -124,9 +126,7 @@ class Car extends Thread {
 
     boolean atGate(Pos pos) {
         return pos.equals(startpos);
-    }
-
-    
+    }    
     
    public void run() {
         try {
@@ -145,6 +145,10 @@ class Car extends Thread {
                     mygate.pass(); 
                     speed = chooseSpeed();
                 }
+                
+                if (barrier.atBarrier(startpos,curpos, num)) { //TODO maybe move and change this, to look at newpos.
+                	barrier.sync(num);
+				}
 
                 final Pos newpos = nextPos(curpos);
                 
@@ -200,7 +204,7 @@ public class CarControl implements CarControlI{
     Gate[] gate;              // Gates
     CriticalRegion[][] mapOfCriticalRegions = new CriticalRegion[11][12];
     Semaphore[][] mapOfCars = new Semaphore[11][12];
-    
+    Barrier barrier = new Barrier();
     
     
     Semaphore allowedNoCars	= new Semaphore(1);
@@ -217,7 +221,7 @@ public class CarControl implements CarControlI{
 
         for (int no = 0; no < NUMBER_OF_CARS; no++) {
             gate[no] = new Gate(allowedNoCars, no);
-            car[no]  = new Car(no,cd,gate[no], mapOfCriticalRegions, mapOfCars);
+            car[no]  = new Car(no,cd,gate[no], mapOfCriticalRegions, mapOfCars, barrier);
             car[no].start();
         } 
     }
@@ -262,11 +266,21 @@ public class CarControl implements CarControlI{
    }
 
    public void barrierOn() { 
-       cd.println("Barrier On not implemented in this version");
+	   try {
+		barrier.on();
+	} catch (InterruptedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
    }
 
    public void barrierOff() { 
-       cd.println("Barrier Off not implemented in this version");
+	   try {
+		barrier.off();
+	} catch (InterruptedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
    }
 
    public void barrierShutDown() { 
