@@ -18,10 +18,7 @@ public class Barrier {
 	
 	private boolean isOn = false; 
 	private int numberCarsAtBarrier = 0;
-	private int numberCarsToAwake = 0;
-	private Semaphore onOffSwitch 			= new Semaphore(1);
-	private Semaphore entryExitProtocol 	= new Semaphore(1);
-	private Semaphore awaitAllCarsAtBarrier = new Semaphore(0);
+	private Object locker = new Object();
 	
 	public Barrier() {
 	}
@@ -31,29 +28,17 @@ public class Barrier {
 	 * @param carID
 	 * @throws InterruptedException
 	 */
-	public void sync(int carID) throws InterruptedException {
+	public synchronized void sync(int carID) throws InterruptedException {
 		if (!isOn) return;
-		
-		entryExitProtocol.P();
-		numberCarsAtBarrier++;
-		//System.out.println("nB " + numberCarsAtBarrier);
-		//System.out.println("nA " + numberCarsToAwake);
-		if (numberCarsAtBarrier == CarControl.NUMBER_OF_CARS) {
-			numberCarsToAwake = numberCarsAtBarrier - 2;
-			numberCarsAtBarrier = 0; //All cars must arrive at the barrier again.
-			awaitAllCarsAtBarrier.V();
-			return; //Does not increment entryExitProtocol, as the baton is passed down to the awoken cars.
+
+		if (numberCarsAtBarrier < CarControl.NUMBER_OF_CARS) {
+			numberCarsAtBarrier++;
+			wait();
 		}
-		entryExitProtocol.V();
-		awaitAllCarsAtBarrier.P();
-		if (numberCarsToAwake > 0) {
-			numberCarsToAwake--;
-			awaitAllCarsAtBarrier.V();
-			return; //Passing the entryExitProtocol baton.
+		else {
+			numberCarsAtBarrier = 0;
+			notifyAll();
 		}
-		entryExitProtocol.V(); //Does maybe not need to be passed as baton?
-		
-		
 	}
 	
 	private int parent(int carID) {
@@ -77,30 +62,17 @@ public class Barrier {
 		return carID == 0;
 	}
 	
-	public void on() throws InterruptedException {
-		onOffSwitch.P();
+	public synchronized void on() throws InterruptedException {
 		isOn = true;
-		onOffSwitch.V();
-		//TODO (*) What if cars already are at the barrier?
 	}
 	
-	public void off() throws InterruptedException { //Takes O(NumberOfCars) time, plus maybe some waiting for cars just leaving or just entering.
-		onOffSwitch.P();
+	public synchronized void off() throws InterruptedException { //Takes O(NumberOfCars) time, plus maybe some waiting for cars just leaving or just entering.
 		isOn = false;
-		entryExitProtocol.P();
 
 		if (numberCarsAtBarrier > 0) {
-			//Simulates that all cars have arrived:
-			numberCarsToAwake = numberCarsAtBarrier - 1;//All the cars at the barrier must be awoken
 			numberCarsAtBarrier = 0;
-			onOffSwitch.V();
-			awaitAllCarsAtBarrier.V();
-			return; //the awoken cars will switch of the entry-exit protocol themself.
-			
-		}
-		entryExitProtocol.V();
-		onOffSwitch.V();
-		
+			notifyAll();
+		}		
 	}
 
 	public boolean atBarrier(Pos startPos, Pos curpos, int num) {

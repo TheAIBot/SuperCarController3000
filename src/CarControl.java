@@ -241,19 +241,8 @@ public class CarControl implements CarControlI{
     Gate[] gate;              // Gates
     CriticalRegion[][] mapOfCriticalRegions = new CriticalRegion[11][12];
     Semaphore[][] mapOfCars = new Semaphore[11][12];
-<<<<<<< HEAD
     boolean[] isCarRunning = new boolean[NUMBER_OF_CARS];
     Semaphore changeACar = new Semaphore(1);
-=======
-    Barrier barrier = new Barrier();
-    
-    
-    Semaphore allowedNoCars	= new Semaphore(1);
-    
-        
-    Semaphore allClockwise	= new Semaphore(0);
-    Semaphore allCounterClockwise = new Semaphore(1);
->>>>>>> origin/step3-simple
 
     public CarControl(CarDisplayI cd) {
         this.cd = cd;
@@ -261,7 +250,6 @@ public class CarControl implements CarControlI{
         gate = new Gate[NUMBER_OF_CARS];
         initializeCriticalRegions();
 
-<<<<<<< HEAD
         try {
             //just to be safe, block here aswell.
             //you might be able to call other methods while the constructor is running
@@ -275,13 +263,6 @@ public class CarControl implements CarControlI{
             changeACar.V();   
         } catch (InterruptedException e) {
         }
-=======
-        for (int no = 0; no < NUMBER_OF_CARS; no++) {
-            gate[no] = new Gate(allowedNoCars, no);
-            car[no]  = new Car(no,cd,gate[no], mapOfCriticalRegions, mapOfCars, barrier);
-            car[no].start();
-        } 
->>>>>>> origin/step3-simple
     }
     
     private void initializeCriticalRegions() {
