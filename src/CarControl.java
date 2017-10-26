@@ -20,7 +20,7 @@ class Gate {
 
     public void pass() throws InterruptedException {
     	
-        g.P(); 
+        g.P();
         g.V();
         
     }

@@ -34,7 +34,7 @@ public class CriticalRegion {
 				entryExitProtocol.P();
 				delayedDownCarsCount--;
 				entryExitProtocol.V();
-				return;
+				throw new InterruptedException();
 			}
         }
         downCarsCount++;
@@ -53,7 +53,7 @@ public class CriticalRegion {
 				entryExitProtocol.P();
 				delayedUpCarsCount--;
 				entryExitProtocol.V();
-				return;
+				throw new InterruptedException();
 			}
         }
         upCarsCount++;
