@@ -52,6 +52,7 @@ class Car extends Thread {
     CriticalRegion currentCriticalRegion;
     CriticalRegion[][] mapCriticalRegions;
     Semaphore[][] mapOfCars;
+    Barrier barrier;
 
     int num;                          // Car number
     Pos startpos;                    // Startpositon (provided by GUI)
@@ -64,7 +65,7 @@ class Car extends Thread {
     Pos curpos;                      // Current position
     Pos newpos;
 
-    public Car(int no, CarDisplayI cd, Gate g, CriticalRegion[][] mapCriticalRegions, Semaphore[][] mapOfCars) {
+    public Car(int no, CarDisplayI cd, Gate g, CriticalRegion[][] mapCriticalRegions, Semaphore[][] mapOfCars, Barrier barrier) {
 
         this.num = no;
         this.cd = cd;
@@ -74,6 +75,7 @@ class Car extends Thread {
         
         this.mapCriticalRegions = mapCriticalRegions;
         this.mapOfCars = mapOfCars;
+        this.barrier = barrier;
        
         col = chooseColor();
 
@@ -123,9 +125,7 @@ class Car extends Thread {
 
     boolean atGate(Pos pos) {
         return pos.equals(startpos);
-    }
-
-    
+    }    
     
     public void run() {
         try {
@@ -156,6 +156,10 @@ class Car extends Thread {
                     }
                     speed = chooseSpeed();
                 }
+                
+                if (barrier.atBarrier(startpos,curpos, num)) { //TODO maybe move and change this, to look at newpos.
+                	barrier.sync(num);
+				}
 
                 newpos = nextPos(curpos);
                 
@@ -237,8 +241,19 @@ public class CarControl implements CarControlI{
     Gate[] gate;              // Gates
     CriticalRegion[][] mapOfCriticalRegions = new CriticalRegion[11][12];
     Semaphore[][] mapOfCars = new Semaphore[11][12];
+<<<<<<< HEAD
     boolean[] isCarRunning = new boolean[NUMBER_OF_CARS];
     Semaphore changeACar = new Semaphore(1);
+=======
+    Barrier barrier = new Barrier();
+    
+    
+    Semaphore allowedNoCars	= new Semaphore(1);
+    
+        
+    Semaphore allClockwise	= new Semaphore(0);
+    Semaphore allCounterClockwise = new Semaphore(1);
+>>>>>>> origin/step3-simple
 
     public CarControl(CarDisplayI cd) {
         this.cd = cd;
@@ -246,6 +261,7 @@ public class CarControl implements CarControlI{
         gate = new Gate[NUMBER_OF_CARS];
         initializeCriticalRegions();
 
+<<<<<<< HEAD
         try {
             //just to be safe, block here aswell.
             //you might be able to call other methods while the constructor is running
@@ -259,6 +275,13 @@ public class CarControl implements CarControlI{
             changeACar.V();   
         } catch (InterruptedException e) {
         }
+=======
+        for (int no = 0; no < NUMBER_OF_CARS; no++) {
+            gate[no] = new Gate(allowedNoCars, no);
+            car[no]  = new Car(no,cd,gate[no], mapOfCriticalRegions, mapOfCars, barrier);
+            car[no].start();
+        } 
+>>>>>>> origin/step3-simple
     }
     
     private void initializeCriticalRegions() {
@@ -301,11 +324,21 @@ public class CarControl implements CarControlI{
    }
 
    public void barrierOn() { 
-       cd.println("Barrier On not implemented in this version");
+	   try {
+		barrier.on();
+	} catch (InterruptedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
    }
 
    public void barrierOff() { 
-       cd.println("Barrier Off not implemented in this version");
+	   try {
+		barrier.off();
+	} catch (InterruptedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
    }
 
    public void barrierShutDown() { 
