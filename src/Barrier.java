@@ -36,8 +36,8 @@ public class Barrier {
 		
 		entryExitProtocol.P();
 		numberCarsAtBarrier++;
-		System.out.println("nB " + numberCarsAtBarrier);
-		System.out.println("nA " + numberCarsToAwake);
+		//System.out.println("nB " + numberCarsAtBarrier);
+		//System.out.println("nA " + numberCarsToAwake);
 		if (numberCarsAtBarrier == CarControl.NUMBER_OF_CARS) {
 			numberCarsToAwake = numberCarsAtBarrier - 2;
 			numberCarsAtBarrier = 0; //All cars must arrive at the barrier again.
@@ -92,6 +92,7 @@ public class Barrier {
 		if (numberCarsAtBarrier > 0) {
 			//Simulates that all cars have arrived:
 			numberCarsToAwake = numberCarsAtBarrier - 1;//All the cars at the barrier must be awoken
+			numberCarsAtBarrier = 0;
 			onOffSwitch.V();
 			awaitAllCarsAtBarrier.V();
 			return; //the awoken cars will switch of the entry-exit protocol themself.
