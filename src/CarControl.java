@@ -157,7 +157,8 @@ class Car extends Thread {
                     speed = chooseSpeed();
                 }
                 
-                if (barrier.atBarrier(startpos,curpos, num)) { //TODO maybe move and change this, to look at newpos.
+                //If the car is at the barrier
+                if (barpos.equals(curpos)) {
                 	barrier.sync();
 				}
 
