@@ -158,7 +158,7 @@ class Car extends Thread {
                 }
                 
                 if (barrier.atBarrier(startpos,curpos, num)) { //TODO maybe move and change this, to look at newpos.
-                	barrier.sync(num);
+                	barrier.sync();
 				}
 
                 newpos = nextPos(curpos);
@@ -305,22 +305,12 @@ public class CarControl implements CarControlI{
        gate[no].close();
    }
 
-   public void barrierOn() { 
-	   try {
+   public void barrierOn() {
 		barrier.on();
-	} catch (InterruptedException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
    }
 
-   public void barrierOff() { 
-	   try {
-		barrier.off();
-	} catch (InterruptedException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+   public void barrierOff() {
+       barrier.off();
    }
 
    public void barrierShutDown() { 
