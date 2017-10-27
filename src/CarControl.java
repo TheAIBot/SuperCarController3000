@@ -243,6 +243,7 @@ public class CarControl implements CarControlI{
     Semaphore[][] mapOfCars = new Semaphore[11][12];
     boolean[] isCarRunning = new boolean[NUMBER_OF_CARS];
     Semaphore changeACar = new Semaphore(1);
+    Barrier barrier = new Barrier();
 
     public CarControl(CarDisplayI cd) {
         this.cd = cd;
@@ -256,7 +257,7 @@ public class CarControl implements CarControlI{
             changeACar.P();
             for (int no = 0; no < NUMBER_OF_CARS; no++) {
                 gate[no] = new Gate(no);
-                car[no]  = new Car(no,cd,gate[no], mapOfCriticalRegions, mapOfCars);
+                car[no]  = new Car(no,cd,gate[no], mapOfCriticalRegions, mapOfCars, barrier);
                 car[no].start();
                 isCarRunning[no] = true;
             } 
@@ -354,7 +355,7 @@ public class CarControl implements CarControlI{
             changeACar.P();
 
             if(!isCarRunning[no]) {
-                car[no]  = new Car(no,cd,gate[no], mapOfCriticalRegions, mapOfCars);
+                car[no]  = new Car(no,cd,gate[no], mapOfCriticalRegions, mapOfCars, barrier);
                 car[no].start();
                 isCarRunning[no] = true;
             }
