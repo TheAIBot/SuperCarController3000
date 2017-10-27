@@ -18,7 +18,6 @@ public class Barrier {
 	
 	private boolean isOn = false; 
 	private int numberCarsAtBarrier = 0;
-	private Object locker = new Object();
 	
 	public Barrier() {
 	}
@@ -29,7 +28,9 @@ public class Barrier {
 	 * @throws InterruptedException
 	 */
 	public synchronized void sync(int carID) throws InterruptedException {
-		if (!isOn) return;
+		if (!isOn) {
+			 return;
+		}
 
 		if (numberCarsAtBarrier < CarControl.NUMBER_OF_CARS) {
 			numberCarsAtBarrier++;
@@ -39,27 +40,6 @@ public class Barrier {
 			numberCarsAtBarrier = 0;
 			notifyAll();
 		}
-	}
-	
-	private int parent(int carID) {
-		return (carID-1)/2;
-	}
-	
-	private int leftChild(int carID) {
-		return 2*carID + 1;
-	}
-	
-	private int rightChild(int carID) {
-		return 2*carID + 2;
-	}
-	
-	
-	private boolean isLeaf(int carID) {
-		return (2*carID + 1) > (CarControl.NUMBER_OF_CARS - 1); //if it has no children, it is a leaf.
-	}
-
-	private boolean isRoot(int carID) {
-		return carID == 0;
 	}
 	
 	public synchronized void on() throws InterruptedException {
