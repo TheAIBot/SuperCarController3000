@@ -62,6 +62,16 @@ init{
 
 //(*) Se paa den anden, for at se spoersmaal til hjaelpelaere.
 
+proctype CarController(){
+    do
+    :: on();
+    
+    :: off(); 
+    
+    :: skip;
+    od
+}
+
 proctype Car(byte type)
 {
 	int temp = 0;

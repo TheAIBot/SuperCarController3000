@@ -32,9 +32,13 @@ public class Barrier {
 	 * @throws InterruptedException
 	 */
 	public void sync(int carID) throws InterruptedException {
+		onOffSwitch.P(); //TODO skal barrieren altid kunne switches fra, ie. ikke opleve starvation?
+		//TODO ovenstaaende kode skal tilfoejes til step-3 branchen. Fiks fejlen i den.
 		if (!isOn) return;
 		
 		entryExitProtocol.P();
+		if (!isOn) return; //Maybe better fix?
+		onOffSwitch.V();
 		numberCarsAtBarrier++;
 		//System.out.println("nB " + numberCarsAtBarrier);
 		//System.out.println("nA " + numberCarsToAwake);
