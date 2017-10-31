@@ -1,5 +1,7 @@
-#define DOWN 1
-#define UP 2
+#define UP 1
+#define DOWN 2
+#define NUMBER_OF_CARS 2
+
 
 
 
@@ -8,40 +10,23 @@ if \
 :: ( (X) > 0) -> X = ((X)-1) \
 fi }
 
-
 #define V(X) atomic{X = (X+1)}
 
-//Verify below with condition is correct(*)
-#define signal() \
-    condition1 =  (noUpCars == 0); \
-    condition1 =   condition1 && (noDelayedDownCars > 0); \
-    condition2 =  (noDownCars == 0); \
-    condition2 =   condition2 && (noDelayedUpCars > 0); \
-    condition3 = !(condition1 || condition2); \
-    if \
-    ::  (condition1) -> \
-            noDelayedDownCars--; \
-            V(waitDownCars) \
-    ::  (condition2 && !condition1) -> \
-            noDelayedUpCars--; \
-            V(waitUpCars) \
-    ::  (condition3) -> \
-            V(entryExitProtocol) \
-    fi
 
 //We do not care about car 0, as it does not affect other cars
 pid carPID[9];
 
+//togles:
+bool isOn                   = false;
+
 //Counters:
-byte noUpCars           	        = 0;
-byte noDownCars                = 0;
-byte noDelayedDownCars  = 0;
-byte noDelayedUpCars       = 0;
+byte numberCarsAtBarrier    = 0;
+byte numberCarsToAwake      = 0;
 
 //Semaphores:
-byte entryExitProtocol  = 1;
-byte waitUpCars         = 0;
-byte waitDownCars       = 0;
+byte entryExitProtocol      = 1;
+byte onOffSwitch            = 1;
+byte awaitAllCarsAtBarrier  = 0;
 
 //(*) Remember making things unatomic.
 //(*) is temp shared between all processes, or are it a local varaible?
@@ -53,8 +38,8 @@ init{
         carPID[2] = run Car(UP);
         //carPID[3] = run Car(UP);
         //carPID[4] = run Car(UP);
-        carPID[5] = run Car(DOWN);
-        carPID[6] = run Car(DOWN);
+        //carPID[5] = run Car(DOWN);
+        //carPID[6] = run Car(DOWN);
         //carPID[7] = run Car(DOWN);
         //carPID[8] = run Car(DOWN);
     }
@@ -62,27 +47,47 @@ init{
 
 //(*) Se paa den anden, for at se spoersmaal til hjaelpelaere.
 
-proctype CarController(){
+active proctype CarController(){
+    int temp;
     do
-    :: on();
+    ::  true -> //on();
+        P(onOffSwitch); 
+        isOn = true;
+        V(onOffSwitch);
+		
+    ::  true -> //off(); 
+        P(onOffSwitch);
+		isOn = false;
+		P(entryExitProtocol);
+
+		if 
+		::  (numberCarsAtBarrier > 0) ->
+                temp = numberCarsAtBarrier - 1;
+                numberCarsToAwake = temp;//All the cars at the barrier must be awoken
+                numberCarsAtBarrier = 0;
+                V(onOffSwitch);
+                V(awaitAllCarsAtBarrier);
+                //return; //the awoken cars will switch of the entry-exit protocol themself.
+        :: !(numberCarsAtBarrier > 0) -> //else
+                V(entryExitProtocol); //TODO (*) This code must be updated in branch step3.
+                V(onOffSwitch);     //off();                 			
+		fi;		
     
-    :: off(); 
+    //:: true -> skip;
     
-    :: skip;
     od
 }
 
 proctype Car(byte type)
 {
 	int temp = 0;
-	bool condition1;
-	bool condition2;
-	bool condition3;
 
-    do
+    do //No need to include atBarrier, as the car either is at the barrier, or it is not.
     ::
         skip;  //Just to have a place marked as the gate.
-gate:   //(*)Hvor langt rækker markoerene?
+        
+beforeBarrier:   
+
         skip;
         //Added eternal spinning.
         
@@ -90,68 +95,55 @@ gate:   //(*)Hvor langt rækker markoerene?
         :: true -> skip;
         :: true -> break;
         od;
-       
 
-entry:   
-    
-        if
-        :: (type == DOWN) ->
-                P(entryExitProtocol);
-                if  ::  noUpCars >  0 ->
-                            temp = noDelayedDownCars + 1;
-                            noDelayedDownCars = temp;
-                            V(entryExitProtocol);
-                            P(waitDownCars)
-                    ::  noUpCars == 0 -> skip;
-                    ::  noUpCars <  0 -> assert(false);
-                fi
-                temp = noDownCars + 1;
-                noDownCars = temp;
-                signal();              
-        :: (type == UP) ->
-                P(entryExitProtocol);
-                if  ::  noDownCars >  0 ->
-                            temp = noDelayedUpCars + 1;
-                            noDelayedUpCars = temp;
-                            V(entryExitProtocol);
-                            P(waitUpCars);
-                    ::  noDownCars == 0 -> skip;
-                    ::  noDownCars <  0 -> assert(false);
-                fi
-                temp = noUpCars + 1;
-                noUpCars = temp;
-                signal();          
-        fi;
+barrierEntry:
+
+        skip;
         
-crit:
-
         if
-        :: (type == DOWN) ->
-                assert(noUpCars == 0 && noDownCars>0); //Tillader at 
-                //(*) TODO add asserts.
-                skip; //Here they are in the crit section.
-        :: (type == UP)  ->
-                assert(noDownCars == 0 && noUpCars>0);
-                skip; //Here they are in the crit section.    
-        fi;
-                
+        ::  (isOn) ->
+            P(entryExitProtocol);
+            if 
+            ::  (isOn) -> 
+                temp = numberCarsAtBarrier + 1;
+                numberCarsAtBarrier = temp;
+                if 
+                ::  (numberCarsAtBarrier == NUMBER_OF_CARS) ->
+                    temp = numberCarsAtBarrier - 2;
+                    numberCarsToAwake = temp;
+                    numberCarsAtBarrier = 0; //All cars must arrive at the barrier again.
+                    V(awaitAllCarsAtBarrier);
+                    //return; implicit by exiting the if statement.
+                :: !(numberCarsAtBarrier == NUMBER_OF_CARS) ->
+                    V(entryExitProtocol); //Error here. Transition to next line, and then switch off(*)
+                    P(awaitAllCarsAtBarrier);
+                    if 
+                    ::  (numberCarsToAwake > 0) ->
+                        temp = numberCarsToAwake - 1;
+                        numberCarsToAwake = temp;
+                        V(awaitAllCarsAtBarrier);
+                        //return; implicit by structure of if statements.
+                    :: !(numberCarsToAwake > 0) ->
+                        V(entryExitProtocol)
+                    fi;
+                    
+                fi;
+            :: !(isOn) ->
+                V(entryExitProtocol);
+                //return; comes from the exit of the if statement.
+            fi;
             
-exit:
-   
-        if
-        :: (type == DOWN) ->
-                P(entryExitProtocol);
-                temp = noDownCars - 1;
-                noDownCars = temp;
-                signal();           
-        :: (type == UP) ->
-                P(entryExitProtocol);
-                temp = noUpCars - 1;
-                noUpCars = temp;
-                signal();                     
+        
+        
+        :: !(isOn) -> skip; //Corresponds to the return statement.
+        
         fi;
         
-        
+		
+		
+afterBarrier:
+
+        skip;
         
         do
         :: true -> skip;
@@ -166,6 +158,12 @@ exit:
 /* Liveness properties (uncomment to verify) */
 //Spørg ind til hvorfor ovenstaaende er formuleret korrekt.(*)
 
+
+//ltl notPassBarrier { [] (    (Car[carPID[1]]@barrierEntry && [](isOn)) -> [] (Car[carPID[1]]@afterBarrier)) } //Shouldn't this be true?
+ltl passBarrier { [] (    (Car[carPID[1]]@barrierEntry && [](!isOn)) -> <> Car[carPID[1]]@afterBarrier) }
+
+
+/*
 //ltl obl1  { []   ( (Car[carPID[1]]@entry) && [] ( !(Car[carPID[2]]@entry || Car[carPID[3]]@entry || Car[carPID[5]]@entry || Car[carPID[6]]@entry || Car[carPID[7]]@entry) ) -> <> (Car[carPID[1]]@crit)) }  
 
 ltl obl1  { []   ( (Car[carPID[1]]@entry) && [] ( !(Car[carPID[2]]@entry  || Car[carPID[5]]@entry || Car[carPID[6]]@entry) ) -> <> (Car[carPID[1]]@crit)) }  
@@ -175,4 +173,4 @@ ltl obl6  { []   ( (Car[carPID[6]]@entry) && [] ( !(Car[carPID[2]]@entry  || Car
 
 ltl res   { [] ( (Car[carPID[1]]@entry || Car[carPID[2]]@entry || Car[carPID[5]]@entry || Car[carPID[6]]@entry ) -> <> (Car[carPID[1]]@crit || Car[carPID[2]]@crit || Car[carPID[5]]@crit|| Car[carPID[6]]@crit ) ) }
 //ltl fair1 { [] ( (Car[carPID[1]]@entry) -> <>  (Car[carPID[1]]@crit) ) } //TODO (*) Does not work.
- 
+*/

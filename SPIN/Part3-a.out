@@ -1,0 +1,38 @@
+ltl passBarrier: [] ((! (((Car[carPID[1]]@barrierEntry)) && ([] (isOn)))) || (<> ((Car[carPID[1]]@afterBarrier))))
+starting claim 3
+using statement merging
+Never claim moves to line 4	[(1)]
+1 CarCo 1)  onOffSwitch>0                        
+1 CarCo 1)  onOffSwitch = (onOffSwitch-1)        
+1 CarCo 1)  onOffSwitch = (onOffSwitch+1)        1                    0                    
+1 CarCo 1)  onOffSwitch>0                        1                    1                    
+1 CarCo 1)  onOffSwitch = (onOffSwitch-1)        1                    1                    
+Starting Car with pid 3
+0 :init ini carPID[1] = run Car(1)               1                    0                    
+Starting Car with pid 4
+0 :init ini carPID[2] = run Car(1)               0                    2                    0                    0                    0                    0                    0                    0                    0                    1                    0                    
+Never claim moves to line 3	[(((!((Car[carPID[1]]._p==afterBarrier))&&(Car[carPID[1]]._p==barrierEntry))&&isOn))]
+Never claim moves to line 8	[((!((Car[carPID[1]]._p==afterBarrier))&&isOn))]
+2 Car:1 1)  entryExitProtocol>0                  0                    2                    3                    0                    0                    0                    0                    0                    0                    1                    0                    
+2 Car:1 1)  entryExitProtocol = (entryExitProtoc 0                    2                    3                    0                    0                    0                    0                    0                    0                    1                    0                    
+2 Car:1 1)  temp = (numberCarsAtBarrier+1)       0                    2                    3                    0                    0                    0                    0                    0                    0                    0                    1                    0                    
+2 Car:1 1)  numberCarsAtBarrier = temp           1                    0                    2                    3                    0                    0                    0                    0                    0                    0                    0                    1                    0                    
+2 Car:1 1)  !((numberCarsAtBarrier==2))          1                    0                    2                    3                    0                    0                    0                    0                    0                    0                    0                    1                    1                    0                    
+2 Car:1 1)  entryExitProtocol = (entryExitProtoc 1                    0                    2                    3                    0                    0                    0                    0                    0                    0                    0                    1                    1                    0                    
+1 CarCo 1)  onOffSwitch = (onOffSwitch+1)        1                    0                    2                    3                    0                    0                    0                    0                    0                    0                    1                    1                    1                    0                    
+1 CarCo 1)  onOffSwitch>0                        1                    0                    2                    3                    0                    0                    0                    0                    0                    0                    1                    1                    1                    1                    
+1 CarCo 1)  onOffSwitch = (onOffSwitch-1)        1                    0                    2                    3                    0                    0                    0                    0                    0                    0                    1                    1                    1                    1                    
+<<<<<START OF CYCLE>>>>>
+1 CarCo 1)  onOffSwitch = (onOffSwitch+1)        1                    0                    2                    3                    0                    0                    0                    0                    0                    0                    1                    1                    1                    0                    
+1 CarCo 1)  onOffSwitch>0                        1                    0                    2                    3                    0                    0                    0                    0                    0                    0                    1                    1                    1                    1                    
+1 CarCo 1)  onOffSwitch = (onOffSwitch-1)        1                    0                    2                    3                    0                    0                    0                    0                    0                    0                    1                    1                    1                    1                    
+spin: trail ends after 102 steps
+#processes: 4
+102:	proc  3 (Car:1) Part3-a.pml:95 (state 4)
+102:	proc  2 (Car:1) Part3-a.pml:119 (state 33)
+102:	proc  1 (CarController:1) Part3-a.pml:55 (state 7)
+102:	proc  0 (:init::1) Part3-a.pml:46 (state 4)
+MSC: ~G line 7
+102:	proc  - (passBarrier:1) _spin_nvr.tmp:7 (state 10)
+4 processes created
+Exit-Status 0

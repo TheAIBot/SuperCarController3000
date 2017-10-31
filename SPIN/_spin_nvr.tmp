@@ -1,55 +1,28 @@
-never obl1 {    /* !([] ((! (((Car[carPID[1]]@entry)) && ([] (! (((Car[carPID[5]]@entry)) || ((Car[carPID[6]]@entry))))))) || (<> ((Car[carPID[1]]@crit))))) */
+never notPassBarrier {    /* !([] ((! (((Car[carPID[1]]@barrierEntry)) && ([] (isOn)))) || ([] ((Car[carPID[1]]@afterBarrier))))) */
 T0_init:
 	do
-	:: ((! (((Car[carPID[5]]@entry)) || ((Car[carPID[6]]@entry)))) && ! (((Car[carPID[1]]@crit))) && ((Car[carPID[1]]@entry))) -> goto accept_S4
+	:: (! (((Car[carPID[1]]@afterBarrier))) && ((Car[carPID[1]]@barrierEntry)) && (isOn)) -> goto accept_S11
+	:: (((Car[carPID[1]]@barrierEntry)) && (isOn)) -> goto T0_S14
 	:: (1) -> goto T0_init
 	od;
-accept_S4:
+accept_S11:
 	do
-	:: ((! (((Car[carPID[5]]@entry)) || ((Car[carPID[6]]@entry)))) && ! (((Car[carPID[1]]@crit)))) -> goto accept_S4
+	:: ((isOn)) -> goto accept_S11
+	od;
+T0_S14:
+	do
+	:: (! (((Car[carPID[1]]@afterBarrier))) && (isOn)) -> goto accept_S11
+	:: ((isOn)) -> goto T0_S14
 	od;
 }
-never obl2 {    /* !([] ((! (((Car[carPID[2]]@entry)) && ([] (! ((((Car[carPID[1]]@entry)) || ((Car[carPID[5]]@entry))) || ((Car[carPID[6]]@entry))))))) || (<> ((Car[carPID[2]]@crit))))) */
+never passBarrier {    /* !([] ((! (((Car[carPID[1]]@barrierEntry)) && ([] (! (isOn))))) || (<> ((Car[carPID[1]]@afterBarrier))))) */
 T0_init:
 	do
-	:: ((! ((((Car[carPID[1]]@entry)) || ((Car[carPID[5]]@entry))) || ((Car[carPID[6]]@entry)))) && ! (((Car[carPID[2]]@crit))) && ((Car[carPID[2]]@entry))) -> goto accept_S4
+	:: ((! (isOn)) && ! (((Car[carPID[1]]@afterBarrier))) && ((Car[carPID[1]]@barrierEntry))) -> goto accept_S4
 	:: (1) -> goto T0_init
 	od;
 accept_S4:
 	do
-	:: ((! ((((Car[carPID[1]]@entry)) || ((Car[carPID[5]]@entry))) || ((Car[carPID[6]]@entry)))) && ! (((Car[carPID[2]]@crit)))) -> goto accept_S4
-	od;
-}
-never obl5 {    /* !([] ((! (((Car[carPID[5]]@entry)) && ([] (! ((((Car[carPID[2]]@entry)) || ((Car[carPID[1]]@entry))) || ((Car[carPID[6]]@entry))))))) || (<> ((Car[carPID[5]]@crit))))) */
-T0_init:
-	do
-	:: ((! ((((Car[carPID[2]]@entry)) || ((Car[carPID[1]]@entry))) || ((Car[carPID[6]]@entry)))) && ! (((Car[carPID[5]]@crit))) && ((Car[carPID[5]]@entry))) -> goto accept_S4
-	:: (1) -> goto T0_init
-	od;
-accept_S4:
-	do
-	:: ((! ((((Car[carPID[2]]@entry)) || ((Car[carPID[1]]@entry))) || ((Car[carPID[6]]@entry)))) && ! (((Car[carPID[5]]@crit)))) -> goto accept_S4
-	od;
-}
-never obl6 {    /* !([] ((! (((Car[carPID[6]]@entry)) && ([] (! ((((Car[carPID[2]]@entry)) || ((Car[carPID[5]]@entry))) || ((Car[carPID[1]]@entry))))))) || (<> ((Car[carPID[6]]@crit))))) */
-T0_init:
-	do
-	:: ((! ((((Car[carPID[2]]@entry)) || ((Car[carPID[5]]@entry))) || ((Car[carPID[1]]@entry)))) && ! (((Car[carPID[6]]@crit))) && ((Car[carPID[6]]@entry))) -> goto accept_S4
-	:: (1) -> goto T0_init
-	od;
-accept_S4:
-	do
-	:: ((! ((((Car[carPID[2]]@entry)) || ((Car[carPID[5]]@entry))) || ((Car[carPID[1]]@entry)))) && ! (((Car[carPID[6]]@crit)))) -> goto accept_S4
-	od;
-}
-never res {    /* !([] ((! (((((Car[carPID[1]]@entry)) || ((Car[carPID[2]]@entry))) || ((Car[carPID[5]]@entry))) || ((Car[carPID[6]]@entry)))) || (<> (((((Car[carPID[1]]@crit)) || ((Car[carPID[2]]@crit))) || ((Car[carPID[5]]@crit))) || ((Car[carPID[6]]@crit)))))) */
-T0_init:
-	do
-	:: (! ((! (((((Car[carPID[1]]@entry)) || ((Car[carPID[2]]@entry))) || ((Car[carPID[5]]@entry))) || ((Car[carPID[6]]@entry))))) && ! ((((((Car[carPID[1]]@crit)) || ((Car[carPID[2]]@crit))) || ((Car[carPID[5]]@crit))) || ((Car[carPID[6]]@crit))))) -> goto accept_S4
-	:: (1) -> goto T0_init
-	od;
-accept_S4:
-	do
-	:: (! ((((((Car[carPID[1]]@crit)) || ((Car[carPID[2]]@crit))) || ((Car[carPID[5]]@crit))) || ((Car[carPID[6]]@crit))))) -> goto accept_S4
+	:: ((! (isOn)) && ! (((Car[carPID[1]]@afterBarrier)))) -> goto accept_S4
 	od;
 }

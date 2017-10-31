@@ -19,11 +19,13 @@ public class Barrier {
 	private boolean isOn = false; 
 	private int numberCarsAtBarrier = 0;
 	private int numberCarsToAwake = 0;
+	private boolean awaitExitBarrier		= false;
 	private Semaphore onOffSwitch 			= new Semaphore(1);
 	private Semaphore entryExitProtocol 	= new Semaphore(1);
 	private Semaphore awaitAllCarsAtBarrier = new Semaphore(0);
 	
 	public Barrier() {
+		
 	}
 
 	/** Uses combining tree method. Views the cars as a heap, where car 0 is the root, and so on.
@@ -32,13 +34,17 @@ public class Barrier {
 	 * @throws InterruptedException
 	 */
 	public void sync(int carID) throws InterruptedException {
-		onOffSwitch.P(); //TODO skal barrieren altid kunne switches fra, ie. ikke opleve starvation?
+		//onOffSwitch.P(); //TODO skal barrieren altid kunne switches fra, ie. ikke opleve starvation?
 		//TODO ovenstaaende kode skal tilfoejes til step-3 branchen. Fiks fejlen i den.
+		
+		
 		if (!isOn) return;
 		
 		entryExitProtocol.P();
-		if (!isOn) return; //Maybe better fix?
-		onOffSwitch.V();
+		if (!isOn) {
+			entryExitProtocol.V();
+			return; //TODO (*) Maybe better fix?
+		}
 		numberCarsAtBarrier++;
 		//System.out.println("nB " + numberCarsAtBarrier);
 		//System.out.println("nA " + numberCarsToAwake);
@@ -54,6 +60,12 @@ public class Barrier {
 			numberCarsToAwake--;
 			awaitAllCarsAtBarrier.V();
 			return; //Passing the entryExitProtocol baton.
+		}
+		if (awaitExitBarrier) { //Only true if one is the last car exiting the barrier, and shutdown is activated.
+			awaitExitBarrier = false;
+			onOffSwitch.P();
+			isOn = false;
+			onOffSwitch.V();
 		}
 		entryExitProtocol.V(); //Does maybe not need to be passed as baton?
 		
@@ -100,13 +112,31 @@ public class Barrier {
 			onOffSwitch.V();
 			awaitAllCarsAtBarrier.V();
 			return; //the awoken cars will switch of the entry-exit protocol themself.
-			
+		} else { 
+			entryExitProtocol.V();
+			onOffSwitch.V();
 		}
-		entryExitProtocol.V();
-		onOffSwitch.V();
 		
 	}
-
+	
+	
+	public void shutdown() throws InterruptedException {
+		onOffSwitch.P();
+		entryExitProtocol.P();
+		
+		if (numberCarsAtBarrier > 0) { //TODO remember awaitExitAtBarrier
+			awaitExitBarrier = true;
+			//TODO The graphical UI must not wait on something hapening for to long, so the cars themself must turn of the barrier.
+			//TODO also take care of this other places,
+			//TODO After activating a shutdown,  can one turn it of/on normally?			
+		} else {
+			isOn = false;
+		}
+		
+		
+		entryExitProtocol.V();		
+		onOffSwitch.V();
+	}
 	public boolean atBarrier(Pos startPos, Pos curpos, int num) {
 		switch (num) {
 			case 0:
