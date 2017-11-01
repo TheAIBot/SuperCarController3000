@@ -20,6 +20,7 @@ public class Barrier {
 	private int numberCarsAtBarrier = 0;
 	private int numberCarsToAwake = 0;
 	private boolean awaitExitBarrier		= false;
+	private Semaphore awaitPossibleShutdown = new Semaphore(0);
 	private Semaphore onOffSwitch 			= new Semaphore(1);
 	private Semaphore entryExitProtocol 	= new Semaphore(1);
 	private Semaphore awaitAllCarsAtBarrier = new Semaphore(0);
@@ -62,10 +63,8 @@ public class Barrier {
 			return; //Passing the entryExitProtocol baton.
 		}
 		if (awaitExitBarrier) { //Only true if one is the last car exiting the barrier, and shutdown is activated.
-			awaitExitBarrier = false;
-			onOffSwitch.P();
-			isOn = false;
-			onOffSwitch.V();
+			awaitPossibleShutdown.V();
+			return; //The shutdown will itself take care of the entryExitProtocol.
 		}
 		entryExitProtocol.V(); //Does maybe not need to be passed as baton?
 		
@@ -121,6 +120,7 @@ public class Barrier {
 	
 	
 	public void shutdown() throws InterruptedException {
+		if (!isOn) return;
 		onOffSwitch.P();
 		entryExitProtocol.P();
 		
@@ -128,7 +128,13 @@ public class Barrier {
 			awaitExitBarrier = true;
 			//TODO The graphical UI must not wait on something hapening for to long, so the cars themself must turn of the barrier.
 			//TODO also take care of this other places,
-			//TODO After activating a shutdown,  can one turn it of/on normally?			
+			//TODO After activating a shutdown,  can one turn it of/on normally?
+			entryExitProtocol.V(); //TODO check no error here.
+			//Nobody will be able to switch on/off while it is waiting:
+			awaitPossibleShutdown.P(); //Will be incremented by last car exiting the barrier.
+			//The car leaving the barrier passes the entryExitProtocol baton to this.
+			isOn = false;		
+			awaitExitBarrier = false;
 		} else {
 			isOn = false;
 		}

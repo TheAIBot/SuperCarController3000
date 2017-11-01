@@ -269,7 +269,6 @@ public class CarControl implements CarControlI{
 	   try {
 		barrier.on();
 	} catch (InterruptedException e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
    }
@@ -278,20 +277,16 @@ public class CarControl implements CarControlI{
 	   try {
 		barrier.off();
 	} catch (InterruptedException e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
    }
 
    public void barrierShutDown() { 
-       cd.println("Barrier shut down not implemented in this version");
        try {
 			barrier.shutdown();
        } catch (InterruptedException e) {
 			e.printStackTrace();
        }
-       // Recommendation: 
-       //   If not implemented call barrier.off() instead to make graphics consistent
    }
 
    public void setLimit(int k) { 
