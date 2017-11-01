@@ -105,7 +105,7 @@ class Car extends Thread {
 
     synchronized int chooseSpeed() { 
         double factor = (1.0D+(Math.random()-0.5D)*2*variation/100);
-        return (int) Math.round(factor*basespeed) / 10;
+        return (int) Math.round(factor*basespeed) / 4;
     }
 
     private int speed() {
@@ -210,13 +210,7 @@ class Car extends Thread {
                 //Leaving current critical region:
                 
                 if (currentCriticalRegion != null && !currentCriticalRegion.equals(nextCriticalRegion)) {
-                    try {
-                        currentCriticalRegion.leave(num);
-                    } catch (InterruptedException e) {
-                        cd.mark(curpos,col,num);   
-                        mapOfCars[newpos.row][newpos.col].V();
-                        break;
-                    }
+                    currentCriticalRegion.leave(num);
                 }
                 currentCriticalRegion = nextCriticalRegion;
             }
