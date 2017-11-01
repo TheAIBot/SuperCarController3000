@@ -105,7 +105,7 @@ class Car extends Thread {
 
     synchronized int chooseSpeed() { 
         double factor = (1.0D+(Math.random()-0.5D)*2*variation/100);
-        return (int) Math.round(factor*basespeed);
+        return (int) Math.round(factor*basespeed) / 10;
     }
 
     private int speed() {
@@ -315,7 +315,11 @@ public class CarControl implements CarControlI{
    }
 
    public void barrierShutDown() { 
-       barrier.shutdown();
+       try {
+            barrier.shutdown();   
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
    }
 
     public void setLimit(int k) { 
