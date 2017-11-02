@@ -7,41 +7,39 @@ public class Barrier {
 	private boolean exitBarrier = false;
 
 	public synchronized void sync() throws InterruptedException {
-		if (!isOn && !doShutdown) {
-			 return;
-		}
+		//new cars can't enter the barrier 
+		//because they won't get notified 
+		//to leave
 		if (exitBarrier) {
 			while (exitBarrier) {
 				wait();
 			}
 		}
 
-		numberCarsAtBarrier++;
-		System.out.println(numberCarsAtBarrier);
-		if (numberCarsAtBarrier == CarControl.NUMBER_OF_CARS) {
-			boolean supposedToDoShutdown = doShutdown;
-			off();
-			if (!supposedToDoShutdown) {
-				isOn = true;
-			}
+		//only enter barrier if it's on
+		if (!isOn && !doShutdown) {
+			return;
+		}
 
-			exitBarrier = true;
-			while (numberCarsAtBarrier > 1) {
-				wait();
-			}
+		numberCarsAtBarrier++;
+		//if all cars are at the barrier then release them all
+		if (numberCarsAtBarrier == CarControl.NUMBER_OF_CARS) {
+			off();
+			isOn = !doShutdown;
+		}
+
+		//wait at barrier until all cars are at the barrier
+		while (!exitBarrier) {
+			wait();
+		}
+
+		numberCarsAtBarrier--;		
+		//if this is the last car leaving the barrier 
+		//then allow cars to enter the barrier again
+		if (numberCarsAtBarrier == 0) {
 			exitBarrier = false;
-			notifyAll();
+			doShutdown = false;
 		}
-		else {
-			while (!exitBarrier && isOn) {
-				wait();
-			}
-			if (numberCarsAtBarrier == 2) {
-				notifyAll();	
-			}
-		}
-		numberCarsAtBarrier--;
-		System.out.println(numberCarsAtBarrier);		
 	}
 	
 	public synchronized void on() {
@@ -50,10 +48,9 @@ public class Barrier {
 	}
 	
 	public synchronized void off() {
+		exitBarrier = true;
 		isOn = false;
-		doShutdown = false;
 		isShutdownDone = true;
-
 		notifyAll();	
 	}
 
@@ -61,6 +58,10 @@ public class Barrier {
 		if (isOn && numberCarsAtBarrier > 0) {
 			doShutdown = true;
 			isShutdownDone = false;
+			//wait for all cars to begin exiting the barrier.
+			//exitBarrier can't be used here because it won't wait 
+			//for this thread to go out of this function before
+			//it's set back to false
 			while (!isShutdownDone)
 			{
 				wait();

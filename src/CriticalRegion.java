@@ -12,16 +12,20 @@ public class CriticalRegion {
 	}
 	
 	private void enterDownCar() throws InterruptedException {
+		//wait until there is no cars comming from the other side
 		while (upCarsCount > 0) {
 			wait();
 		}
+		//enter alley
 		downCarsCount++;
 	}
 
 	private void enterUpCar() throws InterruptedException  {
+		//wait until there is no cars comming from the other side
 		while (downCarsCount > 0) {
 			wait();
 		}
+		//enter alley
 		upCarsCount++;
 	}
 
@@ -34,12 +38,24 @@ public class CriticalRegion {
 	}
 	
 	private void leaveDownCar()  {
+		//leave alley
 		downCarsCount--;
-		notifyAll();
+		//if this was the last car in the alley
+		//then notify all cars waiting that they can
+		//now try to enter it again
+		if (downCarsCount == 0) {
+			notifyAll();
+		}
 	}
 
 	private void leaveUpCar()  {
+		//leave alley
 		upCarsCount--;
-		notifyAll();
+		//if this was the last car in the alley
+		//then notify all cars waiting that they can
+		//now try to enter it again
+		if (upCarsCount == 0) {
+			notifyAll();
+		}
 	}
 }
