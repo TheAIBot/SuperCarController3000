@@ -39,6 +39,9 @@ public class Barrier {
 		if (numberCarsAtBarrier == 0) {
 			exitBarrier = false;
 			doShutdown = false;
+			//there might be threads waiting to enter 
+			//that are sleeping in the top wait call
+			notifyAll();
 		}
 	}
 	

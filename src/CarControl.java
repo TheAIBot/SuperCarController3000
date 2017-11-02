@@ -105,7 +105,7 @@ class Car extends Thread {
 
     synchronized int chooseSpeed() { 
         double factor = (1.0D+(Math.random()-0.5D)*2*variation/100);
-        return (int) Math.round(factor*basespeed) / 4;
+        return (int) Math.round(factor*basespeed) / 20;
     }
 
     private int speed() {
