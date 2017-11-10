@@ -24,8 +24,9 @@ public class Barrier {
 		numberCarsAtBarrier++;
 		//if all cars are at the barrier then release them all
 		if (numberCarsAtBarrier == CarControl.NUMBER_OF_CARS) {
+			boolean oldDoShutdown = doShutdown;
 			off();
-			isOn = !doShutdown;
+			isOn = !oldDoShutdown;
 		}
 
 		//wait at barrier until all cars are at the barrier
@@ -38,7 +39,6 @@ public class Barrier {
 		//then allow cars to enter the barrier again
 		if (numberCarsAtBarrier == 0) {
 			exitBarrier = false;
-			doShutdown = false;
 			//there might be threads waiting to enter 
 			//that are sleeping in the top wait call
 			notifyAll();
@@ -51,10 +51,13 @@ public class Barrier {
 	}
 	
 	public synchronized void off() {
-		exitBarrier = true;
 		isOn = false;
+		doShutdown = false;
 		isShutdownDone = true;
-		notifyAll();	
+		if (numberCarsAtBarrier > 0) {
+			exitBarrier = true;
+			notifyAll();
+		}
 	}
 
 	public synchronized void shutdown() throws InterruptedException {

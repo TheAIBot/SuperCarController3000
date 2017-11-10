@@ -1,30 +1,33 @@
 public class CriticalRegion {
-	private int[] carsFromDirectionCount = new int[2];
-	private static final int UP = 0;
-	private static final int DOWN = 1;
+	private int directedCarsInAlleyCount = 0;
+	private static final int UP = 1;
+	private static final int DOWN = -1;
 	
 	
-	public synchronized void enter(int num) throws InterruptedException {
-		final int direction = (num  <= 4) ? UP : DOWN;
-		final int otherDirection = (direction == UP) ? DOWN : UP;
+	public synchronized void enter(int carNumber) throws InterruptedException {
+		final int direction = (carNumber  <= 4) ? UP : DOWN;
 
-		//wait until there is no cars comming from the other direction
-		while (carsFromDirectionCount[otherDirection] > 0) {
+		while (hasToWait(direction)) {
 			wait();
 		}
-		//enter alley from this direction
-		carsFromDirectionCount[direction]++;
+
+		directedCarsInAlleyCount += direction;
 	}
 
-	public synchronized void leave(int num)  {
-		final int direction = (num  <= 4) ? UP : DOWN;
+	private synchronized boolean  hasToWait(int direction)
+	{
+		//direction is negative then directedCarsInAlleyCount
+		//also has to be 0 or negative for the car to continue.
+		//Other way around with posetive.
+		return directedCarsInAlleyCount * direction < 0;
+	}
 
-		//leave alley from this direction
-		carsFromDirectionCount[direction]--;
-		//if this was the last car in the alley
-		//then notify all cars waiting that they can
-		//now try to enter it again
-		if (carsFromDirectionCount[direction] == 0) {
+	public synchronized void leave(int carNumber)  {
+		final int direction = (carNumber  <= 4) ? UP : DOWN;
+
+		directedCarsInAlleyCount -= direction;
+
+		if (directedCarsInAlleyCount == 0) {
 			notifyAll();
 		}
 	}
