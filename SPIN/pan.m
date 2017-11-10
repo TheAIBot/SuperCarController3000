@@ -20,7 +20,7 @@
 		_m = 3; goto P999;
 
 		 /* CLAIM passBarrier */
-	case 3: // STATE 1 - _spin_nvr.tmp:20 - [(((!(isOn)&&!((Car[carPID[1]]._p==afterBarrier)))&&(Car[carPID[1]]._p==barrierEntry)))] (0:0:0 - 1)
+	case 3: // STATE 1 - _spin_nvr.tmp:20 - [(((!((Car[carPID[1]]._p==afterBarrier))&&(isInBarrier[carPID[1]]&&(numberCarsAtBarrier==2)))&&isOn))] (0:0:0 - 1)
 		
 #if defined(VERI) && !defined(NP)
 #if NCLAIMS>1
@@ -43,10 +43,10 @@
 #endif
 #endif
 		reached[4][1] = 1;
-		if (!((( !(((int)now.isOn))&& !((((int)((P2 *)Pptr(BASE+((int)now.carPID[1])))->_p)==55)))&&(((int)((P2 *)Pptr(BASE+((int)now.carPID[1])))->_p)==10))))
+		if (!((( !((((int)((P2 *)Pptr(BASE+((int)now.carPID[1])))->_p)==63))&&(((int)now.isInBarrier[ Index(((int)now.carPID[1]), 4) ])&&(((int)now.numberCarsAtBarrier)==2)))&&((int)now.isOn))))
 			continue;
 		_m = 3; goto P999; /* 0 */
-	case 4: // STATE 8 - _spin_nvr.tmp:25 - [((!(isOn)&&!((Car[carPID[1]]._p==afterBarrier))))] (0:0:0 - 1)
+	case 4: // STATE 8 - _spin_nvr.tmp:25 - [((!((Car[carPID[1]]._p==afterBarrier))&&isOn))] (0:0:0 - 1)
 		
 #if defined(VERI) && !defined(NP)
 #if NCLAIMS>1
@@ -69,7 +69,7 @@
 #endif
 #endif
 		reached[4][8] = 1;
-		if (!(( !(((int)now.isOn))&& !((((int)((P2 *)Pptr(BASE+((int)now.carPID[1])))->_p)==55)))))
+		if (!(( !((((int)((P2 *)Pptr(BASE+((int)now.carPID[1])))->_p)==63))&&((int)now.isOn))))
 			continue;
 		_m = 3; goto P999; /* 0 */
 	case 5: // STATE 13 - _spin_nvr.tmp:27 - [-end-] (0:0:0 - 1)
@@ -99,7 +99,7 @@
 		_m = 3; goto P999; /* 0 */
 
 		 /* CLAIM notPassBarrier */
-	case 6: // STATE 1 - _spin_nvr.tmp:3 - [(((!((Car[carPID[1]]._p==afterBarrier))&&(Car[carPID[1]]._p==barrierEntry))&&isOn))] (0:0:0 - 1)
+	case 6: // STATE 1 - _spin_nvr.tmp:3 - [(((!((isInBarrier[carPID[1]]&&isInBarrier[carPID[2]]))&&(Car[carPID[1]]._p==afterBarrier))&&isOn))] (0:0:0 - 1)
 		
 #if defined(VERI) && !defined(NP)
 #if NCLAIMS>1
@@ -122,10 +122,10 @@
 #endif
 #endif
 		reached[3][1] = 1;
-		if (!((( !((((int)((P2 *)Pptr(BASE+((int)now.carPID[1])))->_p)==55))&&(((int)((P2 *)Pptr(BASE+((int)now.carPID[1])))->_p)==10))&&((int)now.isOn))))
+		if (!((( !((((int)now.isInBarrier[ Index(((int)now.carPID[1]), 4) ])&&((int)now.isInBarrier[ Index(((int)now.carPID[2]), 4) ])))&&(((int)((P2 *)Pptr(BASE+((int)now.carPID[1])))->_p)==63))&&((int)now.isOn))))
 			continue;
 		_m = 3; goto P999; /* 0 */
-	case 7: // STATE 3 - _spin_nvr.tmp:4 - [(((Car[carPID[1]]._p==barrierEntry)&&isOn))] (0:0:0 - 1)
+	case 7: // STATE 3 - _spin_nvr.tmp:4 - [((!((isInBarrier[carPID[1]]&&isInBarrier[carPID[2]]))&&isOn))] (0:0:0 - 1)
 		
 #if defined(VERI) && !defined(NP)
 #if NCLAIMS>1
@@ -148,10 +148,10 @@
 #endif
 #endif
 		reached[3][3] = 1;
-		if (!(((((int)((P2 *)Pptr(BASE+((int)now.carPID[1])))->_p)==10)&&((int)now.isOn))))
+		if (!(( !((((int)now.isInBarrier[ Index(((int)now.carPID[1]), 4) ])&&((int)now.isInBarrier[ Index(((int)now.carPID[2]), 4) ])))&&((int)now.isOn))))
 			continue;
 		_m = 3; goto P999; /* 0 */
-	case 8: // STATE 10 - _spin_nvr.tmp:9 - [(isOn)] (0:0:0 - 1)
+	case 8: // STATE 10 - _spin_nvr.tmp:9 - [((!((isInBarrier[carPID[1]]&&isInBarrier[carPID[2]]))&&isOn))] (0:0:0 - 1)
 		
 #if defined(VERI) && !defined(NP)
 #if NCLAIMS>1
@@ -174,10 +174,10 @@
 #endif
 #endif
 		reached[3][10] = 1;
-		if (!(((int)now.isOn)))
+		if (!(( !((((int)now.isInBarrier[ Index(((int)now.carPID[1]), 4) ])&&((int)now.isInBarrier[ Index(((int)now.carPID[2]), 4) ])))&&((int)now.isOn))))
 			continue;
 		_m = 3; goto P999; /* 0 */
-	case 9: // STATE 15 - _spin_nvr.tmp:13 - [((!((Car[carPID[1]]._p==afterBarrier))&&isOn))] (0:0:0 - 1)
+	case 9: // STATE 15 - _spin_nvr.tmp:13 - [(((!((isInBarrier[carPID[1]]&&isInBarrier[carPID[2]]))&&(Car[carPID[1]]._p==afterBarrier))&&isOn))] (0:0:0 - 1)
 		
 #if defined(VERI) && !defined(NP)
 #if NCLAIMS>1
@@ -200,10 +200,10 @@
 #endif
 #endif
 		reached[3][15] = 1;
-		if (!(( !((((int)((P2 *)Pptr(BASE+((int)now.carPID[1])))->_p)==55))&&((int)now.isOn))))
+		if (!((( !((((int)now.isInBarrier[ Index(((int)now.carPID[1]), 4) ])&&((int)now.isInBarrier[ Index(((int)now.carPID[2]), 4) ])))&&(((int)((P2 *)Pptr(BASE+((int)now.carPID[1])))->_p)==63))&&((int)now.isOn))))
 			continue;
 		_m = 3; goto P999; /* 0 */
-	case 10: // STATE 17 - _spin_nvr.tmp:14 - [(isOn)] (0:0:0 - 1)
+	case 10: // STATE 17 - _spin_nvr.tmp:14 - [((!((isInBarrier[carPID[1]]&&isInBarrier[carPID[2]]))&&isOn))] (0:0:0 - 1)
 		
 #if defined(VERI) && !defined(NP)
 #if NCLAIMS>1
@@ -226,7 +226,7 @@
 #endif
 #endif
 		reached[3][17] = 1;
-		if (!(((int)now.isOn)))
+		if (!(( !((((int)now.isInBarrier[ Index(((int)now.carPID[1]), 4) ])&&((int)now.isInBarrier[ Index(((int)now.carPID[2]), 4) ])))&&((int)now.isOn))))
 			continue;
 		_m = 3; goto P999; /* 0 */
 	case 11: // STATE 22 - _spin_nvr.tmp:16 - [-end-] (0:0:0 - 1)
@@ -256,110 +256,44 @@
 		_m = 3; goto P999; /* 0 */
 
 		 /* PROC Car */
-	case 12: // STATE 11 - Part3-a.pml:104 - [(isOn)] (0:0:0 - 1)
+	case 12: // STATE 11 - Part3-a.pml:113 - [(!(isOn))] (0:0:0 - 1)
 		IfNotBlocked
 		reached[2][11] = 1;
+		if (!( !(((int)now.isOn))))
+			continue;
+		_m = 3; goto P999; /* 0 */
+	case 13: // STATE 13 - Part3-a.pml:114 - [(isOn)] (0:0:0 - 1)
+		IfNotBlocked
+		reached[2][13] = 1;
 		if (!(((int)now.isOn)))
 			continue;
 		_m = 3; goto P999; /* 0 */
-	case 13: // STATE 12 - Part3-a.pml:105 - [((entryExitProtocol>0))] (49:0:1 - 1)
+	case 14: // STATE 17 - Part3-a.pml:117 - [((entryExitProtocol>0))] (28:0:1 - 1)
 		IfNotBlocked
-		reached[2][12] = 1;
+		reached[2][17] = 1;
 		if (!((((int)now.entryExitProtocol)>0)))
 			continue;
-		/* merge: entryExitProtocol = (entryExitProtocol-1)(49, 13, 49) */
-		reached[2][13] = 1;
+		/* merge: entryExitProtocol = (entryExitProtocol-1)(28, 18, 28) */
+		reached[2][18] = 1;
 		(trpt+1)->bup.oval = ((int)now.entryExitProtocol);
 		now.entryExitProtocol = (((int)now.entryExitProtocol)-1);
 #ifdef VAR_RANGES
 		logval("entryExitProtocol", ((int)now.entryExitProtocol));
 #endif
 		;
-		/* merge: .(goto)(49, 15, 49) */
-		reached[2][15] = 1;
+		/* merge: .(goto)(28, 20, 28) */
+		reached[2][20] = 1;
 		;
 		_m = 3; goto P999; /* 2 */
-	case 14: // STATE 17 - Part3-a.pml:107 - [(isOn)] (0:0:0 - 1)
-		IfNotBlocked
-		reached[2][17] = 1;
-		if (!(((int)now.isOn)))
-			continue;
-		_m = 3; goto P999; /* 0 */
-	case 15: // STATE 18 - Part3-a.pml:108 - [temp = (numberCarsAtBarrier+1)] (0:0:1 - 1)
-		IfNotBlocked
-		reached[2][18] = 1;
-		(trpt+1)->bup.oval = ((P2 *)this)->temp;
-		((P2 *)this)->temp = (((int)now.numberCarsAtBarrier)+1);
-#ifdef VAR_RANGES
-		logval("Car:temp", ((P2 *)this)->temp);
-#endif
-		;
-		_m = 3; goto P999; /* 0 */
-	case 16: // STATE 19 - Part3-a.pml:109 - [numberCarsAtBarrier = temp] (0:0:1 - 1)
-		IfNotBlocked
-		reached[2][19] = 1;
-		(trpt+1)->bup.oval = ((int)now.numberCarsAtBarrier);
-		now.numberCarsAtBarrier = ((P2 *)this)->temp;
-#ifdef VAR_RANGES
-		logval("numberCarsAtBarrier", ((int)now.numberCarsAtBarrier));
-#endif
-		;
-		_m = 3; goto P999; /* 0 */
-	case 17: // STATE 20 - Part3-a.pml:111 - [((numberCarsAtBarrier==2))] (0:0:0 - 1)
-		IfNotBlocked
-		reached[2][20] = 1;
-		if (!((((int)now.numberCarsAtBarrier)==2)))
-			continue;
-		_m = 3; goto P999; /* 0 */
-	case 18: // STATE 21 - Part3-a.pml:112 - [temp = (numberCarsAtBarrier-2)] (0:0:1 - 1)
-		IfNotBlocked
-		reached[2][21] = 1;
-		(trpt+1)->bup.oval = ((P2 *)this)->temp;
-		((P2 *)this)->temp = (((int)now.numberCarsAtBarrier)-2);
-#ifdef VAR_RANGES
-		logval("Car:temp", ((P2 *)this)->temp);
-#endif
-		;
-		_m = 3; goto P999; /* 0 */
-	case 19: // STATE 22 - Part3-a.pml:113 - [numberCarsToAwake = temp] (0:0:1 - 1)
+	case 15: // STATE 22 - Part3-a.pml:119 - [(!(isOn))] (0:0:0 - 1)
 		IfNotBlocked
 		reached[2][22] = 1;
-		(trpt+1)->bup.oval = ((int)now.numberCarsToAwake);
-		now.numberCarsToAwake = ((P2 *)this)->temp;
-#ifdef VAR_RANGES
-		logval("numberCarsToAwake", ((int)now.numberCarsToAwake));
-#endif
-		;
-		_m = 3; goto P999; /* 0 */
-	case 20: // STATE 23 - Part3-a.pml:114 - [numberCarsAtBarrier = 0] (0:0:1 - 1)
-		IfNotBlocked
-		reached[2][23] = 1;
-		(trpt+1)->bup.oval = ((int)now.numberCarsAtBarrier);
-		now.numberCarsAtBarrier = 0;
-#ifdef VAR_RANGES
-		logval("numberCarsAtBarrier", ((int)now.numberCarsAtBarrier));
-#endif
-		;
-		_m = 3; goto P999; /* 0 */
-	case 21: // STATE 24 - Part3-a.pml:115 - [awaitAllCarsAtBarrier = (awaitAllCarsAtBarrier+1)] (0:0:1 - 1)
-		IfNotBlocked
-		reached[2][24] = 1;
-		(trpt+1)->bup.oval = ((int)now.awaitAllCarsAtBarrier);
-		now.awaitAllCarsAtBarrier = (((int)now.awaitAllCarsAtBarrier)+1);
-#ifdef VAR_RANGES
-		logval("awaitAllCarsAtBarrier", ((int)now.awaitAllCarsAtBarrier));
-#endif
-		;
-		_m = 3; goto P999; /* 0 */
-	case 22: // STATE 26 - Part3-a.pml:117 - [(!((numberCarsAtBarrier==2)))] (0:0:0 - 1)
-		IfNotBlocked
-		reached[2][26] = 1;
-		if (!( !((((int)now.numberCarsAtBarrier)==2))))
+		if (!( !(((int)now.isOn))))
 			continue;
 		_m = 3; goto P999; /* 0 */
-	case 23: // STATE 27 - Part3-a.pml:118 - [entryExitProtocol = (entryExitProtocol+1)] (0:0:1 - 1)
+	case 16: // STATE 23 - Part3-a.pml:120 - [entryExitProtocol = (entryExitProtocol+1)] (0:0:1 - 1)
 		IfNotBlocked
-		reached[2][27] = 1;
+		reached[2][23] = 1;
 		(trpt+1)->bup.oval = ((int)now.entryExitProtocol);
 		now.entryExitProtocol = (((int)now.entryExitProtocol)+1);
 #ifdef VAR_RANGES
@@ -367,42 +301,61 @@
 #endif
 		;
 		_m = 3; goto P999; /* 0 */
-	case 24: // STATE 29 - Part3-a.pml:119 - [((awaitAllCarsAtBarrier>0))] (42:0:1 - 1)
+	case 17: // STATE 26 - Part3-a.pml:122 - [(isOn)] (0:0:0 - 1)
 		IfNotBlocked
-		reached[2][29] = 1;
-		if (!((((int)now.awaitAllCarsAtBarrier)>0)))
-			continue;
-		/* merge: awaitAllCarsAtBarrier = (awaitAllCarsAtBarrier-1)(42, 30, 42) */
-		reached[2][30] = 1;
-		(trpt+1)->bup.oval = ((int)now.awaitAllCarsAtBarrier);
-		now.awaitAllCarsAtBarrier = (((int)now.awaitAllCarsAtBarrier)-1);
-#ifdef VAR_RANGES
-		logval("awaitAllCarsAtBarrier", ((int)now.awaitAllCarsAtBarrier));
-#endif
-		;
-		/* merge: .(goto)(42, 32, 42) */
-		reached[2][32] = 1;
-		;
-		_m = 3; goto P999; /* 2 */
-	case 25: // STATE 34 - Part3-a.pml:121 - [((numberCarsToAwake>0))] (0:0:0 - 1)
-		IfNotBlocked
-		reached[2][34] = 1;
-		if (!((((int)now.numberCarsToAwake)>0)))
+		reached[2][26] = 1;
+		if (!(((int)now.isOn)))
 			continue;
 		_m = 3; goto P999; /* 0 */
-	case 26: // STATE 35 - Part3-a.pml:122 - [temp = (numberCarsToAwake-1)] (0:0:1 - 1)
+	case 18: // STATE 30 - Part3-a.pml:125 - [temp = (numberCarsAtBarrier+1)] (0:0:1 - 2)
 		IfNotBlocked
-		reached[2][35] = 1;
+		reached[2][30] = 1;
 		(trpt+1)->bup.oval = ((P2 *)this)->temp;
-		((P2 *)this)->temp = (((int)now.numberCarsToAwake)-1);
+		((P2 *)this)->temp = (((int)now.numberCarsAtBarrier)+1);
 #ifdef VAR_RANGES
 		logval("Car:temp", ((P2 *)this)->temp);
 #endif
 		;
 		_m = 3; goto P999; /* 0 */
-	case 27: // STATE 36 - Part3-a.pml:123 - [numberCarsToAwake = temp] (0:0:1 - 1)
+	case 19: // STATE 31 - Part3-a.pml:126 - [numberCarsAtBarrier = temp] (0:0:1 - 1)
 		IfNotBlocked
-		reached[2][36] = 1;
+		reached[2][31] = 1;
+		(trpt+1)->bup.oval = ((int)now.numberCarsAtBarrier);
+		now.numberCarsAtBarrier = ((P2 *)this)->temp;
+#ifdef VAR_RANGES
+		logval("numberCarsAtBarrier", ((int)now.numberCarsAtBarrier));
+#endif
+		;
+		_m = 3; goto P999; /* 0 */
+	case 20: // STATE 32 - Part3-a.pml:127 - [isInBarrier[_pid] = 1] (0:0:1 - 1)
+		IfNotBlocked
+		reached[2][32] = 1;
+		(trpt+1)->bup.oval = ((int)now.isInBarrier[ Index(((int)((P2 *)this)->_pid), 4) ]);
+		now.isInBarrier[ Index(((P2 *)this)->_pid, 4) ] = 1;
+#ifdef VAR_RANGES
+		logval("isInBarrier[_pid]", ((int)now.isInBarrier[ Index(((int)((P2 *)this)->_pid), 4) ]));
+#endif
+		;
+		_m = 3; goto P999; /* 0 */
+	case 21: // STATE 33 - Part3-a.pml:130 - [((numberCarsAtBarrier==2))] (0:0:0 - 1)
+		IfNotBlocked
+		reached[2][33] = 1;
+		if (!((((int)now.numberCarsAtBarrier)==2)))
+			continue;
+		_m = 3; goto P999; /* 0 */
+	case 22: // STATE 34 - Part3-a.pml:131 - [temp = (numberCarsAtBarrier-2)] (0:0:1 - 1)
+		IfNotBlocked
+		reached[2][34] = 1;
+		(trpt+1)->bup.oval = ((P2 *)this)->temp;
+		((P2 *)this)->temp = (((int)now.numberCarsAtBarrier)-2);
+#ifdef VAR_RANGES
+		logval("Car:temp", ((P2 *)this)->temp);
+#endif
+		;
+		_m = 3; goto P999; /* 0 */
+	case 23: // STATE 35 - Part3-a.pml:132 - [numberCarsToAwake = temp] (0:0:1 - 1)
+		IfNotBlocked
+		reached[2][35] = 1;
 		(trpt+1)->bup.oval = ((int)now.numberCarsToAwake);
 		now.numberCarsToAwake = ((P2 *)this)->temp;
 #ifdef VAR_RANGES
@@ -410,7 +363,17 @@
 #endif
 		;
 		_m = 3; goto P999; /* 0 */
-	case 28: // STATE 37 - Part3-a.pml:124 - [awaitAllCarsAtBarrier = (awaitAllCarsAtBarrier+1)] (0:0:1 - 1)
+	case 24: // STATE 36 - Part3-a.pml:133 - [numberCarsAtBarrier = 0] (0:0:1 - 1)
+		IfNotBlocked
+		reached[2][36] = 1;
+		(trpt+1)->bup.oval = ((int)now.numberCarsAtBarrier);
+		now.numberCarsAtBarrier = 0;
+#ifdef VAR_RANGES
+		logval("numberCarsAtBarrier", ((int)now.numberCarsAtBarrier));
+#endif
+		;
+		_m = 3; goto P999; /* 0 */
+	case 25: // STATE 37 - Part3-a.pml:134 - [awaitAllCarsAtBarrier = (awaitAllCarsAtBarrier+1)] (0:0:1 - 1)
 		IfNotBlocked
 		reached[2][37] = 1;
 		(trpt+1)->bup.oval = ((int)now.awaitAllCarsAtBarrier);
@@ -420,15 +383,15 @@
 #endif
 		;
 		_m = 3; goto P999; /* 0 */
-	case 29: // STATE 39 - Part3-a.pml:126 - [(!((numberCarsToAwake>0)))] (0:0:0 - 1)
-		IfNotBlocked
-		reached[2][39] = 1;
-		if (!( !((((int)now.numberCarsToAwake)>0))))
-			continue;
-		_m = 3; goto P999; /* 0 */
-	case 30: // STATE 40 - Part3-a.pml:127 - [entryExitProtocol = (entryExitProtocol+1)] (0:0:1 - 1)
+	case 26: // STATE 40 - Part3-a.pml:136 - [(!((numberCarsAtBarrier==2)))] (0:0:0 - 1)
 		IfNotBlocked
 		reached[2][40] = 1;
+		if (!( !((((int)now.numberCarsAtBarrier)==2))))
+			continue;
+		_m = 3; goto P999; /* 0 */
+	case 27: // STATE 44 - Part3-a.pml:139 - [entryExitProtocol = (entryExitProtocol+1)] (0:0:1 - 1)
+		IfNotBlocked
+		reached[2][44] = 1;
 		(trpt+1)->bup.oval = ((int)now.entryExitProtocol);
 		now.entryExitProtocol = (((int)now.entryExitProtocol)+1);
 #ifdef VAR_RANGES
@@ -436,165 +399,52 @@
 #endif
 		;
 		_m = 3; goto P999; /* 0 */
-	case 31: // STATE 46 - Part3-a.pml:131 - [(!(isOn))] (0:0:0 - 1)
+	case 28: // STATE 46 - Part3-a.pml:140 - [((awaitAllCarsAtBarrier>0))] (58:0:1 - 1)
 		IfNotBlocked
 		reached[2][46] = 1;
-		if (!( !(((int)now.isOn))))
+		if (!((((int)now.awaitAllCarsAtBarrier)>0)))
 			continue;
-		_m = 3; goto P999; /* 0 */
-	case 32: // STATE 47 - Part3-a.pml:132 - [entryExitProtocol = (entryExitProtocol+1)] (0:0:1 - 1)
-		IfNotBlocked
+		/* merge: awaitAllCarsAtBarrier = (awaitAllCarsAtBarrier-1)(58, 47, 58) */
 		reached[2][47] = 1;
-		(trpt+1)->bup.oval = ((int)now.entryExitProtocol);
-		now.entryExitProtocol = (((int)now.entryExitProtocol)+1);
+		(trpt+1)->bup.oval = ((int)now.awaitAllCarsAtBarrier);
+		now.awaitAllCarsAtBarrier = (((int)now.awaitAllCarsAtBarrier)-1);
 #ifdef VAR_RANGES
-		logval("entryExitProtocol", ((int)now.entryExitProtocol));
+		logval("awaitAllCarsAtBarrier", ((int)now.awaitAllCarsAtBarrier));
 #endif
 		;
-		_m = 3; goto P999; /* 0 */
-	case 33: // STATE 51 - Part3-a.pml:138 - [(!(isOn))] (0:0:0 - 1)
+		/* merge: .(goto)(58, 49, 58) */
+		reached[2][49] = 1;
+		;
+		_m = 3; goto P999; /* 2 */
+	case 29: // STATE 51 - Part3-a.pml:142 - [((numberCarsToAwake>0))] (0:0:0 - 1)
 		IfNotBlocked
 		reached[2][51] = 1;
-		if (!( !(((int)now.isOn))))
+		if (!((((int)now.numberCarsToAwake)>0)))
 			continue;
 		_m = 3; goto P999; /* 0 */
-	case 34: // STATE 66 - Part3-a.pml:155 - [-end-] (0:0:0 - 1)
+	case 30: // STATE 52 - Part3-a.pml:143 - [temp = (numberCarsToAwake-1)] (0:0:1 - 1)
 		IfNotBlocked
-		reached[2][66] = 1;
-		if (!delproc(1, II)) continue;
-		_m = 3; goto P999; /* 0 */
-
-		 /* PROC CarController */
-	case 35: // STATE 2 - Part3-a.pml:54 - [((onOffSwitch>0))] (7:0:1 - 1)
-		IfNotBlocked
-		reached[1][2] = 1;
-		if (!((((int)now.onOffSwitch)>0)))
-			continue;
-		/* merge: onOffSwitch = (onOffSwitch-1)(7, 3, 7) */
-		reached[1][3] = 1;
-		(trpt+1)->bup.oval = ((int)now.onOffSwitch);
-		now.onOffSwitch = (((int)now.onOffSwitch)-1);
+		reached[2][52] = 1;
+		(trpt+1)->bup.oval = ((P2 *)this)->temp;
+		((P2 *)this)->temp = (((int)now.numberCarsToAwake)-1);
 #ifdef VAR_RANGES
-		logval("onOffSwitch", ((int)now.onOffSwitch));
-#endif
-		;
-		/* merge: .(goto)(7, 5, 7) */
-		reached[1][5] = 1;
-		;
-		_m = 3; goto P999; /* 2 */
-	case 36: // STATE 7 - Part3-a.pml:55 - [isOn = 1] (0:0:1 - 1)
-		IfNotBlocked
-		reached[1][7] = 1;
-		(trpt+1)->bup.oval = ((int)now.isOn);
-		now.isOn = 1;
-#ifdef VAR_RANGES
-		logval("isOn", ((int)now.isOn));
+		logval("Car:temp", ((P2 *)this)->temp);
 #endif
 		;
 		_m = 3; goto P999; /* 0 */
-	case 37: // STATE 8 - Part3-a.pml:56 - [onOffSwitch = (onOffSwitch+1)] (0:0:1 - 1)
+	case 31: // STATE 53 - Part3-a.pml:144 - [numberCarsToAwake = temp] (0:0:1 - 1)
 		IfNotBlocked
-		reached[1][8] = 1;
-		(trpt+1)->bup.oval = ((int)now.onOffSwitch);
-		now.onOffSwitch = (((int)now.onOffSwitch)+1);
-#ifdef VAR_RANGES
-		logval("onOffSwitch", ((int)now.onOffSwitch));
-#endif
-		;
-		_m = 3; goto P999; /* 0 */
-	case 38: // STATE 11 - Part3-a.pml:59 - [((onOffSwitch>0))] (16:0:1 - 1)
-		IfNotBlocked
-		reached[1][11] = 1;
-		if (!((((int)now.onOffSwitch)>0)))
-			continue;
-		/* merge: onOffSwitch = (onOffSwitch-1)(16, 12, 16) */
-		reached[1][12] = 1;
-		(trpt+1)->bup.oval = ((int)now.onOffSwitch);
-		now.onOffSwitch = (((int)now.onOffSwitch)-1);
-#ifdef VAR_RANGES
-		logval("onOffSwitch", ((int)now.onOffSwitch));
-#endif
-		;
-		/* merge: .(goto)(16, 14, 16) */
-		reached[1][14] = 1;
-		;
-		_m = 3; goto P999; /* 2 */
-	case 39: // STATE 16 - Part3-a.pml:60 - [isOn = 0] (0:0:1 - 1)
-		IfNotBlocked
-		reached[1][16] = 1;
-		(trpt+1)->bup.oval = ((int)now.isOn);
-		now.isOn = 0;
-#ifdef VAR_RANGES
-		logval("isOn", ((int)now.isOn));
-#endif
-		;
-		_m = 3; goto P999; /* 0 */
-	case 40: // STATE 17 - Part3-a.pml:61 - [((entryExitProtocol>0))] (35:0:1 - 1)
-		IfNotBlocked
-		reached[1][17] = 1;
-		if (!((((int)now.entryExitProtocol)>0)))
-			continue;
-		/* merge: entryExitProtocol = (entryExitProtocol-1)(35, 18, 35) */
-		reached[1][18] = 1;
-		(trpt+1)->bup.oval = ((int)now.entryExitProtocol);
-		now.entryExitProtocol = (((int)now.entryExitProtocol)-1);
-#ifdef VAR_RANGES
-		logval("entryExitProtocol", ((int)now.entryExitProtocol));
-#endif
-		;
-		/* merge: .(goto)(35, 20, 35) */
-		reached[1][20] = 1;
-		;
-		_m = 3; goto P999; /* 2 */
-	case 41: // STATE 22 - Part3-a.pml:64 - [((numberCarsAtBarrier>0))] (0:0:0 - 1)
-		IfNotBlocked
-		reached[1][22] = 1;
-		if (!((((int)now.numberCarsAtBarrier)>0)))
-			continue;
-		_m = 3; goto P999; /* 0 */
-	case 42: // STATE 23 - Part3-a.pml:65 - [temp = (numberCarsAtBarrier-1)] (0:0:1 - 1)
-		IfNotBlocked
-		reached[1][23] = 1;
-		(trpt+1)->bup.oval = ((P1 *)this)->temp;
-		((P1 *)this)->temp = (((int)now.numberCarsAtBarrier)-1);
-#ifdef VAR_RANGES
-		logval("CarController:temp", ((P1 *)this)->temp);
-#endif
-		;
-		_m = 3; goto P999; /* 0 */
-	case 43: // STATE 24 - Part3-a.pml:66 - [numberCarsToAwake = temp] (0:0:1 - 1)
-		IfNotBlocked
-		reached[1][24] = 1;
+		reached[2][53] = 1;
 		(trpt+1)->bup.oval = ((int)now.numberCarsToAwake);
-		now.numberCarsToAwake = ((P1 *)this)->temp;
+		now.numberCarsToAwake = ((P2 *)this)->temp;
 #ifdef VAR_RANGES
 		logval("numberCarsToAwake", ((int)now.numberCarsToAwake));
 #endif
 		;
 		_m = 3; goto P999; /* 0 */
-	case 44: // STATE 25 - Part3-a.pml:67 - [numberCarsAtBarrier = 0] (0:0:1 - 1)
+	case 32: // STATE 54 - Part3-a.pml:145 - [awaitAllCarsAtBarrier = (awaitAllCarsAtBarrier+1)] (0:0:1 - 1)
 		IfNotBlocked
-		reached[1][25] = 1;
-		(trpt+1)->bup.oval = ((int)now.numberCarsAtBarrier);
-		now.numberCarsAtBarrier = 0;
-#ifdef VAR_RANGES
-		logval("numberCarsAtBarrier", ((int)now.numberCarsAtBarrier));
-#endif
-		;
-		_m = 3; goto P999; /* 0 */
-	case 45: // STATE 26 - Part3-a.pml:68 - [onOffSwitch = (onOffSwitch+1)] (0:0:1 - 1)
-		IfNotBlocked
-		reached[1][26] = 1;
-		(trpt+1)->bup.oval = ((int)now.onOffSwitch);
-		now.onOffSwitch = (((int)now.onOffSwitch)+1);
-#ifdef VAR_RANGES
-		logval("onOffSwitch", ((int)now.onOffSwitch));
-#endif
-		;
-		_m = 3; goto P999; /* 0 */
-	case 46: // STATE 28 - Part3-a.pml:69 - [awaitAllCarsAtBarrier = (awaitAllCarsAtBarrier+1)] (0:0:1 - 1)
-		IfNotBlocked
-		reached[1][28] = 1;
+		reached[2][54] = 1;
 		(trpt+1)->bup.oval = ((int)now.awaitAllCarsAtBarrier);
 		now.awaitAllCarsAtBarrier = (((int)now.awaitAllCarsAtBarrier)+1);
 #ifdef VAR_RANGES
@@ -602,15 +452,15 @@
 #endif
 		;
 		_m = 3; goto P999; /* 0 */
-	case 47: // STATE 30 - Part3-a.pml:71 - [(!((numberCarsAtBarrier>0)))] (0:0:0 - 1)
+	case 33: // STATE 56 - Part3-a.pml:147 - [(!((numberCarsToAwake>0)))] (0:0:0 - 1)
 		IfNotBlocked
-		reached[1][30] = 1;
-		if (!( !((((int)now.numberCarsAtBarrier)>0))))
+		reached[2][56] = 1;
+		if (!( !((((int)now.numberCarsToAwake)>0))))
 			continue;
 		_m = 3; goto P999; /* 0 */
-	case 48: // STATE 31 - Part3-a.pml:72 - [entryExitProtocol = (entryExitProtocol+1)] (0:0:1 - 1)
+	case 34: // STATE 60 - Part3-a.pml:150 - [entryExitProtocol = (entryExitProtocol+1)] (0:0:1 - 1)
 		IfNotBlocked
-		reached[1][31] = 1;
+		reached[2][60] = 1;
 		(trpt+1)->bup.oval = ((int)now.entryExitProtocol);
 		now.entryExitProtocol = (((int)now.entryExitProtocol)+1);
 #ifdef VAR_RANGES
@@ -618,34 +468,51 @@
 #endif
 		;
 		_m = 3; goto P999; /* 0 */
-	case 49: // STATE 33 - Part3-a.pml:73 - [onOffSwitch = (onOffSwitch+1)] (0:0:1 - 1)
+	case 35: // STATE 63 - Part3-a.pml:158 - [isInBarrier[_pid] = 0] (0:0:1 - 1)
 		IfNotBlocked
-		reached[1][33] = 1;
-		(trpt+1)->bup.oval = ((int)now.onOffSwitch);
-		now.onOffSwitch = (((int)now.onOffSwitch)+1);
+		reached[2][63] = 1;
+		(trpt+1)->bup.oval = ((int)now.isInBarrier[ Index(((int)((P2 *)this)->_pid), 4) ]);
+		now.isInBarrier[ Index(((P2 *)this)->_pid, 4) ] = 0;
 #ifdef VAR_RANGES
-		logval("onOffSwitch", ((int)now.onOffSwitch));
+		logval("isInBarrier[_pid]", ((int)now.isInBarrier[ Index(((int)((P2 *)this)->_pid), 4) ]));
 #endif
 		;
 		_m = 3; goto P999; /* 0 */
-	case 50: // STATE 40 - Part3-a.pml:79 - [-end-] (0:0:0 - 1)
+	case 36: // STATE 74 - Part3-a.pml:167 - [-end-] (0:0:0 - 1)
 		IfNotBlocked
-		reached[1][40] = 1;
+		reached[2][74] = 1;
+		if (!delproc(1, II)) continue;
+		_m = 3; goto P999; /* 0 */
+
+		 /* PROC CarController */
+	case 37: // STATE 1 - Part3-a.pml:57 - [isOn = 1] (0:0:1 - 1)
+		IfNotBlocked
+		reached[1][1] = 1;
+		(trpt+1)->bup.oval = ((int)now.isOn);
+		now.isOn = 1;
+#ifdef VAR_RANGES
+		logval("isOn", ((int)now.isOn));
+#endif
+		;
+		_m = 3; goto P999; /* 0 */
+	case 38: // STATE 2 - Part3-a.pml:87 - [-end-] (0:0:0 - 1)
+		IfNotBlocked
+		reached[1][2] = 1;
 		if (!delproc(1, II)) continue;
 		_m = 3; goto P999; /* 0 */
 
 		 /* PROC :init: */
-	case 51: // STATE 1 - Part3-a.pml:37 - [carPID[1] = run Car(1)] (0:4:2 - 1)
+	case 39: // STATE 1 - Part3-a.pml:40 - [carPID[1] = run Car(1)] (0:6:4 - 1)
 		IfNotBlocked
 		reached[0][1] = 1;
-		(trpt+1)->bup.ovals = grab_ints(2);
+		(trpt+1)->bup.ovals = grab_ints(4);
 		(trpt+1)->bup.ovals[0] = ((int)now.carPID[1]);
 		now.carPID[1] = addproc(II, 1, 2, 1);
 #ifdef VAR_RANGES
 		logval("carPID[1]", ((int)now.carPID[1]));
 #endif
 		;
-		/* merge: carPID[2] = run Car(1)(4, 2, 4) */
+		/* merge: carPID[2] = run Car(1)(6, 2, 6) */
 		reached[0][2] = 1;
 		(trpt+1)->bup.ovals[1] = ((int)now.carPID[2]);
 		now.carPID[2] = addproc(II, 1, 2, 1);
@@ -653,10 +520,26 @@
 		logval("carPID[2]", ((int)now.carPID[2]));
 #endif
 		;
-		_m = 3; goto P999; /* 1 */
-	case 52: // STATE 4 - Part3-a.pml:46 - [-end-] (0:0:0 - 1)
-		IfNotBlocked
+		/* merge: isInBarrier[carPID[1]] = 0(6, 3, 6) */
+		reached[0][3] = 1;
+		(trpt+1)->bup.ovals[2] = ((int)now.isInBarrier[ Index(((int)now.carPID[1]), 4) ]);
+		now.isInBarrier[ Index(now.carPID[1], 4) ] = 0;
+#ifdef VAR_RANGES
+		logval("isInBarrier[carPID[1]]", ((int)now.isInBarrier[ Index(((int)now.carPID[1]), 4) ]));
+#endif
+		;
+		/* merge: isInBarrier[carPID[2]] = 0(6, 4, 6) */
 		reached[0][4] = 1;
+		(trpt+1)->bup.ovals[3] = ((int)now.isInBarrier[ Index(((int)now.carPID[2]), 4) ]);
+		now.isInBarrier[ Index(now.carPID[2], 4) ] = 0;
+#ifdef VAR_RANGES
+		logval("isInBarrier[carPID[2]]", ((int)now.isInBarrier[ Index(((int)now.carPID[2]), 4) ]));
+#endif
+		;
+		_m = 3; goto P999; /* 3 */
+	case 40: // STATE 6 - Part3-a.pml:51 - [-end-] (0:0:0 - 1)
+		IfNotBlocked
+		reached[0][6] = 1;
 		if (!delproc(1, II)) continue;
 		_m = 3; goto P999; /* 0 */
 	case  _T5:	/* np_ */

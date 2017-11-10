@@ -1,28 +1,28 @@
-never notPassBarrier {    /* !([] ((! (((Car[carPID[1]]@barrierEntry)) && ([] (isOn)))) || ([] ((Car[carPID[1]]@afterBarrier))))) */
+never notPassBarrier {    /* !([] ((! (([] (! ((isInBarrier[carPID[1]]) && (isInBarrier[carPID[2]])))) && ([] (isOn)))) || (! (<> ((Car[carPID[1]]@afterBarrier)))))) */
 T0_init:
 	do
-	:: (! (((Car[carPID[1]]@afterBarrier))) && ((Car[carPID[1]]@barrierEntry)) && (isOn)) -> goto accept_S11
-	:: (((Car[carPID[1]]@barrierEntry)) && (isOn)) -> goto T0_S14
+	:: ((! ((isInBarrier[carPID[1]]) && (isInBarrier[carPID[2]]))) && ((Car[carPID[1]]@afterBarrier)) && (isOn)) -> goto accept_S11
+	:: ((! ((isInBarrier[carPID[1]]) && (isInBarrier[carPID[2]]))) && (isOn)) -> goto T0_S14
 	:: (1) -> goto T0_init
 	od;
 accept_S11:
 	do
-	:: ((isOn)) -> goto accept_S11
+	:: ((! ((isInBarrier[carPID[1]]) && (isInBarrier[carPID[2]]))) && (isOn)) -> goto accept_S11
 	od;
 T0_S14:
 	do
-	:: (! (((Car[carPID[1]]@afterBarrier))) && (isOn)) -> goto accept_S11
-	:: ((isOn)) -> goto T0_S14
+	:: ((! ((isInBarrier[carPID[1]]) && (isInBarrier[carPID[2]]))) && ((Car[carPID[1]]@afterBarrier)) && (isOn)) -> goto accept_S11
+	:: ((! ((isInBarrier[carPID[1]]) && (isInBarrier[carPID[2]]))) && (isOn)) -> goto T0_S14
 	od;
 }
-never passBarrier {    /* !([] ((! (((Car[carPID[1]]@barrierEntry)) && ([] (! (isOn))))) || (<> ((Car[carPID[1]]@afterBarrier))))) */
+never passBarrier {    /* !([] ((! (((isInBarrier[carPID[1]]) && ((numberCarsAtBarrier==2))) && ([] (isOn)))) || (<> ((Car[carPID[1]]@afterBarrier))))) */
 T0_init:
 	do
-	:: ((! (isOn)) && ! (((Car[carPID[1]]@afterBarrier))) && ((Car[carPID[1]]@barrierEntry))) -> goto accept_S4
+	:: (! (((Car[carPID[1]]@afterBarrier))) && ((isInBarrier[carPID[1]]) && ((numberCarsAtBarrier==2))) && (isOn)) -> goto accept_S4
 	:: (1) -> goto T0_init
 	od;
 accept_S4:
 	do
-	:: ((! (isOn)) && ! (((Car[carPID[1]]@afterBarrier)))) -> goto accept_S4
+	:: (! (((Car[carPID[1]]@afterBarrier))) && (isOn)) -> goto accept_S4
 	od;
 }

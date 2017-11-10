@@ -522,62 +522,54 @@ uchar reached3 [] = {
 uchar *loopstate3;
 
 short src_ln2 [] = {
-	  0,  87,  91,  95,  95,  96,  96,  94, 
-	 99,  94, 101, 104, 105, 105, 105, 105, 
-	105, 107, 108, 109, 111, 112, 113, 114, 
-	115, 115, 117, 118, 118, 119, 119, 119, 
-	119, 119, 121, 122, 123, 124, 124, 126, 
-	127, 127, 120, 130, 110, 131, 131, 132, 
-	132, 106, 138, 138, 138, 103, 144, 146, 
-	149, 149, 150, 150, 148, 154, 148,  85, 
-	155,  85, 155,   0, };
+	  0,  95,  99, 103, 103, 104, 104, 102, 
+	107, 102, 108, 113, 113, 114, 114, 112, 
+	117, 117, 117, 117, 117, 117, 119, 120, 
+	120, 121, 122, 122, 118, 125, 125, 126, 
+	127, 130, 131, 132, 133, 134, 134, 135, 
+	136, 136, 129, 139, 139, 139, 140, 140, 
+	140, 140, 140, 142, 143, 144, 145, 145, 
+	147, 147, 141, 150, 150, 150, 154, 158, 
+	161, 161, 162, 162, 160, 166, 160,  93, 
+	167,  93, 167,   0, };
 S_F_MAP src_file2 [] = {
 	{ "-", 0, 0 },
-	{ "Part3-a.pml", 1, 66 },
-	{ "-", 67, 68 }
+	{ "Part3-a.pml", 1, 74 },
+	{ "-", 75, 76 }
 };
 uchar reached2 [] = {
 	  0,   1,   1,   1,   1,   1,   1,   0, 
-	  1,   1,   1,   1,   1,   0,   1,   1, 
-	  0,   1,   0,   0,   1,   0,   0,   0, 
-	  1,   0,   1,   1,   0,   1,   0,   1, 
-	  1,   0,   1,   0,   0,   1,   0,   1, 
-	  1,   0,   0,   1,   0,   1,   1,   1, 
-	  0,   0,   1,   1,   1,   0,   1,   1, 
+	  1,   1,   1,   1,   1,   1,   1,   0, 
+	  1,   1,   0,   1,   1,   0,   1,   1, 
+	  0,   1,   1,   1,   0,   1,   0,   0, 
+	  0,   1,   0,   0,   0,   1,   0,   1, 
+	  1,   1,   0,   1,   1,   0,   1,   0, 
+	  1,   1,   0,   1,   0,   0,   1,   0, 
+	  1,   1,   0,   1,   1,   0,   1,   0, 
 	  1,   1,   1,   1,   0,   1,   1,   0, 
 	  1,   1,   0,   0, };
 uchar *loopstate2;
 
 short src_ln1 [] = {
-	  0,  53,  54,  54,  54,  54,  54,  55, 
-	 56,  56,  58,  59,  59,  59,  59,  59, 
-	 60,  61,  61,  61,  61,  61,  64,  65, 
-	 66,  67,  68,  68,  69,  69,  71,  72, 
-	 72,  73,  73,  63,  78,  52,  79,  52, 
-	 79,   0, };
+	  0,  57,  87,   0, };
 S_F_MAP src_file1 [] = {
 	{ "-", 0, 0 },
-	{ "Part3-a.pml", 1, 40 },
-	{ "-", 41, 42 }
+	{ "Part3-a.pml", 1, 2 },
+	{ "-", 3, 4 }
 };
 uchar reached1 [] = {
-	  0,   1,   1,   0,   1,   1,   0,   0, 
-	  1,   0,   1,   1,   0,   1,   1,   0, 
-	  0,   1,   0,   1,   1,   0,   1,   0, 
-	  0,   0,   1,   0,   1,   0,   1,   1, 
-	  0,   1,   0,   0,   1,   0,   1,   1, 
-	  0,   0, };
+	  0,   0,   0,   0, };
 uchar *loopstate1;
 
 short src_ln0 [] = {
-	  0,  37,  38,  35,  46,   0, };
+	  0,  40,  41,  42,  43,  38,  51,   0, };
 S_F_MAP src_file0 [] = {
 	{ "-", 0, 0 },
-	{ "Part3-a.pml", 1, 4 },
-	{ "-", 5, 6 }
+	{ "Part3-a.pml", 1, 6 },
+	{ "-", 7, 8 }
 };
 uchar reached0 [] = {
-	  0,   1,   0,   0,   0,   0, };
+	  0,   1,   0,   0,   0,   0,   0,   0, };
 uchar *loopstate0;
 uchar reached5[3];  /* np_ */
 uchar *loopstate5;  /* np_ */
@@ -963,11 +955,11 @@ addproc(int calling_pid, int priority, int n, int par0)
 		break;
 	case 2:	/* Car */
 		((P2 *)pptr(h))->_t = 2;
-		((P2 *)pptr(h))->_p = 63;
+		((P2 *)pptr(h))->_p = 71;
 #ifdef HAS_PRIORITY
 		((P2 *)pptr(h))->_priority = priority; /* was: 1 */
 #endif
-		reached2[63]=1;
+		reached2[71]=1;
 		/* params: */
 		((P2 *)pptr(h))->type = par0;
 		/* locals: */
@@ -982,11 +974,11 @@ addproc(int calling_pid, int priority, int n, int par0)
 		break;
 	case 1:	/* CarController */
 		((P1 *)pptr(h))->_t = 1;
-		((P1 *)pptr(h))->_p = 37;
+		((P1 *)pptr(h))->_p = 1;
 #ifdef HAS_PRIORITY
 		((P1 *)pptr(h))->_priority = priority; /* was: 1 */
 #endif
-		reached1[37]=1;
+		reached1[1]=1;
 		/* params: */
 		/* locals: */
 		((P1 *)pptr(h))->temp = 0;
@@ -999,11 +991,11 @@ addproc(int calling_pid, int priority, int n, int par0)
 		break;
 	case 0:	/* :init: */
 		((P0 *)pptr(h))->_t = 0;
-		((P0 *)pptr(h))->_p = 3;
+		((P0 *)pptr(h))->_p = 5;
 #ifdef HAS_PRIORITY
 		((P0 *)pptr(h))->_priority = priority; /* was: 1 */
 #endif
-		reached0[3]=1;
+		reached0[5]=1;
 		/* params: */
 		/* locals: */
 #ifdef VAR_RANGES
@@ -1153,8 +1145,7 @@ run(void)
 
 	accpstate[4][10] = 1;
 	accpstate[3][12] = 1;
-	visstate[2][55] = 1;
-	visstate[2][10] = 1;
+	visstate[2][63] = 1;
 	retrans(0, _nstates0, _start0, src_ln0, reached0, loopstate0);
 	retrans(1, _nstates1, _start1, src_ln1, reached1, loopstate1);
 	retrans(2, _nstates2, _start2, src_ln2, reached2, loopstate2);
@@ -12485,9 +12476,15 @@ do_reach(void)
 void
 iniglobals(int calling_pid)
 {
+	{	int l_in;
+		for (l_in = 0; l_in < 4; l_in++)
+		{
+			now.isInBarrier[l_in] = 0;
+		}
+	}
 		now.isOn = 0;
 	{	int l_in;
-		for (l_in = 0; l_in < 9; l_in++)
+		for (l_in = 0; l_in < 3; l_in++)
 		{
 			now.carPID[l_in] = 0;
 		}
@@ -12495,12 +12492,18 @@ iniglobals(int calling_pid)
 		now.numberCarsAtBarrier = 0;
 		now.numberCarsToAwake = 0;
 		now.entryExitProtocol = 1;
-		now.onOffSwitch = 1;
+		onOffSwitch = 1;
 		now.awaitAllCarsAtBarrier = 0;
 #ifdef VAR_RANGES
+	{	int l_in;
+		for (l_in = 0; l_in < 4; l_in++)
+		{
+			logval("isInBarrier[l_in]", now.isInBarrier[l_in]);
+		}
+	}
 		logval("isOn", now.isOn);
 	{	int l_in;
-		for (l_in = 0; l_in < 9; l_in++)
+		for (l_in = 0; l_in < 3; l_in++)
 		{
 			logval("carPID[l_in]", now.carPID[l_in]);
 		}
@@ -12508,7 +12511,6 @@ iniglobals(int calling_pid)
 		logval("numberCarsAtBarrier", now.numberCarsAtBarrier);
 		logval("numberCarsToAwake", now.numberCarsToAwake);
 		logval("entryExitProtocol", now.entryExitProtocol);
-		logval("onOffSwitch", now.onOffSwitch);
 		logval("awaitAllCarsAtBarrier", now.awaitAllCarsAtBarrier);
 #endif
 }
@@ -14212,16 +14214,21 @@ c_globals(void)
 {	/* int i; */
 	printf("global vars:\n");
 	{	int l_in;
-		for (l_in = 0; l_in < 9; l_in++)
+		for (l_in = 0; l_in < 3; l_in++)
 		{
 			printf("	byte   carPID[%d]:	%d\n", l_in, now.carPID[l_in]);
+		}
+	}
+	{	int l_in;
+		for (l_in = 0; l_in < 4; l_in++)
+		{
+			printf("	bit    isInBarrier[%d]:	%d\n", l_in, now.isInBarrier[l_in]);
 		}
 	}
 	printf("	bit    isOn:	%d\n", now.isOn);
 	printf("	byte   numberCarsAtBarrier:	%d\n", now.numberCarsAtBarrier);
 	printf("	byte   numberCarsToAwake:	%d\n", now.numberCarsToAwake);
 	printf("	byte   entryExitProtocol:	%d\n", now.entryExitProtocol);
-	printf("	byte   onOffSwitch:	%d\n", now.onOffSwitch);
 	printf("	byte   awaitAllCarsAtBarrier:	%d\n", now.awaitAllCarsAtBarrier);
 }
 void
@@ -14260,7 +14267,7 @@ c_chandump(int unused)
 {	unused++; /* avoid complaints */
 }
 
-Trans *t_id_lkup[145];
+Trans *t_id_lkup[117];
 
 
 #ifdef BFS_PAR

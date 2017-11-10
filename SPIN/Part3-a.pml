@@ -14,7 +14,10 @@ fi }
 
 
 //We do not care about car 0, as it does not affect other cars
-pid carPID[9];
+pid carPID[3]; //TODO (*) change back to size 9
+
+//State variables, to signal where cars are:
+bool isInBarrier[4]; //TODO (*) correct?
 
 //togles:
 bool isOn                   = false;
@@ -36,6 +39,8 @@ init{
 	//Car 0 not included.
         carPID[1] = run Car(UP); 
         carPID[2] = run Car(UP);
+isInBarrier[carPID[1]] = false;
+isInBarrier[carPID[2]] = false;
         //carPID[3] = run Car(UP);
         //carPID[4] = run Car(UP);
         //carPID[5] = run Car(DOWN);
@@ -49,6 +54,8 @@ init{
 
 active proctype CarController(){
     int temp;
+    isOn = true;
+/*
     do
     ::  true -> //on();
         P(onOffSwitch); 
@@ -76,6 +83,7 @@ active proctype CarController(){
     //:: true -> skip;
     
     od
+*/
 }
 
 proctype Car(byte type)
@@ -96,54 +104,58 @@ beforeBarrier:
         :: true -> break;
         od;
 
-barrierEntry:
-
-        skip;
+barrierEntry: //TODO (*) is the flag at the line below?
+	skip;
+        
+        //Using goto returnBarrier instead of an actual return
         
         if
-        ::  (isOn) ->
-            P(entryExitProtocol);
-            if 
-            ::  (isOn) -> 
-                temp = numberCarsAtBarrier + 1;
-                numberCarsAtBarrier = temp;
-                if 
-                ::  (numberCarsAtBarrier == NUMBER_OF_CARS) ->
-                    temp = numberCarsAtBarrier - 2;
-                    numberCarsToAwake = temp;
-                    numberCarsAtBarrier = 0; //All cars must arrive at the barrier again.
-                    V(awaitAllCarsAtBarrier);
-                    //return; implicit by exiting the if statement.
-                :: !(numberCarsAtBarrier == NUMBER_OF_CARS) ->
-                    V(entryExitProtocol); //Error here. Transition to next line, and then switch off(*)
-                    P(awaitAllCarsAtBarrier);
-                    if 
-                    ::  (numberCarsToAwake > 0) ->
-                        temp = numberCarsToAwake - 1;
-                        numberCarsToAwake = temp;
-                        V(awaitAllCarsAtBarrier);
-                        //return; implicit by structure of if statements.
-                    :: !(numberCarsToAwake > 0) ->
-                        V(entryExitProtocol)
-                    fi;
-                    
-                fi;
-            :: !(isOn) ->
-                V(entryExitProtocol);
-                //return; comes from the exit of the if statement.
-            fi;
-            
-        
-        
-        :: !(isOn) -> skip; //Corresponds to the return statement.
-        
+        :: !isOn -> goto returnBarrier;
+        ::  isOn -> skip;
         fi;
         
-		
+        P(entryExitProtocol);        
+        if
+        :: !isOn -> 
+            V(entryExitProtocol);
+            goto returnBarrier;
+        ::  isOn -> skip;
+        fi;
+                
+        temp = numberCarsAtBarrier + 1;
+        numberCarsAtBarrier = temp;
+        isInBarrier[_pid] = true;
+        
+        if 
+        ::  (numberCarsAtBarrier == NUMBER_OF_CARS) ->
+            temp = numberCarsAtBarrier - 2;
+            numberCarsToAwake = temp;
+            numberCarsAtBarrier = 0; //All cars must arrive at the barrier again.
+            V(awaitAllCarsAtBarrier);
+            goto returnBarrier;
+        :: !(numberCarsAtBarrier == NUMBER_OF_CARS) -> skip;            
+        fi;
+        
+        V(entryExitProtocol); //Error here. Transition to next line, and then switch off(*)
+        P(awaitAllCarsAtBarrier);
+        if 
+        ::  (numberCarsToAwake > 0) ->
+            temp = numberCarsToAwake - 1;
+            numberCarsToAwake = temp;
+            V(awaitAllCarsAtBarrier);
+            //return; implicit by structure of if statements.
+        :: !(numberCarsToAwake > 0) -> skip;
+        fi;
+        
+        V(entryExitProtocol);
+        
+
+returnBarrier:
+	skip;	
 		
 afterBarrier:
 
-        skip;
+        isInBarrier[_pid] = false;
         
         do
         :: true -> skip;
@@ -158,9 +170,21 @@ afterBarrier:
 /* Liveness properties (uncomment to verify) */
 //Spørg ind til hvorfor ovenstaaende er formuleret korrekt.(*)
 
+//(*) Add thing verifying 0<=carsInBarrier <=9 and the likes
 
-//ltl notPassBarrier { [] (    (Car[carPID[1]]@barrierEntry && [](isOn)) -> [] (Car[carPID[1]]@afterBarrier)) } //Shouldn't this be true?
-ltl passBarrier { [] (    (Car[carPID[1]]@barrierEntry && [](!isOn)) -> <> Car[carPID[1]]@afterBarrier) }
+
+//ltl passBarrier {[] ((Car[carPID[1]]@barrierEntry && Car[carPID[1]]@barrierEntry && [](isOn)) -> <> (Car[carPID[1]]@afterBarrier))} //Wrong. 
+
+ltl notPassBarrier {[] ( [] ! (isInBarrier[carPID[1]] && isInBarrier[carPID[2]]) && [](isOn) -> ! (<> (Car[carPID[1]]@afterBarrier)) )} //Should fail TODO  (*)
+
+ltl passBarrier {[] ((isInBarrier[carPID[1]] && numberCarsAtBarrier == 2 && [](isOn)) -> <> (Car[carPID[1]]@afterBarrier))}
+
+//ltl passBarrier {[] ((isInBarrier[carPID[1]] && isInBarrier[carPID[2]] && [](isOn)) -> <> (Car[carPID[1]]@afterBarrier))} //Wrong. 
+//!isInBarrier[carPID[1]]  &&
+
+
+//ltl notPassBarrier { [] (    (Car[carPID[1]]@barrierEntry && [](isOn)) -> <> (Car[carPID[1]]@afterBarrier)) } //Shouldn't this be true?
+//ltl passBarrier { [] (    (Car[carPID[1]]@barrierEntry && [](!isOn)) -> <> Car[carPID[1]]@afterBarrier) }
 
 
 /*

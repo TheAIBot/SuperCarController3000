@@ -1,38 +1,85 @@
-ltl passBarrier: [] ((! (((Car[carPID[1]]@barrierEntry)) && ([] (isOn)))) || (<> ((Car[carPID[1]]@afterBarrier))))
+ltl passBarrier: [] ((! (((isInBarrier[carPID[1]]) && (isInBarrier[carPID[2]])) && ([] (isOn)))) || (<> ((Car[carPID[1]]@afterBarrier))))
 starting claim 3
 using statement merging
 Never claim moves to line 4	[(1)]
-1 CarCo 1)  onOffSwitch>0                        
-1 CarCo 1)  onOffSwitch = (onOffSwitch-1)        
-1 CarCo 1)  onOffSwitch = (onOffSwitch+1)        1                    0                    
-1 CarCo 1)  onOffSwitch>0                        1                    1                    
-1 CarCo 1)  onOffSwitch = (onOffSwitch-1)        1                    1                    
+1 CarCo 1)  onOffSwitch>0                      
+1 CarCo 1)  onOffSwitch = (onOffSwitch-1)      
+1 CarCo 1)  onOffSwitch = (onOffSwitch+1)      1          0          
+1 CarCo 1)  onOffSwitch>0                      1          1          
+1 CarCo 1)  onOffSwitch = (onOffSwitch-1)      1          1          
 Starting Car with pid 3
-0 :init ini carPID[1] = run Car(1)               1                    0                    
+0 :init ini carPID[1] = run Car(1)             1          0          
 Starting Car with pid 4
-0 :init ini carPID[2] = run Car(1)               0                    2                    0                    0                    0                    0                    0                    0                    0                    1                    0                    
-Never claim moves to line 3	[(((!((Car[carPID[1]]._p==afterBarrier))&&(Car[carPID[1]]._p==barrierEntry))&&isOn))]
+0 :init ini carPID[2] = run Car(1)             0          2          0          0          0          0          0          0          0          1          0          
+0 :init ini isInBarrier[carPID[1]] = 0         0          2          3          0          0          0          0          0          0          1          0          
+0 :init ini isInBarrier[carPID[2]] = 0         0          2          3          0          0          0          0          0          0          1          0          
+3 Car:1 1)  isInBarrier[_pid] = 1              0          2          3          0          0          0          0          0          0          1          0          
+3 Car:1 1)  entryExitProtocol>0                0          2          3          0          0          0          0          0          0          0          0          0          1          1          0          
+3 Car:1 1)  entryExitProtocol = (entryExitProt 0          2          3          0          0          0          0          0          0          0          0          0          1          1          0          
+2 Car:1 1)  isInBarrier[_pid] = 1              0          2          3          0          0          0          0          0          0          0          0          0          0          1          1          0          
+1 CarCo 1)  onOffSwitch = (onOffSwitch+1)      0          2          3          0          0          0          0          0          0          0          0          0          1          1          1          0          
+1 CarCo 1)  onOffSwitch>0                      0          2          3          0          0          0          0          0          0          0          0          0          1          1          1          1          
+1 CarCo 1)  onOffSwitch = (onOffSwitch-1)      0          2          3          0          0          0          0          0          0          0          0          0          1          1          1          1          
+3 Car:1 1)  entryExitProtocol = (entryExitProt 0          2          3          0          0          0          0          0          0          0          0          0          1          1          0          0          
+3 Car:1 1)  isInBarrier[_pid] = 0              0          2          3          0          0          0          0          0          0          1          0          0          1          1          0          0          
+1 CarCo 1)  entryExitProtocol>0                0          2          3          0          0          0          0          0          0          1          0          0          1          0          0          0          
+1 CarCo 1)  entryExitProtocol = (entryExitProt 0          2          3          0          0          0          0          0          0          1          0          0          1          0          0          0          
+1 CarCo 1)  !((numberCarsAtBarrier>0))         0          2          3          0          0          0          0          0          0          0          0          0          1          0          0          0          
+3 Car:1 1)  isInBarrier[_pid] = 1              0          2          3          0          0          0          0          0          0          0          0          0          1          0          0          0          
+3 Car:1 1)  isInBarrier[_pid] = 0              0          2          3          0          0          0          0          0          0          0          0          0          1          1          0          0          
+1 CarCo 1)  entryExitProtocol = (entryExitProt 0          2          3          0          0          0          0          0          0          0          0          0          1          0          0          0          
+2 Car:1 1)  entryExitProtocol>0                0          2          3          0          0          0          0          0          0          1          0          0          1          0          0          0          
+2 Car:1 1)  entryExitProtocol = (entryExitProt 0          2          3          0          0          0          0          0          0          1          0          0          1          0          0          0          
+3 Car:1 1)  isInBarrier[_pid] = 1              0          2          3          0          0          0          0          0          0          0          0          0          1          0          0          0          
+3 Car:1 1)  isInBarrier[_pid] = 0              0          2          3          0          0          0          0          0          0          0          0          0          1          1          0          0          
+1 CarCo 1)  onOffSwitch = (onOffSwitch+1)      0          2          3          0          0          0          0          0          0          0          0          0          1          0          0          0          
+3 Car:1 1)  isInBarrier[_pid] = 1              0          2          3          0          0          0          0          0          0          0          0          0          1          0          0          1          
+3 Car:1 1)  isInBarrier[_pid] = 0              0          2          3          0          0          0          0          0          0          0          0          0          1          1          0          1          
+1 CarCo 1)  onOffSwitch>0                      0          2          3          0          0          0          0          0          0          0          0          0          1          0          0          1          
+1 CarCo 1)  onOffSwitch = (onOffSwitch-1)      0          2          3          0          0          0          0          0          0          0          0          0          1          0          0          1          
+3 Car:1 1)  isInBarrier[_pid] = 1              0          2          3          0          0          0          0          0          0          0          0          0          1          0          1          0          
+1 CarCo 1)  onOffSwitch = (onOffSwitch+1)      0          2          3          0          0          0          0          0          0          0          0          0          1          1          1          0          
+2 Car:1 1)  entryExitProtocol = (entryExitProt 0          2          3          0          0          0          0          0          0          0          0          0          1          1          1          1          
+2 Car:1 1)  isInBarrier[_pid] = 0              0          2          3          0          0          0          0          0          0          1          0          0          1          1          1          1          
+1 CarCo 1)  onOffSwitch>0                      0          2          3          0          0          0          0          0          0          1          0          0          0          1          1          1          
+1 CarCo 1)  onOffSwitch = (onOffSwitch-1)      0          2          3          0          0          0          0          0          0          1          0          0          0          1          1          1          
+2 Car:1 1)  isInBarrier[_pid] = 1              0          2          3          0          0          0          0          0          0          1          0          0          0          1          1          0          
+1 CarCo 1)  entryExitProtocol>0                0          2          3          0          0          0          0          0          0          1          0          0          1          1          0          0          
+1 CarCo 1)  entryExitProtocol = (entryExitProt 0          2          3          0          0          0          0          0          0          1          0          0          1          1          0          0          
+1 CarCo 1)  !((numberCarsAtBarrier>0))         0          2          3          0          0          0          0          0          0          0          0          0          1          1          0          0          
+1 CarCo 1)  entryExitProtocol = (entryExitProt 0          2          3          0          0          0          0          0          0          0          0          0          1          1          0          0          
+3 Car:1 1)  entryExitProtocol>0                0          2          3          0          0          0          0          0          0          1          0          0          1          1          0          0          
+3 Car:1 1)  entryExitProtocol = (entryExitProt 0          2          3          0          0          0          0          0          0          1          0          0          1          1          0          0          
+3 Car:1 1)  entryExitProtocol = (entryExitProt 0          2          3          0          0          0          0          0          0          0          0          0          1          1          0          0          
+1 CarCo 1)  onOffSwitch = (onOffSwitch+1)      0          2          3          0          0          0          0          0          0          1          0          0          1          1          0          0          
+3 Car:1 1)  isInBarrier[_pid] = 0              0          2          3          0          0          0          0          0          0          1          0          0          1          1          0          1          
+2 Car:1 1)  entryExitProtocol>0                0          2          3          0          0          0          0          0          0          1          0          0          1          0          0          1          
+2 Car:1 1)  entryExitProtocol = (entryExitProt 0          2          3          0          0          0          0          0          0          1          0          0          1          0          0          1          
+1 CarCo 1)  onOffSwitch>0                      0          2          3          0          0          0          0          0          0          0          0          0          1          0          0          1          
+1 CarCo 1)  onOffSwitch = (onOffSwitch-1)      0          2          3          0          0          0          0          0          0          0          0          0          1          0          0          1          
+3 Car:1 1)  isInBarrier[_pid] = 1              0          2          3          0          0          0          0          0          0          0          0          0          1          0          0          0          
+Never claim moves to line 3	[(((!((Car[carPID[1]]._p==afterBarrier))&&(isInBarrier[carPID[1]]&&isInBarrier[carPID[2]]))&&isOn))]
 Never claim moves to line 8	[((!((Car[carPID[1]]._p==afterBarrier))&&isOn))]
-2 Car:1 1)  entryExitProtocol>0                  0                    2                    3                    0                    0                    0                    0                    0                    0                    1                    0                    
-2 Car:1 1)  entryExitProtocol = (entryExitProtoc 0                    2                    3                    0                    0                    0                    0                    0                    0                    1                    0                    
-2 Car:1 1)  temp = (numberCarsAtBarrier+1)       0                    2                    3                    0                    0                    0                    0                    0                    0                    0                    1                    0                    
-2 Car:1 1)  numberCarsAtBarrier = temp           1                    0                    2                    3                    0                    0                    0                    0                    0                    0                    0                    1                    0                    
-2 Car:1 1)  !((numberCarsAtBarrier==2))          1                    0                    2                    3                    0                    0                    0                    0                    0                    0                    0                    1                    1                    0                    
-2 Car:1 1)  entryExitProtocol = (entryExitProtoc 1                    0                    2                    3                    0                    0                    0                    0                    0                    0                    0                    1                    1                    0                    
-1 CarCo 1)  onOffSwitch = (onOffSwitch+1)        1                    0                    2                    3                    0                    0                    0                    0                    0                    0                    1                    1                    1                    0                    
-1 CarCo 1)  onOffSwitch>0                        1                    0                    2                    3                    0                    0                    0                    0                    0                    0                    1                    1                    1                    1                    
-1 CarCo 1)  onOffSwitch = (onOffSwitch-1)        1                    0                    2                    3                    0                    0                    0                    0                    0                    0                    1                    1                    1                    1                    
+3 Car:1 1)  isInBarrier[_pid] = 0              0          2          3          0          0          0          0          0          0          0          0          0          1          1          1          0          
+1 CarCo 1)  onOffSwitch = (onOffSwitch+1)      0          2          3          0          0          0          0          0          0          0          0          0          1          0          1          0          
+1 CarCo 1)  onOffSwitch>0                      0          2          3          0          0          0          0          0          0          0          0          0          1          0          1          1          
+1 CarCo 1)  onOffSwitch = (onOffSwitch-1)      0          2          3          0          0          0          0          0          0          0          0          0          1          0          1          1          
+2 Car:1 1)  temp = (numberCarsAtBarrier+1)     0          2          3          0          0          0          0          0          0          0          0          0          1          0          1          0          
+2 Car:1 1)  numberCarsAtBarrier = temp         1          0          2          3          0          0          0          0          0          0          0          0          0          1          0          1          0          
+2 Car:1 1)  !((numberCarsAtBarrier==2))        1          0          2          3          0          0          0          0          0          0          0          0          0          1          0          1          1          0          
+2 Car:1 1)  entryExitProtocol = (entryExitProt 1          0          2          3          0          0          0          0          0          0          0          0          0          1          0          1          1          0          
+1 CarCo 1)  onOffSwitch = (onOffSwitch+1)      1          0          2          3          0          0          0          0          0          0          1          0          0          1          0          1          1          0          
 <<<<<START OF CYCLE>>>>>
-1 CarCo 1)  onOffSwitch = (onOffSwitch+1)        1                    0                    2                    3                    0                    0                    0                    0                    0                    0                    1                    1                    1                    0                    
-1 CarCo 1)  onOffSwitch>0                        1                    0                    2                    3                    0                    0                    0                    0                    0                    0                    1                    1                    1                    1                    
-1 CarCo 1)  onOffSwitch = (onOffSwitch-1)        1                    0                    2                    3                    0                    0                    0                    0                    0                    0                    1                    1                    1                    1                    
-spin: trail ends after 102 steps
+1 CarCo 1)  onOffSwitch>0                      1          0          2          3          0          0          0          0          0          0          1          0          0          1          0          1          1          1          
+1 CarCo 1)  onOffSwitch = (onOffSwitch-1)      1          0          2          3          0          0          0          0          0          0          1          0          0          1          0          1          1          1          
+1 CarCo 1)  onOffSwitch = (onOffSwitch+1)      1          0          2          3          0          0          0          0          0          0          1          0          0          1          0          1          1          0          
+spin: trail ends after 326 steps
 #processes: 4
-102:	proc  3 (Car:1) Part3-a.pml:95 (state 4)
-102:	proc  2 (Car:1) Part3-a.pml:119 (state 33)
-102:	proc  1 (CarController:1) Part3-a.pml:55 (state 7)
-102:	proc  0 (:init::1) Part3-a.pml:46 (state 4)
+326:	proc  3 (Car:1) Part3-a.pml:99 (state 7)
+326:	proc  2 (Car:1) Part3-a.pml:124 (state 33)
+326:	proc  1 (CarController:1) Part3-a.pml:59 (state 6)
+326:	proc  0 (:init::1) Part3-a.pml:51 (state 6)
 MSC: ~G line 7
-102:	proc  - (passBarrier:1) _spin_nvr.tmp:7 (state 10)
+326:	proc  - (passBarrier:1) _spin_nvr.tmp:7 (state 10)
 4 processes created
 Exit-Status 0

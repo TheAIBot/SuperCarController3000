@@ -102,7 +102,7 @@
 #ifndef NFAIR
 	#define NFAIR	2	/* must be >= 2 */
 #endif
-#define REM_REFS	11
+#define REM_REFS	6
 #define HAS_LTL	1
 #define HAS_CODE	1
 #if defined(RANDSTORE) && !defined(RANDSTOR)
@@ -138,29 +138,29 @@ typedef struct S_F_MAP {
 } S_F_MAP;
 
 #define _nstates4	14	/* passBarrier */
-#define minseq4	132
-#define maxseq4	144
+#define minseq4	104
+#define maxseq4	116
 #define _endstate4	13
 
 #define _nstates3	23	/* notPassBarrier */
-#define minseq3	110
-#define maxseq3	131
+#define minseq3	82
+#define maxseq3	103
 #define _endstate3	22
 
-#define _nstates2	67	/* Car */
-#define minseq2	44
-#define maxseq2	109
-#define _endstate2	66
+#define _nstates2	75	/* Car */
+#define minseq2	8
+#define maxseq2	81
+#define _endstate2	74
 
-#define _nstates1	41	/* CarController */
-#define minseq1	4
-#define maxseq1	43
-#define _endstate1	40
+#define _nstates1	3	/* CarController */
+#define minseq1	6
+#define maxseq1	7
+#define _endstate1	2
 
-#define _nstates0	5	/* :init: */
+#define _nstates0	7	/* :init: */
 #define minseq0	0
-#define maxseq0	3
-#define _endstate0	4
+#define maxseq0	5
+#define _endstate0	6
 
 extern short src_ln4[];
 extern short src_ln3[];
@@ -174,8 +174,8 @@ extern S_F_MAP src_file1[];
 extern S_F_MAP src_file0[];
 
 #define T_ID	unsigned char
-#define _T5	53
-#define _T2	54
+#define _T5	41
+#define _T2	42
 #define WS		8 /* word size in bytes */
 #define SYNC	0
 #define ASYNC	0
@@ -458,12 +458,12 @@ typedef struct State {
 		unsigned short _event;
 	#endif
 #endif
+	uchar isInBarrier[4];
 	unsigned isOn : 1;
-	uchar carPID[9];
+	uchar carPID[3];
 	uchar numberCarsAtBarrier;
 	uchar numberCarsToAwake;
 	uchar entryExitProtocol;
-	uchar onOffSwitch;
 	uchar awaitAllCarsAtBarrier;
 #ifdef TRIX
 	/* room for 512 proc+chan ptrs, + safety margin */
@@ -486,6 +486,7 @@ typedef struct TRIX_v6 {
 #endif
 
 #define HAS_TRACK	0
+/* hidden variable: */	uchar onOffSwitch;
 #define FORWARD_MOVES	"pan.m"
 #define BACKWARD_MOVES	"pan.b"
 #define TRANSITIONS	"pan.t"
@@ -496,9 +497,9 @@ typedef struct TRIX_v6 {
 #define _start5	0 /* np_ */
 #define _start4	5
 #define _start3	7
-#define _start2	63
-#define _start1	37
-#define _start0	3
+#define _start2	71
+#define _start1	1
+#define _start0	5
 #ifdef NP
 	#define ACCEPT_LAB	1 /* at least 1 in np_ */
 #else
@@ -858,7 +859,7 @@ void qsend(int, int, int);
 #define GLOBAL	7
 #define BAD	8
 #define ALPHA_F	9
-#define NTRANS	55
+#define NTRANS	43
 #if defined(BFS_PAR) || NCORE>1
 	void e_critical(int);
 	void x_critical(int);

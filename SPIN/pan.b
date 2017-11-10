@@ -37,8 +37,10 @@
 		 /* PROC Car */
 ;
 		;
+		;
+		;
 		
-	case 13: // STATE 13
+	case 14: // STATE 18
 		;
 		now.entryExitProtocol = trpt->bup.oval;
 		;
@@ -46,73 +48,53 @@
 ;
 		;
 		
-	case 15: // STATE 18
+	case 16: // STATE 23
 		;
-		((P2 *)this)->temp = trpt->bup.oval;
-		;
-		goto R999;
-
-	case 16: // STATE 19
-		;
-		now.numberCarsAtBarrier = trpt->bup.oval;
+		now.entryExitProtocol = trpt->bup.oval;
 		;
 		goto R999;
 ;
 		;
 		
-	case 18: // STATE 21
+	case 18: // STATE 30
 		;
 		((P2 *)this)->temp = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 19: // STATE 22
-		;
-		now.numberCarsToAwake = trpt->bup.oval;
-		;
-		goto R999;
-
-	case 20: // STATE 23
+	case 19: // STATE 31
 		;
 		now.numberCarsAtBarrier = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 21: // STATE 24
+	case 20: // STATE 32
 		;
-		now.awaitAllCarsAtBarrier = trpt->bup.oval;
-		;
-		goto R999;
-;
-		;
-		
-	case 23: // STATE 27
-		;
-		now.entryExitProtocol = trpt->bup.oval;
-		;
-		goto R999;
-
-	case 24: // STATE 30
-		;
-		now.awaitAllCarsAtBarrier = trpt->bup.oval;
+		now.isInBarrier[ Index(((P2 *)this)->_pid, 4) ] = trpt->bup.oval;
 		;
 		goto R999;
 ;
 		;
 		
-	case 26: // STATE 35
+	case 22: // STATE 34
 		;
 		((P2 *)this)->temp = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 27: // STATE 36
+	case 23: // STATE 35
 		;
 		now.numberCarsToAwake = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 28: // STATE 37
+	case 24: // STATE 36
+		;
+		now.numberCarsAtBarrier = trpt->bup.oval;
+		;
+		goto R999;
+
+	case 25: // STATE 37
 		;
 		now.awaitAllCarsAtBarrier = trpt->bup.oval;
 		;
@@ -120,23 +102,53 @@
 ;
 		;
 		
-	case 30: // STATE 40
+	case 27: // STATE 44
 		;
 		now.entryExitProtocol = trpt->bup.oval;
+		;
+		goto R999;
+
+	case 28: // STATE 47
+		;
+		now.awaitAllCarsAtBarrier = trpt->bup.oval;
 		;
 		goto R999;
 ;
 		;
 		
-	case 32: // STATE 47
+	case 30: // STATE 52
 		;
-		now.entryExitProtocol = trpt->bup.oval;
+		((P2 *)this)->temp = trpt->bup.oval;
+		;
+		goto R999;
+
+	case 31: // STATE 53
+		;
+		now.numberCarsToAwake = trpt->bup.oval;
+		;
+		goto R999;
+
+	case 32: // STATE 54
+		;
+		now.awaitAllCarsAtBarrier = trpt->bup.oval;
 		;
 		goto R999;
 ;
 		;
 		
-	case 34: // STATE 66
+	case 34: // STATE 60
+		;
+		now.entryExitProtocol = trpt->bup.oval;
+		;
+		goto R999;
+
+	case 35: // STATE 63
+		;
+		now.isInBarrier[ Index(((P2 *)this)->_pid, 4) ] = trpt->bup.oval;
+		;
+		goto R999;
+
+	case 36: // STATE 74
 		;
 		p_restor(II);
 		;
@@ -145,89 +157,13 @@
 
 		 /* PROC CarController */
 
-	case 35: // STATE 3
-		;
-		now.onOffSwitch = trpt->bup.oval;
-		;
-		goto R999;
-
-	case 36: // STATE 7
+	case 37: // STATE 1
 		;
 		now.isOn = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 37: // STATE 8
-		;
-		now.onOffSwitch = trpt->bup.oval;
-		;
-		goto R999;
-
-	case 38: // STATE 12
-		;
-		now.onOffSwitch = trpt->bup.oval;
-		;
-		goto R999;
-
-	case 39: // STATE 16
-		;
-		now.isOn = trpt->bup.oval;
-		;
-		goto R999;
-
-	case 40: // STATE 18
-		;
-		now.entryExitProtocol = trpt->bup.oval;
-		;
-		goto R999;
-;
-		;
-		
-	case 42: // STATE 23
-		;
-		((P1 *)this)->temp = trpt->bup.oval;
-		;
-		goto R999;
-
-	case 43: // STATE 24
-		;
-		now.numberCarsToAwake = trpt->bup.oval;
-		;
-		goto R999;
-
-	case 44: // STATE 25
-		;
-		now.numberCarsAtBarrier = trpt->bup.oval;
-		;
-		goto R999;
-
-	case 45: // STATE 26
-		;
-		now.onOffSwitch = trpt->bup.oval;
-		;
-		goto R999;
-
-	case 46: // STATE 28
-		;
-		now.awaitAllCarsAtBarrier = trpt->bup.oval;
-		;
-		goto R999;
-;
-		;
-		
-	case 48: // STATE 31
-		;
-		now.entryExitProtocol = trpt->bup.oval;
-		;
-		goto R999;
-
-	case 49: // STATE 33
-		;
-		now.onOffSwitch = trpt->bup.oval;
-		;
-		goto R999;
-
-	case 50: // STATE 40
+	case 38: // STATE 2
 		;
 		p_restor(II);
 		;
@@ -236,17 +172,19 @@
 
 		 /* PROC :init: */
 
-	case 51: // STATE 2
+	case 39: // STATE 4
 		;
+		now.isInBarrier[ Index(now.carPID[2], 4) ] = trpt->bup.ovals[3];
+		now.isInBarrier[ Index(now.carPID[1], 4) ] = trpt->bup.ovals[2];
 		now.carPID[2] = trpt->bup.ovals[1];
 		delproc(0, now._nr_pr-1);
 		now.carPID[1] = trpt->bup.ovals[0];
 		delproc(0, now._nr_pr-1);
 		;
-		ungrab_ints(trpt->bup.ovals, 2);
+		ungrab_ints(trpt->bup.ovals, 4);
 		goto R999;
 
-	case 52: // STATE 4
+	case 40: // STATE 6
 		;
 		p_restor(II);
 		;
