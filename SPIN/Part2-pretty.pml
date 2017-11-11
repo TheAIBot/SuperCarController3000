@@ -143,7 +143,7 @@ exit:
         
         
         
-        do
+        do //TODO (*) Is this needed?
         :: true -> skip;
         :: true -> break;
         od;
