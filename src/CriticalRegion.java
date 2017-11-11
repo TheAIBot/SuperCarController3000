@@ -1,33 +1,33 @@
 public class CriticalRegion {
-	private int directedCarsInAlleyCount = 0;
+	private int dirCarCount = 0;
 	private static final int UP = 1;
 	private static final int DOWN = -1;
 	
 	
 	public synchronized void enter(int carNumber) throws InterruptedException {
-		final int direction = (carNumber  <= 4) ? UP : DOWN;
+		final int dir = (carNumber  <= 4) ? UP : DOWN;
 
-		while (hasToWait(direction)) {
+		while (hasToWait(dir)) {
 			wait();
 		}
 
-		directedCarsInAlleyCount += direction;
+		dirCarCount += dir;
 	}
 
-	private synchronized boolean  hasToWait(int direction)
+	private synchronized boolean  hasToWait(int dir)
 	{
-		//direction is negative then directedCarsInAlleyCount
+		//direction is negative then dirCarCount
 		//also has to be 0 or negative for the car to continue.
 		//Other way around with posetive.
-		return directedCarsInAlleyCount * direction < 0;
+		return dirCarCount * dir < 0;
 	}
 
 	public synchronized void leave(int carNumber)  {
-		final int direction = (carNumber  <= 4) ? UP : DOWN;
+		final int dir = (carNumber  <= 4) ? UP : DOWN;
 
-		directedCarsInAlleyCount -= direction;
+		dirCarCount -= dir;
 
-		if (directedCarsInAlleyCount == 0) {
+		if (dirCarCount == 0) {
 			notifyAll();
 		}
 	}
