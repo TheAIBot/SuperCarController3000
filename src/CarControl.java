@@ -103,7 +103,7 @@ class Car extends Thread {
 
     synchronized int chooseSpeed() { 
         double factor = (1.0D+(Math.random()-0.5D)*2*variation/100);
-        return (int) Math.round(factor*basespeed);
+        return (int) Math.round(factor*basespeed) / 10;
     }
 
     private int speed() {
@@ -172,6 +172,9 @@ class Car extends Thread {
                 } catch (InterruptedException e) {
                     cd.clear(curpos);
                     mapOfCars[curpos.row][curpos.col].V();
+                    if (nextCriticalRegion != null) {
+                        nextCriticalRegion.leave(num);
+                    }
                     break;
                 }                	
                 
@@ -184,6 +187,9 @@ class Car extends Thread {
                     cd.clear(curpos,newpos);
                     mapOfCars[newpos.row][newpos.col].V();
                     mapOfCars[curpos.row][curpos.col].V();
+                    if (nextCriticalRegion != null) {
+                        nextCriticalRegion.leave(num);
+                    }
                     break;
                 }
                 cd.clear(curpos,newpos);
@@ -200,6 +206,9 @@ class Car extends Thread {
                     } catch (InterruptedException e) {
                         cd.mark(curpos,col,num);   
                         mapOfCars[newpos.row][newpos.col].V();
+                        if (nextCriticalRegion != null) {
+                            nextCriticalRegion.leave(num);
+                        }
                         break;
                     }
                 }
