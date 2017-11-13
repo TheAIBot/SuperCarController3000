@@ -132,6 +132,7 @@ class Car extends Thread {
             speed = chooseSpeed();
             curpos = startpos;
             cd.mark(curpos,col,num);
+            CriticalRegion nextCriticalRegion = null;
 
             while (true) { 
                 try {
@@ -155,7 +156,7 @@ class Car extends Thread {
 
                 newpos = nextPos(curpos);
                 
-                final CriticalRegion nextCriticalRegion = mapCriticalRegions[newpos.row][newpos.col];
+                nextCriticalRegion = mapCriticalRegions[newpos.row][newpos.col];
                 
                 if (nextCriticalRegion != null && !nextCriticalRegion.equals(currentCriticalRegion)) {
                     try {
@@ -204,18 +205,19 @@ class Car extends Thread {
                     try {
                         currentCriticalRegion.leave(num);
                     } catch (InterruptedException e) {
-                        cd.mark(curpos,col,num);   
+                        cd.clear(curpos);   
                         mapOfCars[newpos.row][newpos.col].V();
                         if (nextCriticalRegion != null) {
                             nextCriticalRegion.leave(num);
                         }
+                        currentCriticalRegion = nextCriticalRegion;
                         break;
                     }
                 }
                 currentCriticalRegion = nextCriticalRegion;
             }
 
-            if (currentCriticalRegion != null) {
+            if (currentCriticalRegion != null && nextCriticalRegion != currentCriticalRegion) {
                 currentCriticalRegion.leave(num);
             }
         }

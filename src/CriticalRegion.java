@@ -9,7 +9,6 @@ public class CriticalRegion {
 	private final Semaphore entryExitProtocol = new Semaphore(1);
 	private final Semaphore waitUpCars 		  = new Semaphore(0);
 	private final Semaphore waitDownCars 	  = new Semaphore(0);
-	private final Object lock = new Object();
 
 
 	
@@ -72,7 +71,11 @@ public class CriticalRegion {
 		//<noDownCars--;>
 		try {
 			entryExitProtocol.P();
-		} finally {
+		} 
+		catch (InterruptedException e) {
+			entryExitProtocol.P();
+		}
+		finally {
 			downCarsCount--;
 			signal();
 		}
@@ -82,7 +85,11 @@ public class CriticalRegion {
 		//<noUpCars--;>
 		try {
 			entryExitProtocol.P();
-		} finally {
+		} 
+		catch (InterruptedException e) {
+			entryExitProtocol.P();
+		}
+		finally {
 			upCarsCount--;
 			signal();
 		}
