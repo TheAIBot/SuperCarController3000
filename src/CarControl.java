@@ -103,7 +103,7 @@ class Car extends Thread {
 
     synchronized int chooseSpeed() { 
         double factor = (1.0D+(Math.random()-0.5D)*2*variation/100);
-        return (int) Math.round(factor*basespeed) / 10;
+        return (int) Math.round(factor*basespeed);
     }
 
     private int speed() {
@@ -347,6 +347,10 @@ public class CarControl implements CarControlI{
             changeACar.V();
         } catch (InterruptedException e) {
         }
+    }
+
+    public boolean getIsCarRunning(int carNumber) {
+        return isCarRunning[carNumber];
     }
 
    /* Speed settings for testing purposes */

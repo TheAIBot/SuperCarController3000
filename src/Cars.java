@@ -691,7 +691,7 @@ public class Cars extends JFrame implements CarDisplayI {
     private boolean barrieractive = false;         // Determines whether car no. 0 is started by startAll
     private volatile boolean slowdown = false;     // Flag read concurrently by isSlow()
 
-    private CarControlI ctr;
+    public CarControlI ctr;
     private CarTestWrapper testwrap;
     private Thread test;
 
