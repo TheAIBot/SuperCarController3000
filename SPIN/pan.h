@@ -102,8 +102,6 @@
 #ifndef NFAIR
 	#define NFAIR	2	/* must be >= 2 */
 #endif
-#define REM_REFS	6
-#define HAS_LTL	1
 #define HAS_CODE	1
 #if defined(RANDSTORE) && !defined(RANDSTOR)
 	#define RANDSTOR	RANDSTORE
@@ -122,13 +120,7 @@
 #endif
 #ifdef NP
 	#define HAS_NP	2
-	#define VERI	5	/* np_ */
-#endif
-#ifndef NOCLAIM
-	#define NCLAIMS	2
-	#ifndef NP
-		#define VERI	4
-	#endif
+	#define VERI	3	/* np_ */
 #endif
 
 typedef struct S_F_MAP {
@@ -137,38 +129,24 @@ typedef struct S_F_MAP {
 	int upto;
 } S_F_MAP;
 
-#define _nstates4	14	/* passBarrier */
-#define minseq4	104
-#define maxseq4	116
-#define _endstate4	13
+#define _nstates2	26	/* Check_noGreaterDifference */
+#define minseq2	94
+#define maxseq2	118
+#define _endstate2	25
 
-#define _nstates3	23	/* notPassBarrier */
-#define minseq3	82
-#define maxseq3	103
-#define _endstate3	22
+#define _nstates1	83	/* Car */
+#define minseq1	12
+#define maxseq1	93
+#define _endstate1	82
 
-#define _nstates2	75	/* Car */
-#define minseq2	8
-#define maxseq2	81
-#define _endstate2	74
-
-#define _nstates1	3	/* CarController */
-#define minseq1	6
-#define maxseq1	7
-#define _endstate1	2
-
-#define _nstates0	7	/* :init: */
+#define _nstates0	13	/* :init: */
 #define minseq0	0
-#define maxseq0	5
-#define _endstate0	6
+#define maxseq0	11
+#define _endstate0	12
 
-extern short src_ln4[];
-extern short src_ln3[];
 extern short src_ln2[];
 extern short src_ln1[];
 extern short src_ln0[];
-extern S_F_MAP src_file4[];
-extern S_F_MAP src_file3[];
 extern S_F_MAP src_file2[];
 extern S_F_MAP src_file1[];
 extern S_F_MAP src_file0[];
@@ -190,47 +168,30 @@ extern S_F_MAP src_file0[];
 	#endif
 #endif
 
-typedef struct P4 { /* passBarrier */
+#define PCheck_noGreaterDifference	((P2 *)this)
+typedef struct P2 { /* Check_noGreaterDifference */
 	unsigned _pid : 8;  /* 0..255 */
-	unsigned _t   : 4; /* proctype */
+	unsigned _t   : 3; /* proctype */
 	unsigned _p   : 8; /* state    */
 #ifdef HAS_PRIORITY
 	unsigned _priority : 8; /* 0..255 */
 #endif
-} P4;
-#define Air4	(sizeof(P4) - 3)
+	int _3_9_minValue;
+	int _3_9_maxValue;
+	int _3_9_i;
+} P2;
+#define Air2	(sizeof(P2) - Offsetof(P2, _3_9_i) - 1*sizeof(int))
 
-typedef struct P3 { /* notPassBarrier */
+#define PCar	((P1 *)this)
+typedef struct P1 { /* Car */
 	unsigned _pid : 8;  /* 0..255 */
-	unsigned _t   : 4; /* proctype */
-	unsigned _p   : 8; /* state    */
-#ifdef HAS_PRIORITY
-	unsigned _priority : 8; /* 0..255 */
-#endif
-} P3;
-#define Air3	(sizeof(P3) - 3)
-
-#define PCar	((P2 *)this)
-typedef struct P2 { /* Car */
-	unsigned _pid : 8;  /* 0..255 */
-	unsigned _t   : 4; /* proctype */
+	unsigned _t   : 3; /* proctype */
 	unsigned _p   : 8; /* state    */
 #ifdef HAS_PRIORITY
 	unsigned _priority : 8; /* 0..255 */
 #endif
 	uchar type;
-	int temp;
-} P2;
-#define Air2	(sizeof(P2) - Offsetof(P2, temp) - 1*sizeof(int))
-
-#define PCarController	((P1 *)this)
-typedef struct P1 { /* CarController */
-	unsigned _pid : 8;  /* 0..255 */
-	unsigned _t   : 4; /* proctype */
-	unsigned _p   : 8; /* state    */
-#ifdef HAS_PRIORITY
-	unsigned _priority : 8; /* 0..255 */
-#endif
+	uchar num;
 	int temp;
 } P1;
 #define Air1	(sizeof(P1) - Offsetof(P1, temp) - 1*sizeof(int))
@@ -238,7 +199,7 @@ typedef struct P1 { /* CarController */
 #define Pinit	((P0 *)this)
 typedef struct P0 { /* :init: */
 	unsigned _pid : 8;  /* 0..255 */
-	unsigned _t   : 4; /* proctype */
+	unsigned _t   : 3; /* proctype */
 	unsigned _p   : 8; /* state    */
 #ifdef HAS_PRIORITY
 	unsigned _priority : 8; /* 0..255 */
@@ -246,31 +207,19 @@ typedef struct P0 { /* :init: */
 } P0;
 #define Air0	(sizeof(P0) - 3)
 
-typedef struct P5 { /* np_ */
+typedef struct P3 { /* np_ */
 	unsigned _pid : 8;  /* 0..255 */
-	unsigned _t   : 4; /* proctype */
+	unsigned _t   : 3; /* proctype */
 	unsigned _p   : 8; /* state    */
 #ifdef HAS_PRIORITY
 	unsigned _priority : 8; /* 0..255 */
 #endif
-} P5;
-#define Air5	(sizeof(P5) - 3)
+} P3;
+#define Air3	(sizeof(P3) - 3)
 
-
-#ifndef NOCLAIM
-	#undef VERI
-	#define VERI	6
-	#define Pclaim	P6
-
-typedef struct P6 {
-	unsigned _pid : 8; /* always zero */
-	unsigned _t   : 4; /* active-claim type  */
-	unsigned _p   : 8; /* active-claim state */
-	unsigned _n   : 2; /* active-claim index */
-	uchar c_cur[NCLAIMS]; /* claim-states */
-} P6;
-	#define Air6	(0)
-
+#define Pclaim	P0
+#ifndef NCLAIMS
+	#define NCLAIMS 1
 #endif
 #if defined(BFS) && defined(REACH)
 	#undef REACH
@@ -458,13 +407,12 @@ typedef struct State {
 		unsigned short _event;
 	#endif
 #endif
-	uchar isInBarrier[4];
 	unsigned isOn : 1;
-	uchar carPID[3];
 	uchar numberCarsAtBarrier;
 	uchar numberCarsToAwake;
 	uchar entryExitProtocol;
 	uchar awaitAllCarsAtBarrier;
+	int roundCount[3];
 #ifdef TRIX
 	/* room for 512 proc+chan ptrs, + safety margin */
 	char *_ids_[MAXPROC+MAXQ+4];
@@ -486,24 +434,23 @@ typedef struct TRIX_v6 {
 #endif
 
 #define HAS_TRACK	0
-/* hidden variable: */	uchar onOffSwitch;
+/* hidden variable: */	uchar isInBarrier[3];
+/* hidden variable: */	uchar carPID[3];
 #define FORWARD_MOVES	"pan.m"
 #define BACKWARD_MOVES	"pan.b"
 #define TRANSITIONS	"pan.t"
-#define _NP_	5
-#define _nstates5	3 /* np_ */
-#define _endstate5	2 /* np_ */
+#define _NP_	3
+#define _nstates3	3 /* np_ */
+#define _endstate3	2 /* np_ */
 
-#define _start5	0 /* np_ */
-#define _start4	5
-#define _start3	7
-#define _start2	71
-#define _start1	1
-#define _start0	5
+#define _start3	0 /* np_ */
+#define _start2	22
+#define _start1	79
+#define _start0	11
 #ifdef NP
 	#define ACCEPT_LAB	1 /* at least 1 in np_ */
 #else
-	#define ACCEPT_LAB	2 /* user-defined accept labels */
+	#define ACCEPT_LAB	0 /* user-defined accept labels */
 #endif
 #ifdef MEMCNT
 	#ifdef MEMLIM
@@ -849,7 +796,7 @@ typedef struct BFS_State {
 
 void qsend(int, int, int);
 
-#define Addproc(x,y)	addproc(256, y, x, 0)
+#define Addproc(x,y)	addproc(256, y, x, 0, 0)
 #define LOCAL	1
 #define Q_FULL_F	2
 #define Q_EMPT_F	3

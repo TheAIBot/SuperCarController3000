@@ -22,184 +22,181 @@ settable(void)
 {	Trans *T;
 	Trans *settr(int, int, int, int, int, char *, int, int, int);
 
-	trans = (Trans ***) emalloc(6*sizeof(Trans **));
+	trans = (Trans ***) emalloc(4*sizeof(Trans **));
 
-	/* proctype 4: passBarrier */
+	/* proctype 2: Check_noGreaterDifference */
 
-	trans[4] = (Trans **) emalloc(14*sizeof(Trans *));
+	trans[2] = (Trans **) emalloc(26*sizeof(Trans *));
 
-	trans[4][6]	= settr(109,0,5,1,0,".(goto)", 0, 2, 0);
-	T = trans[4][5] = settr(108,0,0,0,0,"DO", 0, 2, 0);
-	T = T->nxt	= settr(108,0,1,0,0,"DO", 0, 2, 0);
-	    T->nxt	= settr(108,0,3,0,0,"DO", 0, 2, 0);
-	trans[4][1]	= settr(104,0,10,3,0,"(((!((Car[carPID[1]]._p==afterBarrier))&&(isInBarrier[carPID[1]]&&(numberCarsAtBarrier==2)))&&isOn))", 1, 2, 0);
-	trans[4][2]	= settr(105,0,10,1,0,"goto accept_S4", 0, 2, 0);
-	trans[4][3]	= settr(106,0,5,1,0,"(1)", 0, 2, 0);
-	trans[4][4]	= settr(107,0,5,1,0,"goto T0_init", 0, 2, 0);
-	trans[4][7]	= settr(110,0,10,1,0,"break", 0, 2, 0);
-	trans[4][11]	= settr(114,0,10,1,0,".(goto)", 0, 2, 0);
-	T = trans[4][10] = settr(113,0,0,0,0,"DO", 0, 2, 0);
-	    T->nxt	= settr(113,0,8,0,0,"DO", 0, 2, 0);
-	trans[4][8]	= settr(111,0,10,4,0,"((!((Car[carPID[1]]._p==afterBarrier))&&isOn))", 1, 2, 0);
-	trans[4][9]	= settr(112,0,10,1,0,"goto accept_S4", 0, 2, 0);
-	trans[4][12]	= settr(115,0,13,1,0,"break", 0, 2, 0);
-	trans[4][13]	= settr(116,0,0,5,5,"-end-", 0, 3500, 0);
+	trans[2][23]	= settr(116,0,22,1,0,".(goto)", 0, 2, 0);
+	T = trans[2][22] = settr(115,0,0,0,0,"DO", 0, 2, 0);
+	    T->nxt	= settr(115,0,21,0,0,"DO", 0, 2, 0);
+	T = trans[ 2][21] = settr(114,2,0,0,0,"ATOMIC", 1, 2, 0);
+	T->nxt	= settr(114,2,1,0,0,"ATOMIC", 1, 2, 0);
+	trans[2][1]	= settr(94,2,17,3,3,"minValue = 2147483647", 1, 2, 0); /* m: 2 -> 0,17 */
+	reached2[2] = 1;
+	trans[2][2]	= settr(0,0,0,0,0,"maxValue = 0",0,0,0);
+	trans[2][3]	= settr(0,0,0,0,0,"i = 0",0,0,0);
+	trans[2][4]	= settr(0,0,0,0,0,"i = 0",0,0,0);
+	trans[2][18]	= settr(111,2,17,1,0,".(goto)", 1, 2, 0);
+	T = trans[2][17] = settr(110,2,0,0,0,"DO", 1, 2, 0);
+	T = T->nxt	= settr(110,2,5,0,0,"DO", 1, 2, 0);
+	    T->nxt	= settr(110,2,15,0,0,"DO", 1, 2, 0);
+	trans[2][5]	= settr(98,2,12,4,0,"((i<=(3-1)))", 1, 2, 0);
+	T = trans[2][12] = settr(105,2,0,0,0,"IF", 1, 2, 0);
+	T = T->nxt	= settr(105,2,6,0,0,"IF", 1, 2, 0);
+	T = T->nxt	= settr(105,2,8,0,0,"IF", 1, 2, 0);
+	    T->nxt	= settr(105,2,10,0,0,"IF", 1, 2, 0);
+	trans[2][6]	= settr(99,2,17,5,5,"((roundCount[i]<minValue))", 1, 2, 0); /* m: 7 -> 17,0 */
+	reached2[7] = 1;
+	trans[2][7]	= settr(0,0,0,0,0,"minValue = roundCount[i]",0,0,0);
+	trans[2][13]	= settr(106,2,14,1,0,".(goto)", 1, 2, 0); /* m: 14 -> 0,17 */
+	reached2[14] = 1;
+	trans[2][8]	= settr(101,2,17,6,6,"((roundCount[i]>maxValue))", 1, 2, 0); /* m: 9 -> 17,0 */
+	reached2[9] = 1;
+	trans[2][9]	= settr(0,0,0,0,0,"maxValue = roundCount[i]",0,0,0);
+	trans[2][10]	= settr(103,2,11,7,0,"(!(((roundCount[i]<minValue)||(roundCount[i]>maxValue))))", 1, 2, 0);
+	trans[2][11]	= settr(104,2,17,8,8,"(1)", 1, 2, 0); /* m: 14 -> 17,0 */
+	reached2[14] = 1;
+	trans[2][14]	= settr(107,2,17,9,9,"i = (i+1)", 1, 2, 0);
+	trans[2][15]	= settr(108,2,19,2,0,"else", 1, 2, 0);
+	trans[2][16]	= settr(109,2,19,1,0,"goto :b5", 1, 2, 0);
+	trans[2][19]	= settr(112,2,20,1,0,"break", 1, 2, 0);
+	trans[2][20]	= settr(113,0,22,10,0,"assert(((maxValue-minValue)<=1))", 1, 2, 0);
+	trans[2][24]	= settr(117,0,25,1,0,"break", 0, 2, 0);
+	trans[2][25]	= settr(118,0,0,11,11,"-end-", 0, 3500, 0);
 
-	/* proctype 3: notPassBarrier */
+	/* proctype 1: Car */
 
-	trans[3] = (Trans **) emalloc(23*sizeof(Trans *));
+	trans[1] = (Trans **) emalloc(83*sizeof(Trans *));
 
-	trans[3][8]	= settr(89,0,7,1,0,".(goto)", 0, 2, 0);
-	T = trans[3][7] = settr(88,0,0,0,0,"DO", 0, 2, 0);
-	T = T->nxt	= settr(88,0,1,0,0,"DO", 0, 2, 0);
-	T = T->nxt	= settr(88,0,3,0,0,"DO", 0, 2, 0);
-	    T->nxt	= settr(88,0,5,0,0,"DO", 0, 2, 0);
-	trans[3][1]	= settr(82,0,12,6,0,"(((!((isInBarrier[carPID[1]]&&isInBarrier[carPID[2]]))&&(Car[carPID[1]]._p==afterBarrier))&&isOn))", 1, 2, 0);
-	trans[3][2]	= settr(83,0,12,1,0,"goto accept_S11", 0, 2, 0);
-	trans[3][3]	= settr(84,0,19,7,0,"((!((isInBarrier[carPID[1]]&&isInBarrier[carPID[2]]))&&isOn))", 1, 2, 0);
-	trans[3][4]	= settr(85,0,19,1,0,"goto T0_S14", 0, 2, 0);
-	trans[3][5]	= settr(86,0,7,1,0,"(1)", 0, 2, 0);
-	trans[3][6]	= settr(87,0,7,1,0,"goto T0_init", 0, 2, 0);
-	trans[3][9]	= settr(90,0,12,1,0,"break", 0, 2, 0);
-	trans[3][13]	= settr(94,0,12,1,0,".(goto)", 0, 2, 0);
-	T = trans[3][12] = settr(93,0,0,0,0,"DO", 0, 2, 0);
-	    T->nxt	= settr(93,0,10,0,0,"DO", 0, 2, 0);
-	trans[3][10]	= settr(91,0,12,8,0,"((!((isInBarrier[carPID[1]]&&isInBarrier[carPID[2]]))&&isOn))", 1, 2, 0);
-	trans[3][11]	= settr(92,0,12,1,0,"goto accept_S11", 0, 2, 0);
-	trans[3][14]	= settr(95,0,19,1,0,"break", 0, 2, 0);
-	trans[3][20]	= settr(101,0,19,1,0,".(goto)", 0, 2, 0);
-	T = trans[3][19] = settr(100,0,0,0,0,"DO", 0, 2, 0);
-	T = T->nxt	= settr(100,0,15,0,0,"DO", 0, 2, 0);
-	    T->nxt	= settr(100,0,17,0,0,"DO", 0, 2, 0);
-	trans[3][15]	= settr(96,0,12,9,0,"(((!((isInBarrier[carPID[1]]&&isInBarrier[carPID[2]]))&&(Car[carPID[1]]._p==afterBarrier))&&isOn))", 1, 2, 0);
-	trans[3][16]	= settr(97,0,12,1,0,"goto accept_S11", 0, 2, 0);
-	trans[3][17]	= settr(98,0,19,10,0,"((!((isInBarrier[carPID[1]]&&isInBarrier[carPID[2]]))&&isOn))", 1, 2, 0);
-	trans[3][18]	= settr(99,0,19,1,0,"goto T0_S14", 0, 2, 0);
-	trans[3][21]	= settr(102,0,22,1,0,"break", 0, 2, 0);
-	trans[3][22]	= settr(103,0,0,11,11,"-end-", 0, 3500, 0);
-
-	/* proctype 2: Car */
-
-	trans[2] = (Trans **) emalloc(75*sizeof(Trans *));
-
-	trans[2][72]	= settr(79,0,71,1,0,".(goto)", 0, 2, 0);
-	T = trans[2][71] = settr(78,0,0,0,0,"DO", 0, 2, 0);
-	    T->nxt	= settr(78,0,1,0,0,"DO", 0, 2, 0);
-	trans[2][1]	= settr(8,0,2,1,0,"(1)", 0, 2, 0);
-	trans[2][2]	= settr(9,0,7,1,0,"(1)", 0, 2, 0);
-	trans[2][8]	= settr(15,0,7,1,0,".(goto)", 0, 2, 0);
-	T = trans[2][7] = settr(14,0,0,0,0,"DO", 0, 2, 0);
-	T = T->nxt	= settr(14,0,3,0,0,"DO", 0, 2, 0);
-	    T->nxt	= settr(14,0,5,0,0,"DO", 0, 2, 0);
-	trans[2][3]	= settr(10,0,4,1,0,"(1)", 0, 2, 0);
-	trans[2][4]	= settr(11,0,7,1,0,"(1)", 0, 2, 0);
-	trans[2][5]	= settr(12,0,10,1,0,"(1)", 0, 2, 0);
-	trans[2][6]	= settr(13,0,10,1,0,"goto :b1", 0, 2, 0);
-	trans[2][9]	= settr(16,0,10,1,0,"break", 0, 2, 0);
-	trans[2][10]	= settr(17,0,15,1,0,"(1)", 0, 2, 0);
-	T = trans[2][15] = settr(22,0,0,0,0,"IF", 0, 2, 0);
-	T = T->nxt	= settr(22,0,11,0,0,"IF", 0, 2, 0);
-	    T->nxt	= settr(22,0,13,0,0,"IF", 0, 2, 0);
-	trans[2][11]	= settr(18,0,62,12,0,"(!(isOn))", 1, 2, 0);
-	trans[2][12]	= settr(19,0,62,1,0,"goto returnBarrier", 0, 2, 0);
-	trans[2][16]	= settr(23,0,21,1,0,".(goto)", 0, 2, 0);
-	trans[2][13]	= settr(20,0,14,13,0,"(isOn)", 1, 2, 0);
-	trans[2][14]	= settr(21,0,21,1,0,"(1)", 0, 2, 0);
-	T = trans[ 2][21] = settr(28,2,0,0,0,"ATOMIC", 1, 2, 0);
-	T->nxt	= settr(28,2,19,0,0,"ATOMIC", 1, 2, 0);
-	T = trans[2][19] = settr(26,2,0,0,0,"IF", 1, 2, 0);
-	    T->nxt	= settr(26,2,17,0,0,"IF", 1, 2, 0);
-	trans[2][17]	= settr(24,4,28,14,14,"((entryExitProtocol>0))", 1, 2, 0); /* m: 18 -> 28,0 */
-	reached2[18] = 1;
-	trans[2][18]	= settr(0,0,0,0,0,"entryExitProtocol = (entryExitProtocol-1)",0,0,0);
-	trans[2][20]	= settr(27,0,28,1,0,".(goto)", 1, 2, 0);
-	T = trans[2][28] = settr(35,0,0,0,0,"IF", 0, 2, 0);
-	T = T->nxt	= settr(35,0,22,0,0,"IF", 0, 2, 0);
-	    T->nxt	= settr(35,0,26,0,0,"IF", 0, 2, 0);
-	trans[2][22]	= settr(29,0,24,15,0,"(!(isOn))", 1, 2, 0);
-	T = trans[ 2][24] = settr(31,2,0,0,0,"ATOMIC", 1, 2, 0);
-	T->nxt	= settr(31,2,23,0,0,"ATOMIC", 1, 2, 0);
-	trans[2][23]	= settr(30,0,62,16,16,"entryExitProtocol = (entryExitProtocol+1)", 1, 2, 0);
-	trans[2][25]	= settr(32,0,62,1,0,"goto returnBarrier", 0, 2, 0);
-	trans[2][29]	= settr(36,0,30,1,0,".(goto)", 0, 2, 0);
-	trans[2][26]	= settr(33,0,27,17,0,"(isOn)", 1, 2, 0);
-	trans[2][27]	= settr(34,0,30,1,0,"(1)", 0, 2, 0);
-	trans[2][30]	= settr(37,0,31,18,18,"temp = (numberCarsAtBarrier+1)", 1, 2, 0);
-	trans[2][31]	= settr(38,0,32,19,19,"numberCarsAtBarrier = temp", 1, 2, 0);
-	trans[2][32]	= settr(39,0,42,20,20,"isInBarrier[_pid] = 1", 1, 2, 0);
-	T = trans[2][42] = settr(49,0,0,0,0,"IF", 0, 2, 0);
-	T = T->nxt	= settr(49,0,33,0,0,"IF", 0, 2, 0);
-	    T->nxt	= settr(49,0,40,0,0,"IF", 0, 2, 0);
-	trans[2][33]	= settr(40,0,34,21,0,"((numberCarsAtBarrier==2))", 1, 2, 0);
-	trans[2][34]	= settr(41,0,35,22,22,"temp = (numberCarsAtBarrier-2)", 1, 2, 0);
-	trans[2][35]	= settr(42,0,36,23,23,"numberCarsToAwake = temp", 1, 2, 0);
-	trans[2][36]	= settr(43,0,38,24,24,"numberCarsAtBarrier = 0", 1, 2, 0);
-	T = trans[ 2][38] = settr(45,2,0,0,0,"ATOMIC", 1, 2, 0);
-	T->nxt	= settr(45,2,37,0,0,"ATOMIC", 1, 2, 0);
-	trans[2][37]	= settr(44,0,62,25,25,"awaitAllCarsAtBarrier = (awaitAllCarsAtBarrier+1)", 1, 2, 0);
-	trans[2][39]	= settr(46,0,62,1,0,"goto returnBarrier", 0, 2, 0);
-	trans[2][43]	= settr(50,0,45,1,0,".(goto)", 0, 2, 0);
-	trans[2][40]	= settr(47,0,41,26,0,"(!((numberCarsAtBarrier==2)))", 1, 2, 0);
-	trans[2][41]	= settr(48,0,45,1,0,"(1)", 0, 2, 0);
-	T = trans[ 2][45] = settr(52,2,0,0,0,"ATOMIC", 1, 2, 0);
-	T->nxt	= settr(52,2,44,0,0,"ATOMIC", 1, 2, 0);
-	trans[2][44]	= settr(51,0,50,27,27,"entryExitProtocol = (entryExitProtocol+1)", 1, 2, 0);
-	T = trans[ 2][50] = settr(57,2,0,0,0,"ATOMIC", 1, 2, 0);
-	T->nxt	= settr(57,2,48,0,0,"ATOMIC", 1, 2, 0);
-	T = trans[2][48] = settr(55,2,0,0,0,"IF", 1, 2, 0);
-	    T->nxt	= settr(55,2,46,0,0,"IF", 1, 2, 0);
-	trans[2][46]	= settr(53,4,58,28,28,"((awaitAllCarsAtBarrier>0))", 1, 2, 0); /* m: 47 -> 58,0 */
-	reached2[47] = 1;
-	trans[2][47]	= settr(0,0,0,0,0,"awaitAllCarsAtBarrier = (awaitAllCarsAtBarrier-1)",0,0,0);
-	trans[2][49]	= settr(56,0,58,1,0,".(goto)", 1, 2, 0);
-	T = trans[2][58] = settr(65,0,0,0,0,"IF", 0, 2, 0);
-	T = T->nxt	= settr(65,0,51,0,0,"IF", 0, 2, 0);
-	    T->nxt	= settr(65,0,56,0,0,"IF", 0, 2, 0);
-	trans[2][51]	= settr(58,0,52,29,0,"((numberCarsToAwake>0))", 1, 2, 0);
-	trans[2][52]	= settr(59,0,53,30,30,"temp = (numberCarsToAwake-1)", 1, 2, 0);
-	trans[2][53]	= settr(60,0,55,31,31,"numberCarsToAwake = temp", 1, 2, 0);
-	T = trans[ 2][55] = settr(62,2,0,0,0,"ATOMIC", 1, 2, 0);
-	T->nxt	= settr(62,2,54,0,0,"ATOMIC", 1, 2, 0);
-	trans[2][54]	= settr(61,0,61,32,32,"awaitAllCarsAtBarrier = (awaitAllCarsAtBarrier+1)", 1, 2, 0);
-	trans[2][59]	= settr(66,0,61,1,0,".(goto)", 0, 2, 0);
-	trans[2][56]	= settr(63,0,57,33,0,"(!((numberCarsToAwake>0)))", 1, 2, 0);
-	trans[2][57]	= settr(64,0,61,1,0,"(1)", 0, 2, 0);
-	T = trans[ 2][61] = settr(68,2,0,0,0,"ATOMIC", 1, 2, 0);
-	T->nxt	= settr(68,2,60,0,0,"ATOMIC", 1, 2, 0);
-	trans[2][60]	= settr(67,0,62,34,34,"entryExitProtocol = (entryExitProtocol+1)", 1, 2, 0);
-	trans[2][62]	= settr(69,0,63,1,0,"(1)", 1, 2, 0);
-	trans[2][63]	= settr(70,0,68,35,35,"isInBarrier[_pid] = 0", 1, 2, 0);
-	trans[2][69]	= settr(76,0,68,1,0,".(goto)", 0, 2, 0);
-	T = trans[2][68] = settr(75,0,0,0,0,"DO", 0, 2, 0);
-	T = T->nxt	= settr(75,0,64,0,0,"DO", 0, 2, 0);
-	    T->nxt	= settr(75,0,66,0,0,"DO", 0, 2, 0);
-	trans[2][64]	= settr(71,0,65,1,0,"(1)", 0, 2, 0);
-	trans[2][65]	= settr(72,0,68,1,0,"(1)", 0, 2, 0);
-	trans[2][66]	= settr(73,0,71,1,0,"(1)", 0, 2, 0);
-	trans[2][67]	= settr(74,0,71,1,0,"goto :b2", 0, 2, 0);
-	trans[2][70]	= settr(77,0,71,1,0,"break", 0, 2, 0);
-	trans[2][73]	= settr(80,0,74,1,0,"break", 0, 2, 0);
-	trans[2][74]	= settr(81,0,0,36,36,"-end-", 0, 3500, 0);
-
-	/* proctype 1: CarController */
-
-	trans[1] = (Trans **) emalloc(3*sizeof(Trans *));
-
-	trans[1][1]	= settr(6,0,2,37,37,"isOn = 1", 1, 2, 0);
-	trans[1][2]	= settr(7,0,0,38,38,"-end-", 0, 3500, 0);
+	trans[1][80]	= settr(91,0,79,1,0,".(goto)", 0, 2, 0);
+	T = trans[1][79] = settr(90,0,0,0,0,"DO", 0, 2, 0);
+	    T->nxt	= settr(90,0,1,0,0,"DO", 0, 2, 0);
+	trans[1][1]	= settr(12,0,6,1,0,"(1)", 0, 2, 0);
+	trans[1][7]	= settr(18,0,6,1,0,".(goto)", 0, 2, 0);
+	T = trans[1][6] = settr(17,0,0,0,0,"DO", 0, 2, 0);
+	T = T->nxt	= settr(17,0,2,0,0,"DO", 0, 2, 0);
+	    T->nxt	= settr(17,0,4,0,0,"DO", 0, 2, 0);
+	trans[1][2]	= settr(13,0,3,1,0,"(1)", 0, 2, 0);
+	trans[1][3]	= settr(14,0,6,1,0,"(1)", 0, 2, 0);
+	trans[1][4]	= settr(15,0,13,1,0,"(1)", 0, 2, 0);
+	trans[1][5]	= settr(16,0,13,1,0,"goto :b1", 0, 2, 0);
+	trans[1][8]	= settr(19,0,13,1,0,"break", 0, 2, 0);
+	trans[1][14]	= settr(25,0,13,1,0,".(goto)", 0, 2, 0);
+	T = trans[1][13] = settr(24,0,0,0,0,"DO", 0, 2, 0);
+	T = T->nxt	= settr(24,0,9,0,0,"DO", 0, 2, 0);
+	    T->nxt	= settr(24,0,11,0,0,"DO", 0, 2, 0);
+	trans[1][9]	= settr(20,0,10,1,0,"(1)", 0, 2, 0);
+	trans[1][10]	= settr(21,0,13,1,0,"(1)", 0, 2, 0);
+	trans[1][11]	= settr(22,0,16,1,0,"(1)", 0, 2, 0);
+	trans[1][12]	= settr(23,0,16,1,0,"goto :b2", 0, 2, 0);
+	trans[1][15]	= settr(26,0,16,1,0,"break", 0, 2, 0);
+	trans[1][16]	= settr(27,0,17,1,0,"(1)", 0, 2, 0);
+	trans[1][17]	= settr(28,0,22,12,12,"roundCount[num] = (roundCount[num]+1)", 1, 2, 0);
+	T = trans[1][22] = settr(33,0,0,0,0,"IF", 0, 2, 0);
+	T = T->nxt	= settr(33,0,18,0,0,"IF", 0, 2, 0);
+	    T->nxt	= settr(33,0,20,0,0,"IF", 0, 2, 0);
+	trans[1][18]	= settr(29,0,70,13,0,"(!(isOn))", 1, 2, 0);
+	trans[1][19]	= settr(30,0,70,1,0,"goto returnBarrier", 0, 2, 0);
+	trans[1][23]	= settr(34,0,28,1,0,".(goto)", 0, 2, 0);
+	trans[1][20]	= settr(31,0,21,14,0,"(isOn)", 1, 2, 0);
+	trans[1][21]	= settr(32,0,28,1,0,"(1)", 0, 2, 0);
+	T = trans[ 1][28] = settr(39,2,0,0,0,"ATOMIC", 1, 2, 0);
+	T->nxt	= settr(39,2,26,0,0,"ATOMIC", 1, 2, 0);
+	T = trans[1][26] = settr(37,2,0,0,0,"IF", 1, 2, 0);
+	    T->nxt	= settr(37,2,24,0,0,"IF", 1, 2, 0);
+	trans[1][24]	= settr(35,4,35,15,15,"((entryExitProtocol>0))", 1, 2, 0); /* m: 25 -> 35,0 */
+	reached1[25] = 1;
+	trans[1][25]	= settr(0,0,0,0,0,"entryExitProtocol = (entryExitProtocol-1)",0,0,0);
+	trans[1][27]	= settr(38,0,35,1,0,".(goto)", 1, 2, 0);
+	T = trans[1][35] = settr(46,0,0,0,0,"IF", 0, 2, 0);
+	T = T->nxt	= settr(46,0,29,0,0,"IF", 0, 2, 0);
+	    T->nxt	= settr(46,0,33,0,0,"IF", 0, 2, 0);
+	trans[1][29]	= settr(40,0,31,16,0,"(!(isOn))", 1, 2, 0);
+	T = trans[ 1][31] = settr(42,2,0,0,0,"ATOMIC", 1, 2, 0);
+	T->nxt	= settr(42,2,30,0,0,"ATOMIC", 1, 2, 0);
+	trans[1][30]	= settr(41,0,70,17,17,"entryExitProtocol = (entryExitProtocol+1)", 1, 2, 0);
+	trans[1][32]	= settr(43,0,70,1,0,"goto returnBarrier", 0, 2, 0);
+	trans[1][36]	= settr(47,0,37,1,0,".(goto)", 0, 2, 0);
+	trans[1][33]	= settr(44,0,34,18,0,"(isOn)", 1, 2, 0);
+	trans[1][34]	= settr(45,0,37,1,0,"(1)", 0, 2, 0);
+	trans[1][37]	= settr(48,0,38,19,19,"temp = (numberCarsAtBarrier+1)", 1, 2, 0);
+	trans[1][38]	= settr(49,0,39,20,20,"numberCarsAtBarrier = temp", 1, 2, 0);
+	trans[1][39]	= settr(50,0,49,21,21,"isInBarrier[num] = 1", 1, 2, 0);
+	T = trans[1][49] = settr(60,0,0,0,0,"IF", 0, 2, 0);
+	T = T->nxt	= settr(60,0,40,0,0,"IF", 0, 2, 0);
+	    T->nxt	= settr(60,0,47,0,0,"IF", 0, 2, 0);
+	trans[1][40]	= settr(51,0,41,22,0,"((numberCarsAtBarrier==3))", 1, 2, 0);
+	trans[1][41]	= settr(52,0,42,23,23,"temp = (numberCarsAtBarrier-2)", 1, 2, 0);
+	trans[1][42]	= settr(53,0,43,24,24,"numberCarsToAwake = temp", 1, 2, 0);
+	trans[1][43]	= settr(54,0,45,25,25,"numberCarsAtBarrier = 0", 1, 2, 0);
+	T = trans[ 1][45] = settr(56,2,0,0,0,"ATOMIC", 1, 2, 0);
+	T->nxt	= settr(56,2,44,0,0,"ATOMIC", 1, 2, 0);
+	trans[1][44]	= settr(55,0,70,26,26,"awaitAllCarsAtBarrier = (awaitAllCarsAtBarrier+1)", 1, 2, 0);
+	trans[1][46]	= settr(57,0,70,1,0,"goto returnBarrier", 0, 2, 0);
+	trans[1][50]	= settr(61,0,52,1,0,".(goto)", 0, 2, 0);
+	trans[1][47]	= settr(58,0,48,27,0,"(!((numberCarsAtBarrier==3)))", 1, 2, 0);
+	trans[1][48]	= settr(59,0,52,1,0,"(1)", 0, 2, 0);
+	T = trans[ 1][52] = settr(63,2,0,0,0,"ATOMIC", 1, 2, 0);
+	T->nxt	= settr(63,2,51,0,0,"ATOMIC", 1, 2, 0);
+	trans[1][51]	= settr(62,0,57,28,28,"entryExitProtocol = (entryExitProtocol+1)", 1, 2, 0);
+	T = trans[ 1][57] = settr(68,2,0,0,0,"ATOMIC", 1, 2, 0);
+	T->nxt	= settr(68,2,55,0,0,"ATOMIC", 1, 2, 0);
+	T = trans[1][55] = settr(66,2,0,0,0,"IF", 1, 2, 0);
+	    T->nxt	= settr(66,2,53,0,0,"IF", 1, 2, 0);
+	trans[1][53]	= settr(64,4,66,29,29,"((awaitAllCarsAtBarrier>0))", 1, 2, 0); /* m: 54 -> 66,0 */
+	reached1[54] = 1;
+	trans[1][54]	= settr(0,0,0,0,0,"awaitAllCarsAtBarrier = (awaitAllCarsAtBarrier-1)",0,0,0);
+	trans[1][56]	= settr(67,0,66,1,0,".(goto)", 1, 2, 0);
+	T = trans[1][66] = settr(77,0,0,0,0,"IF", 0, 2, 0);
+	T = T->nxt	= settr(77,0,58,0,0,"IF", 0, 2, 0);
+	    T->nxt	= settr(77,0,64,0,0,"IF", 0, 2, 0);
+	trans[1][58]	= settr(69,0,59,30,0,"((numberCarsToAwake>0))", 1, 2, 0);
+	trans[1][59]	= settr(70,0,60,31,31,"temp = (numberCarsToAwake-1)", 1, 2, 0);
+	trans[1][60]	= settr(71,0,62,32,32,"numberCarsToAwake = temp", 1, 2, 0);
+	T = trans[ 1][62] = settr(73,2,0,0,0,"ATOMIC", 1, 2, 0);
+	T->nxt	= settr(73,2,61,0,0,"ATOMIC", 1, 2, 0);
+	trans[1][61]	= settr(72,0,70,33,33,"awaitAllCarsAtBarrier = (awaitAllCarsAtBarrier+1)", 1, 2, 0);
+	trans[1][63]	= settr(74,0,70,1,0,"goto returnBarrier", 0, 2, 0);
+	trans[1][67]	= settr(78,0,69,1,0,".(goto)", 0, 2, 0);
+	trans[1][64]	= settr(75,0,65,34,0,"(!((numberCarsToAwake>0)))", 1, 2, 0);
+	trans[1][65]	= settr(76,0,69,1,0,"(1)", 0, 2, 0);
+	T = trans[ 1][69] = settr(80,2,0,0,0,"ATOMIC", 1, 2, 0);
+	T->nxt	= settr(80,2,68,0,0,"ATOMIC", 1, 2, 0);
+	trans[1][68]	= settr(79,0,70,35,35,"entryExitProtocol = (entryExitProtocol+1)", 1, 2, 0);
+	trans[1][70]	= settr(81,0,71,1,0,"(1)", 0, 2, 0);
+	trans[1][71]	= settr(82,0,76,36,36,"isInBarrier[num] = 0", 1, 2, 0);
+	trans[1][77]	= settr(88,0,76,1,0,".(goto)", 0, 2, 0);
+	T = trans[1][76] = settr(87,0,0,0,0,"DO", 0, 2, 0);
+	T = T->nxt	= settr(87,0,72,0,0,"DO", 0, 2, 0);
+	    T->nxt	= settr(87,0,74,0,0,"DO", 0, 2, 0);
+	trans[1][72]	= settr(83,0,73,1,0,"(1)", 0, 2, 0);
+	trans[1][73]	= settr(84,0,76,1,0,"(1)", 0, 2, 0);
+	trans[1][74]	= settr(85,0,79,1,0,"(1)", 0, 2, 0);
+	trans[1][75]	= settr(86,0,79,1,0,"goto :b3", 0, 2, 0);
+	trans[1][78]	= settr(89,0,79,1,0,"break", 0, 2, 0);
+	trans[1][81]	= settr(92,0,82,1,0,"break", 0, 2, 0);
+	trans[1][82]	= settr(93,0,0,37,37,"-end-", 0, 3500, 0);
 
 	/* proctype 0: :init: */
 
-	trans[0] = (Trans **) emalloc(7*sizeof(Trans *));
+	trans[0] = (Trans **) emalloc(13*sizeof(Trans *));
 
-	T = trans[ 0][5] = settr(4,2,0,0,0,"ATOMIC", 1, 2, 0);
-	T->nxt	= settr(4,2,1,0,0,"ATOMIC", 1, 2, 0);
-	trans[0][1]	= settr(0,4,6,39,39,"carPID[1] = run Car(1)", 1, 2, 0); /* m: 2 -> 0,6 */
+	T = trans[ 0][11] = settr(10,2,0,0,0,"ATOMIC", 1, 2, 0);
+	T->nxt	= settr(10,2,1,0,0,"ATOMIC", 1, 2, 0);
+	trans[0][1]	= settr(0,2,10,38,38,"carPID[0] = run Car(1,0)", 1, 2, 0); /* m: 2 -> 0,10 */
 	reached0[2] = 1;
-	trans[0][2]	= settr(0,0,0,0,0,"carPID[2] = run Car(1)",0,0,0);
-	trans[0][3]	= settr(0,0,0,0,0,"isInBarrier[carPID[1]] = 0",0,0,0);
-	trans[0][4]	= settr(0,0,0,0,0,"isInBarrier[carPID[2]] = 0",0,0,0);
-	trans[0][6]	= settr(5,0,0,40,40,"-end-", 0, 3500, 0);
+	trans[0][2]	= settr(0,0,0,0,0,"carPID[1] = run Car(1,1)",0,0,0);
+	trans[0][3]	= settr(0,0,0,0,0,"carPID[2] = run Car(1,2)",0,0,0);
+	trans[0][4]	= settr(0,0,0,0,0,"isInBarrier[0] = 0",0,0,0);
+	trans[0][5]	= settr(0,0,0,0,0,"isInBarrier[1] = 0",0,0,0);
+	trans[0][6]	= settr(0,0,0,0,0,"isInBarrier[2] = 0",0,0,0);
+	trans[0][7]	= settr(0,0,0,0,0,"roundCount[0] = 0",0,0,0);
+	trans[0][8]	= settr(0,0,0,0,0,"roundCount[1] = 0",0,0,0);
+	trans[0][9]	= settr(0,0,0,0,0,"roundCount[2] = 0",0,0,0);
+	trans[0][10]	= settr(9,0,12,39,39,"(run Check_noGreaterDifference())", 1, 2, 0);
+	trans[0][12]	= settr(11,0,0,40,40,"-end-", 0, 3500, 0);
 	/* np_ demon: */
 	trans[_NP_] = (Trans **) emalloc(2*sizeof(Trans *));
 	T = trans[_NP_][0] = settr(9997,0,1,_T5,0,"(np_)", 1,2,0);

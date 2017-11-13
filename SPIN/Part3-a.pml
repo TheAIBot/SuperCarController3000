@@ -1,6 +1,6 @@
 #define UP 1
 #define DOWN 2
-#define NUMBER_OF_CARS 2
+#define NUMBER_OF_CARS 3
 
 
 
@@ -14,13 +14,14 @@ fi }
 
 
 //We do not care about car 0, as it does not affect other cars
-pid carPID[3]; //TODO (*) change back to size 9
+pid carPID[NUMBER_OF_CARS]; //TODO (*) change back to size 9
 
 //State variables, to signal where cars are:
-bool isInBarrier[4]; //TODO (*) correct?
+bool isInBarrier[NUMBER_OF_CARS]; //TODO (*) correct?
+int roundCount[NUMBER_OF_CARS]; //TODO (*) correct?
 
 //togles:
-bool isOn                   = false;
+bool isOn                   = true;
 
 //Counters:
 byte numberCarsAtBarrier    = 0;
@@ -28,7 +29,6 @@ byte numberCarsToAwake      = 0;
 
 //Semaphores:
 byte entryExitProtocol      = 1;
-byte onOffSwitch            = 1;
 byte awaitAllCarsAtBarrier  = 0;
 
 //(*) Remember making things unatomic.
@@ -37,77 +37,51 @@ byte awaitAllCarsAtBarrier  = 0;
 init{
     atomic{
 	//Car 0 not included.
-        carPID[1] = run Car(UP); 
-        carPID[2] = run Car(UP);
-isInBarrier[carPID[1]] = false;
-isInBarrier[carPID[2]] = false;
-        //carPID[3] = run Car(UP);
-        //carPID[4] = run Car(UP);
-        //carPID[5] = run Car(DOWN);
-        //carPID[6] = run Car(DOWN);
-        //carPID[7] = run Car(DOWN);
-        //carPID[8] = run Car(DOWN);
+        carPID[0]   = run Car(UP, 0); 
+        carPID[1]   = run Car(UP, 1);
+        carPID[2]   = run Car(UP, 2);
+isInBarrier[0]      = false;
+isInBarrier[1]      = false;
+isInBarrier[2]      = false;
+roundCount[0]       = 0;
+roundCount[1]       = 0;
+roundCount[2]       = 0;
+        //carPID[3] = run Car(UP, 3);
+        //carPID[4] = run Car(DOWN,4);
+        //carPID[5] = run Car(DOWN,5);
+        //carPID[6] = run Car(DOWN,6);
+        //carPID[7] = run Car(DOWN,7);
+	run Check_noGreaterDifference(); //(*) can one not just make the checker active?
     }
 }
 
-//(*) Se paa den anden, for at se spoersmaal til hjaelpelaere.
 
-active proctype CarController(){
-    int temp;
-    isOn = true;
-/*
-    do
-    ::  true -> //on();
-        P(onOffSwitch); 
-        isOn = true;
-        V(onOffSwitch);
-		
-    ::  true -> //off(); 
-        P(onOffSwitch);
-		isOn = false;
-		P(entryExitProtocol);
-
-		if 
-		::  (numberCarsAtBarrier > 0) ->
-                temp = numberCarsAtBarrier - 1;
-                numberCarsToAwake = temp;//All the cars at the barrier must be awoken
-                numberCarsAtBarrier = 0;
-                V(onOffSwitch);
-                V(awaitAllCarsAtBarrier);
-                //return; //the awoken cars will switch of the entry-exit protocol themself.
-        :: !(numberCarsAtBarrier > 0) -> //else
-                V(entryExitProtocol); //TODO (*) This code must be updated in branch step3.
-                V(onOffSwitch);     //off();                 			
-		fi;		
-    
-    //:: true -> skip;
-    
-    od
-*/
-}
-
-proctype Car(byte type)
+proctype Car(byte type; byte num)
 {
 	int temp = 0;
 
     do //No need to include atBarrier, as the car either is at the barrier, or it is not.
     ::
-        skip;  //Just to have a place marked as the gate.
-        
-beforeBarrier:   
-
-        skip;
-        //Added eternal spinning.
+        skip;  
         
         do
-        :: true -> skip;
+        :: true -> skip; //(*) bare skip. Hvorfor dur det ikke med det?
         :: true -> break;
         od;
 
-barrierEntry: //TODO (*) is the flag at the line below?
+beforeBarrier:   
+        
+        do
+        :: true -> skip; //(*) bare skip. Hvorfor dur det ikke med det?
+        :: true -> break;
+        od;
+
+barrierEntry: 
 	skip;
         
         //Using goto returnBarrier instead of an actual return
+
+        roundCount[num] ++; //Allowed to be atomic.
         
         if
         :: !isOn -> goto returnBarrier;
@@ -117,14 +91,14 @@ barrierEntry: //TODO (*) is the flag at the line below?
         P(entryExitProtocol);        
         if
         :: !isOn -> 
-            V(entryExitProtocol);
-            goto returnBarrier;
+                V(entryExitProtocol);
+                goto returnBarrier;
         ::  isOn -> skip;
         fi;
                 
-        temp = numberCarsAtBarrier + 1;
+        temp                = numberCarsAtBarrier + 1;
         numberCarsAtBarrier = temp;
-        isInBarrier[_pid] = true;
+        isInBarrier[num]   = true;
         
         if 
         ::  (numberCarsAtBarrier == NUMBER_OF_CARS) ->
@@ -143,7 +117,7 @@ barrierEntry: //TODO (*) is the flag at the line below?
             temp = numberCarsToAwake - 1;
             numberCarsToAwake = temp;
             V(awaitAllCarsAtBarrier);
-            //return; implicit by structure of if statements.
+	goto returnBarrier;
         :: !(numberCarsToAwake > 0) -> skip;
         fi;
         
@@ -155,7 +129,7 @@ returnBarrier:
 		
 afterBarrier:
 
-        isInBarrier[_pid] = false;
+        isInBarrier[num] = false;
         
         do
         :: true -> skip;
@@ -166,18 +140,56 @@ afterBarrier:
     od;
 }
 
+proctype Check_noGreaterDifference() { //TODO takes up a lot of space and ressources...
+	do
+	:: atomic{
+		int minValue = 2147483647;
+		int maxValue = 0;
+		int i;
+		for (i : 0 .. NUMBER_OF_CARS - 1) {
+            if
+            :: roundCount[i] < minValue -> minValue = roundCount[i];
+            :: roundCount[i] > maxValue -> maxValue = roundCount[i];
+            :: !(roundCount[i] < minValue || roundCount[i] > maxValue) -> skip;
+            fi
+		}
+		assert(maxValue - minValue <= 1);
+	}
+	od;
+}
 
 /* Liveness properties (uncomment to verify) */
 //Spørg ind til hvorfor ovenstaaende er formuleret korrekt.(*)
 
-//(*) Add thing verifying 0<=carsInBarrier <=9 and the likes
+//ltl noGreaterDifference {[] ( roundCount[0] - roundCount[1] <= 1 && roundCount[1] -  roundCount[0] <= 1 )}
+    //Meaning that a car can only be one turn ahead
+    //Use an
 
+//ltl noPassingBarrierWithoutOthers {[] ( (roundCount[0] > roundCount[1] && roundCount[0] > roundCount[2] &&  Car[carPID[0]]@afterBarrier) -> !(Car[carPID[1]]@beforeBarrier || Car[carPID[2]]@beforeBarrier))}
 
+//ltl testPassing{[]( !( (roundCount[0] > roundCount[1] || roundCount[0] > roundCount[2]) &&  Car[carPID[0]]@afterBarrier) )}
+	//(*) Ovenstående burde være sufficient?
+
+//ltl testIncrement{! <> ( [](Car[carPID[0]]@beforeBarrier)) }
+    //(*) OBS!!! Dur hvis weak fairness er sat til! ødelægger det hele.
+
+//ltl testIncrement{[] ( ([](!isInBarrier[0]) &&  Car[carPID[1]]@barrierEntry && Car[carPID[2]]@barrierEntry ) -> [](!Car[carPID[1]]@afterBarrier && !Car[carPID[2]]@afterBarrier)) }
+	//(*) OBS!!!! Viser kun noget uden weak fairness, da predecenten ellers aldrig er sand.
+//ltl noIncrementUnlessAllAtGates {[]( [](Car[carPID[0]]@beforeBarrier) && Car[carPID[1]]@barrierEntry && Car[carPID[2]]@barrierEntry ->  [](!Car[carPID[1]]@afterBarrier && !Car[carPID[2]]@afterBarrier) )}
+    //Burde fejle, da car 0 ikke har garanteret laveste round count.
+    //Meaning that all cars must be at the gate, before the cars continue
+    //Make a formula for each car.
+    //Hvordan påvirker weak fairness ovenstående? (*) Check op.
+
+    
+    
+    
+    
 //ltl passBarrier {[] ((Car[carPID[1]]@barrierEntry && Car[carPID[1]]@barrierEntry && [](isOn)) -> <> (Car[carPID[1]]@afterBarrier))} //Wrong. 
 
-ltl notPassBarrier {[] ( [] ! (isInBarrier[carPID[1]] && isInBarrier[carPID[2]]) && [](isOn) -> ! (<> (Car[carPID[1]]@afterBarrier)) )} //Should fail TODO  (*)
+//ltl notPassBarrier {[] ( [] ! (isInBarrier[carPID[1]] && isInBarrier[carPID[2]]) && [](isOn) -> ! (<> (Car[carPID[1]]@afterBarrier)) )} //Should fail TODO  (*)
 
-ltl passBarrier {[] ((isInBarrier[carPID[1]] && numberCarsAtBarrier == 2 && [](isOn)) -> <> (Car[carPID[1]]@afterBarrier))}
+//ltl passBarrier {[] ((isInBarrier[carPID[1]] && numberCarsAtBarrier == 2 && [](isOn)) -> <> (Car[carPID[1]]@afterBarrier))}
 
 //ltl passBarrier {[] ((isInBarrier[carPID[1]] && isInBarrier[carPID[2]] && [](isOn)) -> <> (Car[carPID[1]]@afterBarrier))} //Wrong. 
 //!isInBarrier[carPID[1]]  &&

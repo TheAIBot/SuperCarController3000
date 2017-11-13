@@ -1,28 +1,18 @@
-never notPassBarrier {    /* !([] ((! (([] (! ((isInBarrier[carPID[1]]) && (isInBarrier[carPID[2]])))) && ([] (isOn)))) || (! (<> ((Car[carPID[1]]@afterBarrier)))))) */
+never noPassingBarrierWithoutOthers {    /* !([] ((! ((((roundCount[0]>roundCount[1])) && ((roundCount[0]>roundCount[2]))) && ((Car[carPID[0]]@afterBarrier)))) || (! (((Car[carPID[1]]@beforeBarrier)) || ((Car[carPID[2]]@beforeBarrier)))))) */
 T0_init:
 	do
-	:: ((! ((isInBarrier[carPID[1]]) && (isInBarrier[carPID[2]]))) && ((Car[carPID[1]]@afterBarrier)) && (isOn)) -> goto accept_S11
-	:: ((! ((isInBarrier[carPID[1]]) && (isInBarrier[carPID[2]]))) && (isOn)) -> goto T0_S14
+	:: atomic { (! (((! ((((roundCount[0]>roundCount[1])) && ((roundCount[0]>roundCount[2]))) && ((Car[carPID[0]]@afterBarrier)))) || (! (((Car[carPID[1]]@beforeBarrier)) || ((Car[carPID[2]]@beforeBarrier))))))) -> assert(!(! (((! ((((roundCount[0]>roundCount[1])) && ((roundCount[0]>roundCount[2]))) && ((Car[carPID[0]]@afterBarrier)))) || (! (((Car[carPID[1]]@beforeBarrier)) || ((Car[carPID[2]]@beforeBarrier)))))))) }
 	:: (1) -> goto T0_init
 	od;
-accept_S11:
-	do
-	:: ((! ((isInBarrier[carPID[1]]) && (isInBarrier[carPID[2]]))) && (isOn)) -> goto accept_S11
-	od;
-T0_S14:
-	do
-	:: ((! ((isInBarrier[carPID[1]]) && (isInBarrier[carPID[2]]))) && ((Car[carPID[1]]@afterBarrier)) && (isOn)) -> goto accept_S11
-	:: ((! ((isInBarrier[carPID[1]]) && (isInBarrier[carPID[2]]))) && (isOn)) -> goto T0_S14
-	od;
+accept_all:
+	skip
 }
-never passBarrier {    /* !([] ((! (((isInBarrier[carPID[1]]) && ((numberCarsAtBarrier==2))) && ([] (isOn)))) || (<> ((Car[carPID[1]]@afterBarrier))))) */
+never testPassing {    /* !([] (! ((((roundCount[0]>roundCount[1])) && ((roundCount[0]>roundCount[2]))) && ((Car[carPID[0]]@afterBarrier))))) */
 T0_init:
 	do
-	:: (! (((Car[carPID[1]]@afterBarrier))) && ((isInBarrier[carPID[1]]) && ((numberCarsAtBarrier==2))) && (isOn)) -> goto accept_S4
+	:: atomic { (! ((! ((((roundCount[0]>roundCount[1])) && ((roundCount[0]>roundCount[2]))) && ((Car[carPID[0]]@afterBarrier)))))) -> assert(!(! ((! ((((roundCount[0]>roundCount[1])) && ((roundCount[0]>roundCount[2]))) && ((Car[carPID[0]]@afterBarrier))))))) }
 	:: (1) -> goto T0_init
 	od;
-accept_S4:
-	do
-	:: (! (((Car[carPID[1]]@afterBarrier))) && (isOn)) -> goto accept_S4
-	od;
+accept_all:
+	skip
 }
