@@ -133,6 +133,12 @@ class Car extends Thread {
             curpos = startpos;
             cd.mark(curpos,col,num);
             CriticalRegion nextCriticalRegion = null;
+            try {
+                mapOfCars[curpos.row][curpos.col].P();
+            } catch (InterruptedException e) {
+                cd.clear(curpos);
+                return;
+            }
 
             while (true) { 
                 try {
