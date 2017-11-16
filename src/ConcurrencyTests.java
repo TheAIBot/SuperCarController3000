@@ -55,12 +55,24 @@ class ConcurrencyTests {
                     Thread.sleep(rand.nextInt(20));
                     removeOrRestoreCar(rand, carControl, cars, carUnexpectedWaitingForAlley);
                 }
+
+                for(int i = 0; i < cars.length; i++) {
+                    carUnexpectedWaitingForAlley[i] = 0;
+                }
+
                 //then verify that they still work as expected
                 while (System.nanoTime() - startTime < TEST_RUNTIME * 2) {   
                     Thread.sleep(100);
                     
                     if (areCarsDeadlocked(carControl, cars, oldCarPositions, carUnexpectedWaitingForAlley)) {
                         carControl.println("Deadlock detected");
+                        for(int i = 1; i < cars.length; i++) {
+                            cars[i].setSpeed(400);
+                        }
+                        Thread.sleep(5000);
+                        for(int i = 1; i < cars.length; i++) {
+                            cars[i].setSpeed(10);
+                        }
                         //Assert.fail("Deadlock detected");
                     }
     
@@ -96,7 +108,7 @@ class ConcurrencyTests {
 
     private static boolean areCarsDeadlocked(final Cars carControl, final Car[] cars, final Pos[] oldCarPositions, final int[] carUnexpectedWaitingForAlley)
     {
-        boolean carsInAlley = anyCarsInAlley(cars);
+        final boolean carsInAlley = anyCarsInAlley(carControl, cars);
         boolean deadlockDetected = true;
         for(int i = 1; i < cars.length; i++) {
             final Pos carOldPos = oldCarPositions[i];
@@ -109,10 +121,12 @@ class ConcurrencyTests {
                     carUnexpectedWaitingForAlley[i] = 0;
                 }
                 else if (!carsInAlley) {
-                    carUnexpectedWaitingForAlley[i]++;
-                    //carControl.println(i + " " + carUnexpectedWaitingForAlley[i]);
-                    if (carUnexpectedWaitingForAlley[i] >= 2) {
-                        return true;
+                    if (carOldPos.equals(carNewPos)) {
+                        carUnexpectedWaitingForAlley[i]++;
+                        carControl.println(i + " " + carUnexpectedWaitingForAlley[i]);
+                        if (carUnexpectedWaitingForAlley[i] > 3) {
+                            return true;
+                        }
                     }
                 }
             }
@@ -121,11 +135,12 @@ class ConcurrencyTests {
         return deadlockDetected;
     }
 
-    private static boolean anyCarsInAlley(final Car[] cars) {
+    private static boolean anyCarsInAlley(final Cars carControl, final Car[] cars) {
         for(int i = 1; i < cars.length; i++) {
             final Pos carNewPos = cars[i].curpos;
 
-            if (criticalRegionArea.stream().anyMatch(x -> x.equals(carNewPos))) {
+            final boolean isCarRunning = ((CarControl)carControl.ctr).getIsCarRunning(i);
+            if (isCarRunning && criticalRegionArea.stream().anyMatch(x -> x.equals(carNewPos))) {
                 return true;
             }
         }

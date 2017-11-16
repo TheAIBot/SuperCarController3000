@@ -1,109 +1,37 @@
-import java.util.Arrays;
-
 public class CriticalRegion {
-	//TODO one could make the critical region fair.
-	private int upCarsCount   = 0; //Invariant: (noUpCars == 0 || noDownCars == 0)
-	private int downCarsCount = 0; //Implemented as a variant of the reader/writer problem, with passing the baton.
-	private int delayedDownCarsCount = 0;
-	private int delayedUpCarsCount   = 0;
-	private final Semaphore entryExitProtocol = new Semaphore(1);
-	private final Semaphore waitUpCars 		  = new Semaphore(0);
-	private final Semaphore waitDownCars 	  = new Semaphore(0);
-
-
+	private int dirCarCount = 0;
+	private static final int UP = 1;
+	private static final int DOWN = -1;
 	
-	public void enter(int num) throws InterruptedException {
-		//TODO it is a variant of the reader/writer problem. It is implemented with the passing the baton technique.
-		if (num  <= 4) {
-			enterUpCar();
-		} else {
-			enterDownCar();
+	public synchronized void enter(int carNumber) throws InterruptedException {
+		final int dir = getDirectionFromCarNumber(carNumber);
+
+		while (hasToWait(dir)) {
+			wait();
 		}
-	}
-	
-	private void enterDownCar() throws InterruptedException {
-		//<await (noUpCars == 0) noDownCars++;>
-		entryExitProtocol.P();	
-        if (upCarsCount > 0) {	
-			delayedDownCarsCount++;
-			entryExitProtocol.V();
-			try {
-				waitDownCars.P();	
-			} catch (InterruptedException e) {
-				entryExitProtocol.P();
-				delayedDownCarsCount--;
-				entryExitProtocol.V();
-				throw new InterruptedException();
-			}
-        }
-        downCarsCount++;
-        signal();
+
+		dirCarCount += dir;
 	}
 
-	private void enterUpCar() throws InterruptedException  {
-		//<await (noDownCars == 0) noUpCars++;>
-        entryExitProtocol.P();
-        if (downCarsCount > 0) {
-			delayedUpCarsCount++;
-			entryExitProtocol.V();
-			try {
-				waitUpCars.P();
-			} catch (Exception e) {
-				entryExitProtocol.P();
-				delayedUpCarsCount--;
-				entryExitProtocol.V();
-				throw new InterruptedException();
-			}
-        }
-        upCarsCount++;
-        signal();
+	private synchronized boolean  hasToWait(int dir)
+	{
+		//direction is negative then dirCarCount
+		//also has to be 0 or negative for the car to continue.
+		//Other way around with posetive.
+		return dirCarCount * dir < 0;
 	}
 
-	public void leave(int num) throws InterruptedException  {
-		if (num <= 4) {
-			leaveUpCar();
-		} else {
-            leaveDownCar();
-        }
-	}
-	
-	private void leaveDownCar() throws InterruptedException  {
-		//<noDownCars--;>
-		try {
-			entryExitProtocol.P();
-		} 
-		catch (InterruptedException e) {
-			entryExitProtocol.P();
-		}
-		finally {
-			downCarsCount--;
-			signal();
-		}
+	private int getDirectionFromCarNumber(int carNumber) {
+		return (carNumber  <= 4) ? UP : DOWN;
 	}
 
-	private void leaveUpCar() throws InterruptedException  {
-		//<noUpCars--;>
-		try {
-			entryExitProtocol.P();
-		} 
-		catch (InterruptedException e) {
-			entryExitProtocol.P();
-		}
-		finally {
-			upCarsCount--;
-			signal();
-		}
-	}
+	public synchronized void leave(int carNumber)  {
+		final int dir = getDirectionFromCarNumber(carNumber);
 
-	private void signal() {
-		if (upCarsCount == 0 && delayedDownCarsCount > 0) {
-			delayedDownCarsCount--;
-			waitDownCars.V();
-		} else if (downCarsCount == 0 && delayedUpCarsCount > 0) {
-			delayedUpCarsCount--;
-			waitUpCars.V();
-		} else {
-			entryExitProtocol.V();
+		dirCarCount -= dir;
+
+		if (dirCarCount == 0) {
+			notifyAll();
 		}
 	}
 }

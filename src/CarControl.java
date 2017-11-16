@@ -132,7 +132,6 @@ class Car extends Thread {
             speed = chooseSpeed();
             curpos = startpos;
             cd.mark(curpos,col,num);
-            CriticalRegion nextCriticalRegion = null;
             try {
                 mapOfCars[curpos.row][curpos.col].P();
             } catch (InterruptedException e) {
@@ -146,6 +145,9 @@ class Car extends Thread {
                 } catch (InterruptedException e) {
                     cd.clear(curpos);
                     mapOfCars[curpos.row][curpos.col].V();
+                    if (currentCriticalRegion != null) {
+                        currentCriticalRegion.leave(num);
+                    }
                     break;
                 }
 
@@ -155,14 +157,17 @@ class Car extends Thread {
                     } catch (InterruptedException e) {
                         cd.clear(curpos);
                         mapOfCars[curpos.row][curpos.col].V();
+                        if (currentCriticalRegion != null) {
+                            currentCriticalRegion.leave(num);
+                        }
                         break;
                     }
-                    speed = chooseSpeed();
                 }
+                speed = chooseSpeed();
 
                 newpos = nextPos(curpos);
                 
-                nextCriticalRegion = mapCriticalRegions[newpos.row][newpos.col];
+                CriticalRegion nextCriticalRegion = mapCriticalRegions[newpos.row][newpos.col];
                 
                 if (nextCriticalRegion != null && !nextCriticalRegion.equals(currentCriticalRegion)) {
                     try {
@@ -170,6 +175,9 @@ class Car extends Thread {
                     } catch (InterruptedException e) {
                         cd.clear(curpos);
                         mapOfCars[curpos.row][curpos.col].V();
+                        if (currentCriticalRegion != null) {
+                            currentCriticalRegion.leave(num);
+                        }
                         break;
                     }
                 }
@@ -181,6 +189,9 @@ class Car extends Thread {
                     mapOfCars[curpos.row][curpos.col].V();
                     if (nextCriticalRegion != null) {
                         nextCriticalRegion.leave(num);
+                    }
+                    if (currentCriticalRegion != null && currentCriticalRegion != nextCriticalRegion) {
+                        currentCriticalRegion.leave(num);
                     }
                     break;
                 }                	
@@ -197,6 +208,9 @@ class Car extends Thread {
                     if (nextCriticalRegion != null) {
                         nextCriticalRegion.leave(num);
                     }
+                    if (currentCriticalRegion != null && currentCriticalRegion != nextCriticalRegion) {
+                        currentCriticalRegion.leave(num);
+                    }
                     break;
                 }
                 cd.clear(curpos,newpos);
@@ -207,24 +221,10 @@ class Car extends Thread {
                 
                 curpos = newpos;           
                 
-                if (currentCriticalRegion != null && !currentCriticalRegion.equals(nextCriticalRegion)) {
-                    try {
-                        currentCriticalRegion.leave(num);
-                    } catch (InterruptedException e) {
-                        cd.clear(curpos);   
-                        mapOfCars[newpos.row][newpos.col].V();
-                        if (nextCriticalRegion != null) {
-                            nextCriticalRegion.leave(num);
-                        }
-                        currentCriticalRegion = nextCriticalRegion;
-                        break;
-                    }
+                if (currentCriticalRegion != null && currentCriticalRegion != nextCriticalRegion) {
+                    currentCriticalRegion.leave(num);
                 }
                 currentCriticalRegion = nextCriticalRegion;
-            }
-
-            if (currentCriticalRegion != null && nextCriticalRegion != currentCriticalRegion) {
-                currentCriticalRegion.leave(num);
             }
         }
         catch (Exception e) {
