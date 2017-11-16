@@ -111,9 +111,6 @@ class ConcurrencyTests {
     private static boolean areCarsDeadlocked(final Cars carControl, final Car[] cars, final Pos[] oldCarPositions, final int[] carUnexpectedWaitingForAlley)
     {
         final boolean carsInAlley = anyCarsInAlley(cars);
-        if (!carsInAlley) {
-            carControl.println("no cars in alley" + (uu++));
-        }
         boolean deadlockDetected = true;
         for(int i = 1; i < cars.length; i++) {
             final Pos carOldPos = oldCarPositions[i];
