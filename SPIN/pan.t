@@ -22,120 +22,139 @@ settable(void)
 {	Trans *T;
 	Trans *settr(int, int, int, int, int, char *, int, int, int);
 
-	trans = (Trans ***) emalloc(8*sizeof(Trans **));
+	trans = (Trans ***) emalloc(9*sizeof(Trans **));
 
-	/* proctype 6: res */
+	/* proctype 7: res */
+
+	trans[7] = (Trans **) emalloc(14*sizeof(Trans *));
+
+	trans[7][6]	= settr(234,0,5,1,0,".(goto)", 0, 2, 0);
+	T = trans[7][5] = settr(233,0,0,0,0,"DO", 0, 2, 0);
+	T = T->nxt	= settr(233,0,1,0,0,"DO", 0, 2, 0);
+	    T->nxt	= settr(233,0,3,0,0,"DO", 0, 2, 0);
+	trans[7][1]	= settr(229,0,10,3,0,"((!(!(((((Car[carPID[1]]._p==entry)||(Car[carPID[2]]._p==entry))||(Car[carPID[5]]._p==entry))||(Car[carPID[6]]._p==entry))))&&!(((((Car[carPID[1]]._p==crit)||(Car[carPID[2]]._p==crit))||(Car[carPID[5]]._p==crit))||(Car[carPID[6]]._p==crit)))))", 1, 2, 0);
+	trans[7][2]	= settr(230,0,10,1,0,"goto accept_S4", 0, 2, 0);
+	trans[7][3]	= settr(231,0,5,1,0,"(1)", 0, 2, 0);
+	trans[7][4]	= settr(232,0,5,1,0,"goto T0_init", 0, 2, 0);
+	trans[7][7]	= settr(235,0,10,1,0,"break", 0, 2, 0);
+	trans[7][11]	= settr(239,0,10,1,0,".(goto)", 0, 2, 0);
+	T = trans[7][10] = settr(238,0,0,0,0,"DO", 0, 2, 0);
+	    T->nxt	= settr(238,0,8,0,0,"DO", 0, 2, 0);
+	trans[7][8]	= settr(236,0,10,4,0,"(!(((((Car[carPID[1]]._p==crit)||(Car[carPID[2]]._p==crit))||(Car[carPID[5]]._p==crit))||(Car[carPID[6]]._p==crit))))", 1, 2, 0);
+	trans[7][9]	= settr(237,0,10,1,0,"goto accept_S4", 0, 2, 0);
+	trans[7][12]	= settr(240,0,13,1,0,"break", 0, 2, 0);
+	trans[7][13]	= settr(241,0,0,5,5,"-end-", 0, 3500, 0);
+
+	/* proctype 6: obl6 */
 
 	trans[6] = (Trans **) emalloc(14*sizeof(Trans *));
 
-	trans[6][6]	= settr(231,0,5,1,0,".(goto)", 0, 2, 0);
-	T = trans[6][5] = settr(230,0,0,0,0,"DO", 0, 2, 0);
-	T = T->nxt	= settr(230,0,1,0,0,"DO", 0, 2, 0);
-	    T->nxt	= settr(230,0,3,0,0,"DO", 0, 2, 0);
-	trans[6][1]	= settr(226,0,10,3,0,"((!(!(((((Car[carPID[1]]._p==entry)||(Car[carPID[2]]._p==entry))||(Car[carPID[5]]._p==entry))||(Car[carPID[6]]._p==entry))))&&!(((((Car[carPID[1]]._p==crit)||(Car[carPID[2]]._p==crit))||(Car[carPID[5]]._p==crit))||(Car[carPID[6]]._p==crit)))))", 1, 2, 0);
-	trans[6][2]	= settr(227,0,10,1,0,"goto accept_S4", 0, 2, 0);
-	trans[6][3]	= settr(228,0,5,1,0,"(1)", 0, 2, 0);
-	trans[6][4]	= settr(229,0,5,1,0,"goto T0_init", 0, 2, 0);
-	trans[6][7]	= settr(232,0,10,1,0,"break", 0, 2, 0);
-	trans[6][11]	= settr(236,0,10,1,0,".(goto)", 0, 2, 0);
-	T = trans[6][10] = settr(235,0,0,0,0,"DO", 0, 2, 0);
-	    T->nxt	= settr(235,0,8,0,0,"DO", 0, 2, 0);
-	trans[6][8]	= settr(233,0,10,4,0,"(!(((((Car[carPID[1]]._p==crit)||(Car[carPID[2]]._p==crit))||(Car[carPID[5]]._p==crit))||(Car[carPID[6]]._p==crit))))", 1, 2, 0);
-	trans[6][9]	= settr(234,0,10,1,0,"goto accept_S4", 0, 2, 0);
-	trans[6][12]	= settr(237,0,13,1,0,"break", 0, 2, 0);
-	trans[6][13]	= settr(238,0,0,5,5,"-end-", 0, 3500, 0);
+	trans[6][6]	= settr(221,0,5,1,0,".(goto)", 0, 2, 0);
+	T = trans[6][5] = settr(220,0,0,0,0,"DO", 0, 2, 0);
+	T = T->nxt	= settr(220,0,1,0,0,"DO", 0, 2, 0);
+	    T->nxt	= settr(220,0,3,0,0,"DO", 0, 2, 0);
+	trans[6][1]	= settr(216,0,10,6,0,"(((!((((Car[carPID[2]]._p==entry)||(Car[carPID[5]]._p==entry))||(Car[carPID[1]]._p==entry)))&&!((Car[carPID[6]]._p==crit)))&&(Car[carPID[6]]._p==entry)))", 1, 2, 0);
+	trans[6][2]	= settr(217,0,10,1,0,"goto accept_S4", 0, 2, 0);
+	trans[6][3]	= settr(218,0,5,1,0,"(1)", 0, 2, 0);
+	trans[6][4]	= settr(219,0,5,1,0,"goto T0_init", 0, 2, 0);
+	trans[6][7]	= settr(222,0,10,1,0,"break", 0, 2, 0);
+	trans[6][11]	= settr(226,0,10,1,0,".(goto)", 0, 2, 0);
+	T = trans[6][10] = settr(225,0,0,0,0,"DO", 0, 2, 0);
+	    T->nxt	= settr(225,0,8,0,0,"DO", 0, 2, 0);
+	trans[6][8]	= settr(223,0,10,7,0,"((!((((Car[carPID[2]]._p==entry)||(Car[carPID[5]]._p==entry))||(Car[carPID[1]]._p==entry)))&&!((Car[carPID[6]]._p==crit))))", 1, 2, 0);
+	trans[6][9]	= settr(224,0,10,1,0,"goto accept_S4", 0, 2, 0);
+	trans[6][12]	= settr(227,0,13,1,0,"break", 0, 2, 0);
+	trans[6][13]	= settr(228,0,0,8,8,"-end-", 0, 3500, 0);
 
-	/* proctype 5: obl6 */
+	/* proctype 5: obl5 */
 
 	trans[5] = (Trans **) emalloc(14*sizeof(Trans *));
 
-	trans[5][6]	= settr(218,0,5,1,0,".(goto)", 0, 2, 0);
-	T = trans[5][5] = settr(217,0,0,0,0,"DO", 0, 2, 0);
-	T = T->nxt	= settr(217,0,1,0,0,"DO", 0, 2, 0);
-	    T->nxt	= settr(217,0,3,0,0,"DO", 0, 2, 0);
-	trans[5][1]	= settr(213,0,10,6,0,"(((!((((Car[carPID[2]]._p==entry)||(Car[carPID[5]]._p==entry))||(Car[carPID[1]]._p==entry)))&&!((Car[carPID[6]]._p==crit)))&&(Car[carPID[6]]._p==entry)))", 1, 2, 0);
-	trans[5][2]	= settr(214,0,10,1,0,"goto accept_S4", 0, 2, 0);
-	trans[5][3]	= settr(215,0,5,1,0,"(1)", 0, 2, 0);
-	trans[5][4]	= settr(216,0,5,1,0,"goto T0_init", 0, 2, 0);
-	trans[5][7]	= settr(219,0,10,1,0,"break", 0, 2, 0);
-	trans[5][11]	= settr(223,0,10,1,0,".(goto)", 0, 2, 0);
-	T = trans[5][10] = settr(222,0,0,0,0,"DO", 0, 2, 0);
-	    T->nxt	= settr(222,0,8,0,0,"DO", 0, 2, 0);
-	trans[5][8]	= settr(220,0,10,7,0,"((!((((Car[carPID[2]]._p==entry)||(Car[carPID[5]]._p==entry))||(Car[carPID[1]]._p==entry)))&&!((Car[carPID[6]]._p==crit))))", 1, 2, 0);
-	trans[5][9]	= settr(221,0,10,1,0,"goto accept_S4", 0, 2, 0);
-	trans[5][12]	= settr(224,0,13,1,0,"break", 0, 2, 0);
-	trans[5][13]	= settr(225,0,0,8,8,"-end-", 0, 3500, 0);
+	trans[5][6]	= settr(208,0,5,1,0,".(goto)", 0, 2, 0);
+	T = trans[5][5] = settr(207,0,0,0,0,"DO", 0, 2, 0);
+	T = T->nxt	= settr(207,0,1,0,0,"DO", 0, 2, 0);
+	    T->nxt	= settr(207,0,3,0,0,"DO", 0, 2, 0);
+	trans[5][1]	= settr(203,0,10,9,0,"(((!((((Car[carPID[2]]._p==entry)||(Car[carPID[1]]._p==entry))||(Car[carPID[6]]._p==entry)))&&!((Car[carPID[5]]._p==crit)))&&(Car[carPID[5]]._p==entry)))", 1, 2, 0);
+	trans[5][2]	= settr(204,0,10,1,0,"goto accept_S4", 0, 2, 0);
+	trans[5][3]	= settr(205,0,5,1,0,"(1)", 0, 2, 0);
+	trans[5][4]	= settr(206,0,5,1,0,"goto T0_init", 0, 2, 0);
+	trans[5][7]	= settr(209,0,10,1,0,"break", 0, 2, 0);
+	trans[5][11]	= settr(213,0,10,1,0,".(goto)", 0, 2, 0);
+	T = trans[5][10] = settr(212,0,0,0,0,"DO", 0, 2, 0);
+	    T->nxt	= settr(212,0,8,0,0,"DO", 0, 2, 0);
+	trans[5][8]	= settr(210,0,10,10,0,"((!((((Car[carPID[2]]._p==entry)||(Car[carPID[1]]._p==entry))||(Car[carPID[6]]._p==entry)))&&!((Car[carPID[5]]._p==crit))))", 1, 2, 0);
+	trans[5][9]	= settr(211,0,10,1,0,"goto accept_S4", 0, 2, 0);
+	trans[5][12]	= settr(214,0,13,1,0,"break", 0, 2, 0);
+	trans[5][13]	= settr(215,0,0,11,11,"-end-", 0, 3500, 0);
 
-	/* proctype 4: obl5 */
+	/* proctype 4: obl2 */
 
 	trans[4] = (Trans **) emalloc(14*sizeof(Trans *));
 
-	trans[4][6]	= settr(205,0,5,1,0,".(goto)", 0, 2, 0);
-	T = trans[4][5] = settr(204,0,0,0,0,"DO", 0, 2, 0);
-	T = T->nxt	= settr(204,0,1,0,0,"DO", 0, 2, 0);
-	    T->nxt	= settr(204,0,3,0,0,"DO", 0, 2, 0);
-	trans[4][1]	= settr(200,0,10,9,0,"(((!((((Car[carPID[2]]._p==entry)||(Car[carPID[1]]._p==entry))||(Car[carPID[6]]._p==entry)))&&!((Car[carPID[5]]._p==crit)))&&(Car[carPID[5]]._p==entry)))", 1, 2, 0);
-	trans[4][2]	= settr(201,0,10,1,0,"goto accept_S4", 0, 2, 0);
-	trans[4][3]	= settr(202,0,5,1,0,"(1)", 0, 2, 0);
-	trans[4][4]	= settr(203,0,5,1,0,"goto T0_init", 0, 2, 0);
-	trans[4][7]	= settr(206,0,10,1,0,"break", 0, 2, 0);
-	trans[4][11]	= settr(210,0,10,1,0,".(goto)", 0, 2, 0);
-	T = trans[4][10] = settr(209,0,0,0,0,"DO", 0, 2, 0);
-	    T->nxt	= settr(209,0,8,0,0,"DO", 0, 2, 0);
-	trans[4][8]	= settr(207,0,10,10,0,"((!((((Car[carPID[2]]._p==entry)||(Car[carPID[1]]._p==entry))||(Car[carPID[6]]._p==entry)))&&!((Car[carPID[5]]._p==crit))))", 1, 2, 0);
-	trans[4][9]	= settr(208,0,10,1,0,"goto accept_S4", 0, 2, 0);
-	trans[4][12]	= settr(211,0,13,1,0,"break", 0, 2, 0);
-	trans[4][13]	= settr(212,0,0,11,11,"-end-", 0, 3500, 0);
+	trans[4][6]	= settr(195,0,5,1,0,".(goto)", 0, 2, 0);
+	T = trans[4][5] = settr(194,0,0,0,0,"DO", 0, 2, 0);
+	T = T->nxt	= settr(194,0,1,0,0,"DO", 0, 2, 0);
+	    T->nxt	= settr(194,0,3,0,0,"DO", 0, 2, 0);
+	trans[4][1]	= settr(190,0,10,12,0,"(((!((((Car[carPID[1]]._p==entry)||(Car[carPID[5]]._p==entry))||(Car[carPID[6]]._p==entry)))&&!((Car[carPID[2]]._p==crit)))&&(Car[carPID[2]]._p==entry)))", 1, 2, 0);
+	trans[4][2]	= settr(191,0,10,1,0,"goto accept_S4", 0, 2, 0);
+	trans[4][3]	= settr(192,0,5,1,0,"(1)", 0, 2, 0);
+	trans[4][4]	= settr(193,0,5,1,0,"goto T0_init", 0, 2, 0);
+	trans[4][7]	= settr(196,0,10,1,0,"break", 0, 2, 0);
+	trans[4][11]	= settr(200,0,10,1,0,".(goto)", 0, 2, 0);
+	T = trans[4][10] = settr(199,0,0,0,0,"DO", 0, 2, 0);
+	    T->nxt	= settr(199,0,8,0,0,"DO", 0, 2, 0);
+	trans[4][8]	= settr(197,0,10,13,0,"((!((((Car[carPID[1]]._p==entry)||(Car[carPID[5]]._p==entry))||(Car[carPID[6]]._p==entry)))&&!((Car[carPID[2]]._p==crit))))", 1, 2, 0);
+	trans[4][9]	= settr(198,0,10,1,0,"goto accept_S4", 0, 2, 0);
+	trans[4][12]	= settr(201,0,13,1,0,"break", 0, 2, 0);
+	trans[4][13]	= settr(202,0,0,14,14,"-end-", 0, 3500, 0);
 
-	/* proctype 3: obl2 */
+	/* proctype 3: obl1 */
 
 	trans[3] = (Trans **) emalloc(14*sizeof(Trans *));
 
-	trans[3][6]	= settr(192,0,5,1,0,".(goto)", 0, 2, 0);
-	T = trans[3][5] = settr(191,0,0,0,0,"DO", 0, 2, 0);
-	T = T->nxt	= settr(191,0,1,0,0,"DO", 0, 2, 0);
-	    T->nxt	= settr(191,0,3,0,0,"DO", 0, 2, 0);
-	trans[3][1]	= settr(187,0,10,12,0,"(((!((((Car[carPID[1]]._p==entry)||(Car[carPID[5]]._p==entry))||(Car[carPID[6]]._p==entry)))&&!((Car[carPID[2]]._p==crit)))&&(Car[carPID[2]]._p==entry)))", 1, 2, 0);
-	trans[3][2]	= settr(188,0,10,1,0,"goto accept_S4", 0, 2, 0);
-	trans[3][3]	= settr(189,0,5,1,0,"(1)", 0, 2, 0);
-	trans[3][4]	= settr(190,0,5,1,0,"goto T0_init", 0, 2, 0);
-	trans[3][7]	= settr(193,0,10,1,0,"break", 0, 2, 0);
-	trans[3][11]	= settr(197,0,10,1,0,".(goto)", 0, 2, 0);
-	T = trans[3][10] = settr(196,0,0,0,0,"DO", 0, 2, 0);
-	    T->nxt	= settr(196,0,8,0,0,"DO", 0, 2, 0);
-	trans[3][8]	= settr(194,0,10,13,0,"((!((((Car[carPID[1]]._p==entry)||(Car[carPID[5]]._p==entry))||(Car[carPID[6]]._p==entry)))&&!((Car[carPID[2]]._p==crit))))", 1, 2, 0);
-	trans[3][9]	= settr(195,0,10,1,0,"goto accept_S4", 0, 2, 0);
-	trans[3][12]	= settr(198,0,13,1,0,"break", 0, 2, 0);
-	trans[3][13]	= settr(199,0,0,14,14,"-end-", 0, 3500, 0);
+	trans[3][6]	= settr(182,0,5,1,0,".(goto)", 0, 2, 0);
+	T = trans[3][5] = settr(181,0,0,0,0,"DO", 0, 2, 0);
+	T = T->nxt	= settr(181,0,1,0,0,"DO", 0, 2, 0);
+	    T->nxt	= settr(181,0,3,0,0,"DO", 0, 2, 0);
+	trans[3][1]	= settr(177,0,10,15,0,"(((!((((Car[carPID[2]]._p==entry)||(Car[carPID[5]]._p==entry))||(Car[carPID[6]]._p==entry)))&&!((Car[carPID[1]]._p==crit)))&&(Car[carPID[1]]._p==entry)))", 1, 2, 0);
+	trans[3][2]	= settr(178,0,10,1,0,"goto accept_S4", 0, 2, 0);
+	trans[3][3]	= settr(179,0,5,1,0,"(1)", 0, 2, 0);
+	trans[3][4]	= settr(180,0,5,1,0,"goto T0_init", 0, 2, 0);
+	trans[3][7]	= settr(183,0,10,1,0,"break", 0, 2, 0);
+	trans[3][11]	= settr(187,0,10,1,0,".(goto)", 0, 2, 0);
+	T = trans[3][10] = settr(186,0,0,0,0,"DO", 0, 2, 0);
+	    T->nxt	= settr(186,0,8,0,0,"DO", 0, 2, 0);
+	trans[3][8]	= settr(184,0,10,16,0,"((!((((Car[carPID[2]]._p==entry)||(Car[carPID[5]]._p==entry))||(Car[carPID[6]]._p==entry)))&&!((Car[carPID[1]]._p==crit))))", 1, 2, 0);
+	trans[3][9]	= settr(185,0,10,1,0,"goto accept_S4", 0, 2, 0);
+	trans[3][12]	= settr(188,0,13,1,0,"break", 0, 2, 0);
+	trans[3][13]	= settr(189,0,0,17,17,"-end-", 0, 3500, 0);
 
-	/* proctype 2: obl1 */
+	/* proctype 2: test */
 
-	trans[2] = (Trans **) emalloc(14*sizeof(Trans *));
+	trans[2] = (Trans **) emalloc(11*sizeof(Trans *));
 
-	trans[2][6]	= settr(179,0,5,1,0,".(goto)", 0, 2, 0);
-	T = trans[2][5] = settr(178,0,0,0,0,"DO", 0, 2, 0);
-	T = T->nxt	= settr(178,0,1,0,0,"DO", 0, 2, 0);
-	    T->nxt	= settr(178,0,3,0,0,"DO", 0, 2, 0);
-	trans[2][1]	= settr(174,0,10,15,0,"(((!(((Car[carPID[5]]._p==entry)||(Car[carPID[6]]._p==entry)))&&!((Car[carPID[1]]._p==crit)))&&(Car[carPID[1]]._p==entry)))", 1, 2, 0);
-	trans[2][2]	= settr(175,0,10,1,0,"goto accept_S4", 0, 2, 0);
-	trans[2][3]	= settr(176,0,5,1,0,"(1)", 0, 2, 0);
-	trans[2][4]	= settr(177,0,5,1,0,"goto T0_init", 0, 2, 0);
-	trans[2][7]	= settr(180,0,10,1,0,"break", 0, 2, 0);
-	trans[2][11]	= settr(184,0,10,1,0,".(goto)", 0, 2, 0);
-	T = trans[2][10] = settr(183,0,0,0,0,"DO", 0, 2, 0);
-	    T->nxt	= settr(183,0,8,0,0,"DO", 0, 2, 0);
-	trans[2][8]	= settr(181,0,10,16,0,"((!(((Car[carPID[5]]._p==entry)||(Car[carPID[6]]._p==entry)))&&!((Car[carPID[1]]._p==crit))))", 1, 2, 0);
-	trans[2][9]	= settr(182,0,10,1,0,"goto accept_S4", 0, 2, 0);
-	trans[2][12]	= settr(185,0,13,1,0,"break", 0, 2, 0);
-	trans[2][13]	= settr(186,0,0,17,17,"-end-", 0, 3500, 0);
+	trans[2][7]	= settr(173,0,6,1,0,".(goto)", 0, 2, 0);
+	T = trans[2][6] = settr(172,0,0,0,0,"DO", 0, 2, 0);
+	T = T->nxt	= settr(172,0,3,0,0,"DO", 0, 2, 0);
+	    T->nxt	= settr(172,0,4,0,0,"DO", 0, 2, 0);
+	T = trans[ 2][3] = settr(169,2,0,0,0,"ATOMIC", 1, 2, 0);
+	T->nxt	= settr(169,2,1,0,0,"ATOMIC", 1, 2, 0);
+	trans[2][1]	= settr(167,0,6,18,18,"(!(!((((Car[carPID[2]]._p==entry)||(Car[carPID[5]]._p==entry))||(Car[carPID[6]]._p==entry)))))", 1, 2, 0); /* m: 2 -> 6,0 */
+	reached2[2] = 1;
+	trans[2][2]	= settr(0,0,0,0,0,"assert(!(!(!((((Car[carPID[2]]._p==entry)||(Car[carPID[5]]._p==entry))||(Car[carPID[6]]._p==entry))))))",0,0,0);
+	trans[2][4]	= settr(170,0,6,1,0,"(1)", 0, 2, 0);
+	trans[2][5]	= settr(171,0,6,1,0,"goto T0_init", 0, 2, 0);
+	trans[2][8]	= settr(174,0,9,1,0,"break", 0, 2, 0);
+	trans[2][9]	= settr(175,0,10,1,0,"(1)", 0, 2, 0);
+	trans[2][10]	= settr(176,0,0,19,19,"-end-", 0, 3500, 0);
 
 	/* proctype 1: Car */
 
-	trans[1] = (Trans **) emalloc(169*sizeof(Trans *));
+	trans[1] = (Trans **) emalloc(162*sizeof(Trans *));
 
-	trans[1][166]	= settr(171,0,165,1,0,".(goto)", 0, 2, 0);
-	T = trans[1][165] = settr(170,0,0,0,0,"DO", 0, 2, 0);
-	    T->nxt	= settr(170,0,1,0,0,"DO", 0, 2, 0);
+	trans[1][159]	= settr(164,0,158,1,0,".(goto)", 0, 2, 0);
+	T = trans[1][158] = settr(163,0,0,0,0,"DO", 0, 2, 0);
+	    T->nxt	= settr(163,0,1,0,0,"DO", 0, 2, 0);
 	trans[1][1]	= settr(6,0,2,1,0,"(1)", 0, 2, 0);
 	trans[1][2]	= settr(7,0,7,1,0,"(1)", 0, 2, 0);
 	trans[1][8]	= settr(13,0,7,1,0,".(goto)", 0, 2, 0);
@@ -150,12 +169,12 @@ settable(void)
 	T = trans[1][94] = settr(99,0,0,0,0,"IF", 1, 2, 0);
 	T = T->nxt	= settr(99,0,10,0,0,"IF", 0, 2, 0);
 	    T->nxt	= settr(99,0,52,0,0,"IF", 0, 2, 0);
-	trans[1][10]	= settr(15,0,15,18,0,"((type==1))", 0, 2, 0);
+	trans[1][10]	= settr(15,0,15,20,0,"((type==1))", 0, 2, 0);
 	T = trans[ 1][15] = settr(20,2,0,0,0,"ATOMIC", 1, 2, 0);
 	T->nxt	= settr(20,2,13,0,0,"ATOMIC", 1, 2, 0);
 	T = trans[1][13] = settr(18,2,0,0,0,"IF", 1, 2, 0);
 	    T->nxt	= settr(18,2,11,0,0,"IF", 1, 2, 0);
-	trans[1][11]	= settr(16,4,30,19,19,"((entryExitProtocol>0))", 1, 2, 0); /* m: 12 -> 30,0 */
+	trans[1][11]	= settr(16,4,30,21,21,"((entryExitProtocol>0))", 1, 2, 0); /* m: 12 -> 30,0 */
 	reached1[12] = 1;
 	trans[1][12]	= settr(0,0,0,0,0,"entryExitProtocol = (entryExitProtocol-1)",0,0,0);
 	trans[1][14]	= settr(19,0,30,1,0,".(goto)", 1, 2, 0);
@@ -163,58 +182,58 @@ settable(void)
 	T = T->nxt	= settr(35,0,16,0,0,"IF", 0, 2, 0);
 	T = T->nxt	= settr(35,0,26,0,0,"IF", 0, 2, 0);
 	    T->nxt	= settr(35,0,28,0,0,"IF", 0, 2, 0);
-	trans[1][16]	= settr(21,0,17,20,0,"((noUpCars>0))", 1, 2, 0);
-	trans[1][17]	= settr(22,0,18,21,21,"temp = (noDelayedDownCars+1)", 1, 2, 0);
-	trans[1][18]	= settr(23,0,20,22,22,"noDelayedDownCars = temp", 1, 2, 0);
+	trans[1][16]	= settr(21,0,17,22,0,"((noUpCars>0))", 1, 2, 0);
+	trans[1][17]	= settr(22,0,18,23,23,"temp = (noDelayedDownCars+1)", 1, 2, 0);
+	trans[1][18]	= settr(23,0,20,24,24,"noDelayedDownCars = temp", 1, 2, 0);
 	T = trans[ 1][20] = settr(25,2,0,0,0,"ATOMIC", 1, 2, 0);
 	T->nxt	= settr(25,2,19,0,0,"ATOMIC", 1, 2, 0);
-	trans[1][19]	= settr(24,0,25,23,23,"entryExitProtocol = (entryExitProtocol+1)", 1, 2, 0);
+	trans[1][19]	= settr(24,0,25,25,25,"entryExitProtocol = (entryExitProtocol+1)", 1, 2, 0);
 	T = trans[ 1][25] = settr(30,2,0,0,0,"ATOMIC", 1, 2, 0);
 	T->nxt	= settr(30,2,23,0,0,"ATOMIC", 1, 2, 0);
 	T = trans[1][23] = settr(28,2,0,0,0,"IF", 1, 2, 0);
 	    T->nxt	= settr(28,2,21,0,0,"IF", 1, 2, 0);
-	trans[1][21]	= settr(26,0,32,24,24,"((waitDownCars>0))", 1, 2, 0); /* m: 22 -> 32,0 */
+	trans[1][21]	= settr(26,0,32,26,26,"((waitDownCars>0))", 1, 2, 0); /* m: 22 -> 32,0 */
 	reached1[22] = 1;
 	trans[1][22]	= settr(0,0,0,0,0,"waitDownCars = (waitDownCars-1)",0,0,0);
 	trans[1][24]	= settr(29,0,32,1,0,".(goto)", 1, 2, 0);
 	trans[1][31]	= settr(36,0,32,1,0,".(goto)", 0, 2, 0);
-	trans[1][26]	= settr(31,0,27,25,0,"((noUpCars==0))", 1, 2, 0);
+	trans[1][26]	= settr(31,0,27,27,0,"((noUpCars==0))", 1, 2, 0);
 	trans[1][27]	= settr(32,0,32,1,0,"(1)", 0, 2, 0);
-	trans[1][28]	= settr(33,0,29,26,0,"((noUpCars<0))", 1, 2, 0);
-	trans[1][29]	= settr(34,0,32,27,0,"assert(0)", 0, 2, 0);
-	trans[1][32]	= settr(37,0,33,28,28,"temp = (noDownCars+1)", 1, 2, 0);
-	trans[1][33]	= settr(38,0,34,29,29,"noDownCars = temp", 1, 2, 0);
-	trans[1][34]	= settr(39,0,35,30,30,"condition1 = (noUpCars==0)", 1, 2, 0);
-	trans[1][35]	= settr(40,0,36,31,31,"condition1 = (condition1&&(noDelayedDownCars>0))", 1, 2, 0);
-	trans[1][36]	= settr(41,0,37,32,32,"condition2 = (noDownCars==0)", 1, 2, 0);
-	trans[1][37]	= settr(42,0,38,33,33,"condition2 = (condition2&&(noDelayedUpCars>0))", 1, 2, 0);
-	trans[1][38]	= settr(43,0,50,34,34,"condition3 = !((condition1||condition2))", 0, 2, 0);
+	trans[1][28]	= settr(33,0,29,28,0,"((noUpCars<0))", 1, 2, 0);
+	trans[1][29]	= settr(34,0,32,29,0,"assert(0)", 0, 2, 0);
+	trans[1][32]	= settr(37,0,33,30,30,"temp = (noDownCars+1)", 1, 2, 0);
+	trans[1][33]	= settr(38,0,34,31,31,"noDownCars = temp", 1, 2, 0);
+	trans[1][34]	= settr(39,0,35,32,32,"condition1 = (noUpCars==0)", 1, 2, 0);
+	trans[1][35]	= settr(40,0,36,33,33,"condition1 = (condition1&&(noDelayedDownCars>0))", 1, 2, 0);
+	trans[1][36]	= settr(41,0,37,34,34,"condition2 = (noDownCars==0)", 1, 2, 0);
+	trans[1][37]	= settr(42,0,38,35,35,"condition2 = (condition2&&(noDelayedUpCars>0))", 1, 2, 0);
+	trans[1][38]	= settr(43,0,50,36,36,"condition3 = !((condition1||condition2))", 0, 2, 0);
 	T = trans[1][50] = settr(55,0,0,0,0,"IF", 0, 2, 0);
 	T = T->nxt	= settr(55,0,39,0,0,"IF", 0, 2, 0);
 	T = T->nxt	= settr(55,0,43,0,0,"IF", 0, 2, 0);
 	    T->nxt	= settr(55,0,47,0,0,"IF", 0, 2, 0);
-	trans[1][39]	= settr(44,0,40,35,35,"(condition1)", 0, 2, 0);
-	trans[1][40]	= settr(45,0,42,36,36,"noDelayedDownCars = (noDelayedDownCars-1)", 1, 2, 0);
+	trans[1][39]	= settr(44,0,40,37,37,"(condition1)", 0, 2, 0);
+	trans[1][40]	= settr(45,0,42,38,38,"noDelayedDownCars = (noDelayedDownCars-1)", 1, 2, 0);
 	T = trans[ 1][42] = settr(47,2,0,0,0,"ATOMIC", 1, 2, 0);
 	T->nxt	= settr(47,2,41,0,0,"ATOMIC", 1, 2, 0);
-	trans[1][41]	= settr(46,0,102,37,37,"waitDownCars = (waitDownCars+1)", 1, 2, 0);
+	trans[1][41]	= settr(46,0,102,39,39,"waitDownCars = (waitDownCars+1)", 1, 2, 0);
 	trans[1][51]	= settr(56,0,102,1,0,".(goto)", 1, 2, 0);
-	trans[1][43]	= settr(48,0,44,38,38,"((condition2&&!(condition1)))", 0, 2, 0);
-	trans[1][44]	= settr(49,0,46,39,39,"noDelayedUpCars = (noDelayedUpCars-1)", 1, 2, 0);
+	trans[1][43]	= settr(48,0,44,40,40,"((condition2&&!(condition1)))", 0, 2, 0);
+	trans[1][44]	= settr(49,0,46,41,41,"noDelayedUpCars = (noDelayedUpCars-1)", 1, 2, 0);
 	T = trans[ 1][46] = settr(51,2,0,0,0,"ATOMIC", 1, 2, 0);
 	T->nxt	= settr(51,2,45,0,0,"ATOMIC", 1, 2, 0);
-	trans[1][45]	= settr(50,0,102,40,40,"waitUpCars = (waitUpCars+1)", 1, 2, 0);
-	trans[1][47]	= settr(52,0,49,41,41,"(condition3)", 0, 2, 0);
+	trans[1][45]	= settr(50,0,102,42,42,"waitUpCars = (waitUpCars+1)", 1, 2, 0);
+	trans[1][47]	= settr(52,0,49,43,43,"(condition3)", 0, 2, 0);
 	T = trans[ 1][49] = settr(54,2,0,0,0,"ATOMIC", 1, 2, 0);
 	T->nxt	= settr(54,2,48,0,0,"ATOMIC", 1, 2, 0);
-	trans[1][48]	= settr(53,0,102,42,42,"entryExitProtocol = (entryExitProtocol+1)", 1, 2, 0);
+	trans[1][48]	= settr(53,0,102,44,44,"entryExitProtocol = (entryExitProtocol+1)", 1, 2, 0);
 	trans[1][95]	= settr(100,0,102,1,0,".(goto)", 1, 2, 0);
-	trans[1][52]	= settr(57,0,57,43,0,"((type==2))", 0, 2, 0);
+	trans[1][52]	= settr(57,0,57,45,0,"((type==2))", 0, 2, 0);
 	T = trans[ 1][57] = settr(62,2,0,0,0,"ATOMIC", 1, 2, 0);
 	T->nxt	= settr(62,2,55,0,0,"ATOMIC", 1, 2, 0);
 	T = trans[1][55] = settr(60,2,0,0,0,"IF", 1, 2, 0);
 	    T->nxt	= settr(60,2,53,0,0,"IF", 1, 2, 0);
-	trans[1][53]	= settr(58,4,72,44,44,"((entryExitProtocol>0))", 1, 2, 0); /* m: 54 -> 72,0 */
+	trans[1][53]	= settr(58,4,72,46,46,"((entryExitProtocol>0))", 1, 2, 0); /* m: 54 -> 72,0 */
 	reached1[54] = 1;
 	trans[1][54]	= settr(0,0,0,0,0,"entryExitProtocol = (entryExitProtocol-1)",0,0,0);
 	trans[1][56]	= settr(61,0,72,1,0,".(goto)", 1, 2, 0);
@@ -222,146 +241,137 @@ settable(void)
 	T = T->nxt	= settr(77,0,58,0,0,"IF", 0, 2, 0);
 	T = T->nxt	= settr(77,0,68,0,0,"IF", 0, 2, 0);
 	    T->nxt	= settr(77,0,70,0,0,"IF", 0, 2, 0);
-	trans[1][58]	= settr(63,0,59,45,0,"((noDownCars>0))", 1, 2, 0);
-	trans[1][59]	= settr(64,0,60,46,46,"temp = (noDelayedUpCars+1)", 1, 2, 0);
-	trans[1][60]	= settr(65,0,62,47,47,"noDelayedUpCars = temp", 1, 2, 0);
+	trans[1][58]	= settr(63,0,59,47,0,"((noDownCars>0))", 1, 2, 0);
+	trans[1][59]	= settr(64,0,60,48,48,"temp = (noDelayedUpCars+1)", 1, 2, 0);
+	trans[1][60]	= settr(65,0,62,49,49,"noDelayedUpCars = temp", 1, 2, 0);
 	T = trans[ 1][62] = settr(67,2,0,0,0,"ATOMIC", 1, 2, 0);
 	T->nxt	= settr(67,2,61,0,0,"ATOMIC", 1, 2, 0);
-	trans[1][61]	= settr(66,0,67,48,48,"entryExitProtocol = (entryExitProtocol+1)", 1, 2, 0);
+	trans[1][61]	= settr(66,0,67,50,50,"entryExitProtocol = (entryExitProtocol+1)", 1, 2, 0);
 	T = trans[ 1][67] = settr(72,2,0,0,0,"ATOMIC", 1, 2, 0);
 	T->nxt	= settr(72,2,65,0,0,"ATOMIC", 1, 2, 0);
 	T = trans[1][65] = settr(70,2,0,0,0,"IF", 1, 2, 0);
 	    T->nxt	= settr(70,2,63,0,0,"IF", 1, 2, 0);
-	trans[1][63]	= settr(68,0,74,49,49,"((waitUpCars>0))", 1, 2, 0); /* m: 64 -> 74,0 */
+	trans[1][63]	= settr(68,0,74,51,51,"((waitUpCars>0))", 1, 2, 0); /* m: 64 -> 74,0 */
 	reached1[64] = 1;
 	trans[1][64]	= settr(0,0,0,0,0,"waitUpCars = (waitUpCars-1)",0,0,0);
 	trans[1][66]	= settr(71,0,74,1,0,".(goto)", 1, 2, 0);
 	trans[1][73]	= settr(78,0,74,1,0,".(goto)", 0, 2, 0);
-	trans[1][68]	= settr(73,0,69,50,0,"((noDownCars==0))", 1, 2, 0);
+	trans[1][68]	= settr(73,0,69,52,0,"((noDownCars==0))", 1, 2, 0);
 	trans[1][69]	= settr(74,0,74,1,0,"(1)", 0, 2, 0);
-	trans[1][70]	= settr(75,0,71,51,0,"((noDownCars<0))", 1, 2, 0);
-	trans[1][71]	= settr(76,0,74,52,0,"assert(0)", 0, 2, 0);
-	trans[1][74]	= settr(79,0,75,53,53,"temp = (noUpCars+1)", 1, 2, 0);
-	trans[1][75]	= settr(80,0,76,54,54,"noUpCars = temp", 1, 2, 0);
-	trans[1][76]	= settr(81,0,77,55,55,"condition1 = (noUpCars==0)", 1, 2, 0);
-	trans[1][77]	= settr(82,0,78,56,56,"condition1 = (condition1&&(noDelayedDownCars>0))", 1, 2, 0);
-	trans[1][78]	= settr(83,0,79,57,57,"condition2 = (noDownCars==0)", 1, 2, 0);
-	trans[1][79]	= settr(84,0,80,58,58,"condition2 = (condition2&&(noDelayedUpCars>0))", 1, 2, 0);
-	trans[1][80]	= settr(85,0,92,59,59,"condition3 = !((condition1||condition2))", 0, 2, 0);
+	trans[1][70]	= settr(75,0,71,53,0,"((noDownCars<0))", 1, 2, 0);
+	trans[1][71]	= settr(76,0,74,54,0,"assert(0)", 0, 2, 0);
+	trans[1][74]	= settr(79,0,75,55,55,"temp = (noUpCars+1)", 1, 2, 0);
+	trans[1][75]	= settr(80,0,76,56,56,"noUpCars = temp", 1, 2, 0);
+	trans[1][76]	= settr(81,0,77,57,57,"condition1 = (noUpCars==0)", 1, 2, 0);
+	trans[1][77]	= settr(82,0,78,58,58,"condition1 = (condition1&&(noDelayedDownCars>0))", 1, 2, 0);
+	trans[1][78]	= settr(83,0,79,59,59,"condition2 = (noDownCars==0)", 1, 2, 0);
+	trans[1][79]	= settr(84,0,80,60,60,"condition2 = (condition2&&(noDelayedUpCars>0))", 1, 2, 0);
+	trans[1][80]	= settr(85,0,92,61,61,"condition3 = !((condition1||condition2))", 0, 2, 0);
 	T = trans[1][92] = settr(97,0,0,0,0,"IF", 0, 2, 0);
 	T = T->nxt	= settr(97,0,81,0,0,"IF", 0, 2, 0);
 	T = T->nxt	= settr(97,0,85,0,0,"IF", 0, 2, 0);
 	    T->nxt	= settr(97,0,89,0,0,"IF", 0, 2, 0);
-	trans[1][81]	= settr(86,0,82,60,60,"(condition1)", 0, 2, 0);
-	trans[1][82]	= settr(87,0,84,61,61,"noDelayedDownCars = (noDelayedDownCars-1)", 1, 2, 0);
+	trans[1][81]	= settr(86,0,82,62,62,"(condition1)", 0, 2, 0);
+	trans[1][82]	= settr(87,0,84,63,63,"noDelayedDownCars = (noDelayedDownCars-1)", 1, 2, 0);
 	T = trans[ 1][84] = settr(89,2,0,0,0,"ATOMIC", 1, 2, 0);
 	T->nxt	= settr(89,2,83,0,0,"ATOMIC", 1, 2, 0);
-	trans[1][83]	= settr(88,0,102,62,62,"waitDownCars = (waitDownCars+1)", 1, 2, 0);
+	trans[1][83]	= settr(88,0,102,64,64,"waitDownCars = (waitDownCars+1)", 1, 2, 0);
 	trans[1][93]	= settr(98,0,102,1,0,".(goto)", 1, 2, 0);
-	trans[1][85]	= settr(90,0,86,63,63,"((condition2&&!(condition1)))", 0, 2, 0);
-	trans[1][86]	= settr(91,0,88,64,64,"noDelayedUpCars = (noDelayedUpCars-1)", 1, 2, 0);
+	trans[1][85]	= settr(90,0,86,65,65,"((condition2&&!(condition1)))", 0, 2, 0);
+	trans[1][86]	= settr(91,0,88,66,66,"noDelayedUpCars = (noDelayedUpCars-1)", 1, 2, 0);
 	T = trans[ 1][88] = settr(93,2,0,0,0,"ATOMIC", 1, 2, 0);
 	T->nxt	= settr(93,2,87,0,0,"ATOMIC", 1, 2, 0);
-	trans[1][87]	= settr(92,0,102,65,65,"waitUpCars = (waitUpCars+1)", 1, 2, 0);
-	trans[1][89]	= settr(94,0,91,66,66,"(condition3)", 0, 2, 0);
+	trans[1][87]	= settr(92,0,102,67,67,"waitUpCars = (waitUpCars+1)", 1, 2, 0);
+	trans[1][89]	= settr(94,0,91,68,68,"(condition3)", 0, 2, 0);
 	T = trans[ 1][91] = settr(96,2,0,0,0,"ATOMIC", 1, 2, 0);
 	T->nxt	= settr(96,2,90,0,0,"ATOMIC", 1, 2, 0);
-	trans[1][90]	= settr(95,0,102,67,67,"entryExitProtocol = (entryExitProtocol+1)", 1, 2, 0);
+	trans[1][90]	= settr(95,0,102,69,69,"entryExitProtocol = (entryExitProtocol+1)", 1, 2, 0);
 	T = trans[1][102] = settr(107,0,0,0,0,"IF", 1, 2, 0);
 	T = T->nxt	= settr(107,0,96,0,0,"IF", 0, 2, 0);
 	    T->nxt	= settr(107,0,99,0,0,"IF", 0, 2, 0);
-	trans[1][96]	= settr(101,0,97,68,0,"((type==1))", 0, 2, 0);
-	trans[1][97]	= settr(102,0,98,69,0,"assert(((noUpCars==0)&&(noDownCars>0)))", 1, 2, 0);
+	trans[1][96]	= settr(101,0,97,70,0,"((type==1))", 0, 2, 0);
+	trans[1][97]	= settr(102,0,98,71,0,"assert(((noUpCars==0)&&(noDownCars>0)))", 1, 2, 0);
 	trans[1][98]	= settr(103,0,156,1,0,"(1)", 0, 2, 0);
 	trans[1][103]	= settr(108,0,156,1,0,".(goto)", 0, 2, 0);
-	trans[1][99]	= settr(104,0,100,70,0,"((type==2))", 0, 2, 0);
-	trans[1][100]	= settr(105,0,101,71,0,"assert(((noDownCars==0)&&(noUpCars>0)))", 1, 2, 0);
+	trans[1][99]	= settr(104,0,100,72,0,"((type==2))", 0, 2, 0);
+	trans[1][100]	= settr(105,0,101,73,0,"assert(((noDownCars==0)&&(noUpCars>0)))", 1, 2, 0);
 	trans[1][101]	= settr(106,0,156,1,0,"(1)", 0, 2, 0);
 	T = trans[1][156] = settr(161,0,0,0,0,"IF", 0, 2, 0);
 	T = T->nxt	= settr(161,0,104,0,0,"IF", 0, 2, 0);
 	    T->nxt	= settr(161,0,130,0,0,"IF", 0, 2, 0);
-	trans[1][104]	= settr(109,0,109,72,0,"((type==1))", 0, 2, 0);
+	trans[1][104]	= settr(109,0,109,74,0,"((type==1))", 0, 2, 0);
 	T = trans[ 1][109] = settr(114,2,0,0,0,"ATOMIC", 1, 2, 0);
 	T->nxt	= settr(114,2,107,0,0,"ATOMIC", 1, 2, 0);
 	T = trans[1][107] = settr(112,2,0,0,0,"IF", 1, 2, 0);
 	    T->nxt	= settr(112,2,105,0,0,"IF", 1, 2, 0);
-	trans[1][105]	= settr(110,4,110,73,73,"((entryExitProtocol>0))", 1, 2, 0); /* m: 106 -> 110,0 */
+	trans[1][105]	= settr(110,4,110,75,75,"((entryExitProtocol>0))", 1, 2, 0); /* m: 106 -> 110,0 */
 	reached1[106] = 1;
 	trans[1][106]	= settr(0,0,0,0,0,"entryExitProtocol = (entryExitProtocol-1)",0,0,0);
 	trans[1][108]	= settr(113,0,110,1,0,".(goto)", 1, 2, 0);
-	trans[1][110]	= settr(115,0,111,74,74,"temp = (noDownCars-1)", 1, 2, 0);
-	trans[1][111]	= settr(116,0,112,75,75,"noDownCars = temp", 1, 2, 0);
-	trans[1][112]	= settr(117,0,113,76,76,"condition1 = (noUpCars==0)", 1, 2, 0);
-	trans[1][113]	= settr(118,0,114,77,77,"condition1 = (condition1&&(noDelayedDownCars>0))", 1, 2, 0);
-	trans[1][114]	= settr(119,0,115,78,78,"condition2 = (noDownCars==0)", 1, 2, 0);
-	trans[1][115]	= settr(120,0,116,79,79,"condition2 = (condition2&&(noDelayedUpCars>0))", 1, 2, 0);
-	trans[1][116]	= settr(121,0,128,80,80,"condition3 = !((condition1||condition2))", 0, 2, 0);
+	trans[1][110]	= settr(115,0,111,76,76,"temp = (noDownCars-1)", 1, 2, 0);
+	trans[1][111]	= settr(116,0,112,77,77,"noDownCars = temp", 1, 2, 0);
+	trans[1][112]	= settr(117,0,113,78,78,"condition1 = (noUpCars==0)", 1, 2, 0);
+	trans[1][113]	= settr(118,0,114,79,79,"condition1 = (condition1&&(noDelayedDownCars>0))", 1, 2, 0);
+	trans[1][114]	= settr(119,0,115,80,80,"condition2 = (noDownCars==0)", 1, 2, 0);
+	trans[1][115]	= settr(120,0,116,81,81,"condition2 = (condition2&&(noDelayedUpCars>0))", 1, 2, 0);
+	trans[1][116]	= settr(121,0,128,82,82,"condition3 = !((condition1||condition2))", 0, 2, 0);
 	T = trans[1][128] = settr(133,0,0,0,0,"IF", 0, 2, 0);
 	T = T->nxt	= settr(133,0,117,0,0,"IF", 0, 2, 0);
 	T = T->nxt	= settr(133,0,121,0,0,"IF", 0, 2, 0);
 	    T->nxt	= settr(133,0,125,0,0,"IF", 0, 2, 0);
-	trans[1][117]	= settr(122,0,118,81,81,"(condition1)", 0, 2, 0);
-	trans[1][118]	= settr(123,0,120,82,82,"noDelayedDownCars = (noDelayedDownCars-1)", 1, 2, 0);
+	trans[1][117]	= settr(122,0,118,83,83,"(condition1)", 0, 2, 0);
+	trans[1][118]	= settr(123,0,120,84,84,"noDelayedDownCars = (noDelayedDownCars-1)", 1, 2, 0);
 	T = trans[ 1][120] = settr(125,2,0,0,0,"ATOMIC", 1, 2, 0);
 	T->nxt	= settr(125,2,119,0,0,"ATOMIC", 1, 2, 0);
-	trans[1][119]	= settr(124,0,162,83,83,"waitDownCars = (waitDownCars+1)", 1, 2, 0);
-	trans[1][129]	= settr(134,0,162,1,0,".(goto)", 0, 2, 0);
-	trans[1][121]	= settr(126,0,122,84,84,"((condition2&&!(condition1)))", 0, 2, 0);
-	trans[1][122]	= settr(127,0,124,85,85,"noDelayedUpCars = (noDelayedUpCars-1)", 1, 2, 0);
+	trans[1][119]	= settr(124,0,158,85,85,"waitDownCars = (waitDownCars+1)", 1, 2, 0);
+	trans[1][129]	= settr(134,0,158,1,0,".(goto)", 0, 2, 0);
+	trans[1][121]	= settr(126,0,122,86,86,"((condition2&&!(condition1)))", 0, 2, 0);
+	trans[1][122]	= settr(127,0,124,87,87,"noDelayedUpCars = (noDelayedUpCars-1)", 1, 2, 0);
 	T = trans[ 1][124] = settr(129,2,0,0,0,"ATOMIC", 1, 2, 0);
 	T->nxt	= settr(129,2,123,0,0,"ATOMIC", 1, 2, 0);
-	trans[1][123]	= settr(128,0,162,86,86,"waitUpCars = (waitUpCars+1)", 1, 2, 0);
-	trans[1][125]	= settr(130,0,127,87,87,"(condition3)", 0, 2, 0);
+	trans[1][123]	= settr(128,0,158,88,88,"waitUpCars = (waitUpCars+1)", 1, 2, 0);
+	trans[1][125]	= settr(130,0,127,89,89,"(condition3)", 0, 2, 0);
 	T = trans[ 1][127] = settr(132,2,0,0,0,"ATOMIC", 1, 2, 0);
 	T->nxt	= settr(132,2,126,0,0,"ATOMIC", 1, 2, 0);
-	trans[1][126]	= settr(131,0,162,88,88,"entryExitProtocol = (entryExitProtocol+1)", 1, 2, 0);
-	trans[1][157]	= settr(162,0,162,1,0,".(goto)", 0, 2, 0);
-	trans[1][130]	= settr(135,0,135,89,0,"((type==2))", 0, 2, 0);
+	trans[1][126]	= settr(131,0,158,90,90,"entryExitProtocol = (entryExitProtocol+1)", 1, 2, 0);
+	trans[1][157]	= settr(162,0,158,1,0,".(goto)", 0, 2, 0);
+	trans[1][130]	= settr(135,0,135,91,0,"((type==2))", 0, 2, 0);
 	T = trans[ 1][135] = settr(140,2,0,0,0,"ATOMIC", 1, 2, 0);
 	T->nxt	= settr(140,2,133,0,0,"ATOMIC", 1, 2, 0);
 	T = trans[1][133] = settr(138,2,0,0,0,"IF", 1, 2, 0);
 	    T->nxt	= settr(138,2,131,0,0,"IF", 1, 2, 0);
-	trans[1][131]	= settr(136,4,136,90,90,"((entryExitProtocol>0))", 1, 2, 0); /* m: 132 -> 136,0 */
+	trans[1][131]	= settr(136,4,136,92,92,"((entryExitProtocol>0))", 1, 2, 0); /* m: 132 -> 136,0 */
 	reached1[132] = 1;
 	trans[1][132]	= settr(0,0,0,0,0,"entryExitProtocol = (entryExitProtocol-1)",0,0,0);
 	trans[1][134]	= settr(139,0,136,1,0,".(goto)", 1, 2, 0);
-	trans[1][136]	= settr(141,0,137,91,91,"temp = (noUpCars-1)", 1, 2, 0);
-	trans[1][137]	= settr(142,0,138,92,92,"noUpCars = temp", 1, 2, 0);
-	trans[1][138]	= settr(143,0,139,93,93,"condition1 = (noUpCars==0)", 1, 2, 0);
-	trans[1][139]	= settr(144,0,140,94,94,"condition1 = (condition1&&(noDelayedDownCars>0))", 1, 2, 0);
-	trans[1][140]	= settr(145,0,141,95,95,"condition2 = (noDownCars==0)", 1, 2, 0);
-	trans[1][141]	= settr(146,0,142,96,96,"condition2 = (condition2&&(noDelayedUpCars>0))", 1, 2, 0);
-	trans[1][142]	= settr(147,0,154,97,97,"condition3 = !((condition1||condition2))", 0, 2, 0);
+	trans[1][136]	= settr(141,0,137,93,93,"temp = (noUpCars-1)", 1, 2, 0);
+	trans[1][137]	= settr(142,0,138,94,94,"noUpCars = temp", 1, 2, 0);
+	trans[1][138]	= settr(143,0,139,95,95,"condition1 = (noUpCars==0)", 1, 2, 0);
+	trans[1][139]	= settr(144,0,140,96,96,"condition1 = (condition1&&(noDelayedDownCars>0))", 1, 2, 0);
+	trans[1][140]	= settr(145,0,141,97,97,"condition2 = (noDownCars==0)", 1, 2, 0);
+	trans[1][141]	= settr(146,0,142,98,98,"condition2 = (condition2&&(noDelayedUpCars>0))", 1, 2, 0);
+	trans[1][142]	= settr(147,0,154,99,99,"condition3 = !((condition1||condition2))", 0, 2, 0);
 	T = trans[1][154] = settr(159,0,0,0,0,"IF", 0, 2, 0);
 	T = T->nxt	= settr(159,0,143,0,0,"IF", 0, 2, 0);
 	T = T->nxt	= settr(159,0,147,0,0,"IF", 0, 2, 0);
 	    T->nxt	= settr(159,0,151,0,0,"IF", 0, 2, 0);
-	trans[1][143]	= settr(148,0,144,98,98,"(condition1)", 0, 2, 0);
-	trans[1][144]	= settr(149,0,146,99,99,"noDelayedDownCars = (noDelayedDownCars-1)", 1, 2, 0);
+	trans[1][143]	= settr(148,0,144,100,100,"(condition1)", 0, 2, 0);
+	trans[1][144]	= settr(149,0,146,101,101,"noDelayedDownCars = (noDelayedDownCars-1)", 1, 2, 0);
 	T = trans[ 1][146] = settr(151,2,0,0,0,"ATOMIC", 1, 2, 0);
 	T->nxt	= settr(151,2,145,0,0,"ATOMIC", 1, 2, 0);
-	trans[1][145]	= settr(150,0,162,100,100,"waitDownCars = (waitDownCars+1)", 1, 2, 0);
-	trans[1][155]	= settr(160,0,162,1,0,".(goto)", 0, 2, 0);
-	trans[1][147]	= settr(152,0,148,101,101,"((condition2&&!(condition1)))", 0, 2, 0);
-	trans[1][148]	= settr(153,0,150,102,102,"noDelayedUpCars = (noDelayedUpCars-1)", 1, 2, 0);
+	trans[1][145]	= settr(150,0,158,102,102,"waitDownCars = (waitDownCars+1)", 1, 2, 0);
+	trans[1][155]	= settr(160,0,158,1,0,".(goto)", 0, 2, 0);
+	trans[1][147]	= settr(152,0,148,103,103,"((condition2&&!(condition1)))", 0, 2, 0);
+	trans[1][148]	= settr(153,0,150,104,104,"noDelayedUpCars = (noDelayedUpCars-1)", 1, 2, 0);
 	T = trans[ 1][150] = settr(155,2,0,0,0,"ATOMIC", 1, 2, 0);
 	T->nxt	= settr(155,2,149,0,0,"ATOMIC", 1, 2, 0);
-	trans[1][149]	= settr(154,0,162,103,103,"waitUpCars = (waitUpCars+1)", 1, 2, 0);
-	trans[1][151]	= settr(156,0,153,104,104,"(condition3)", 0, 2, 0);
+	trans[1][149]	= settr(154,0,158,105,105,"waitUpCars = (waitUpCars+1)", 1, 2, 0);
+	trans[1][151]	= settr(156,0,153,106,106,"(condition3)", 0, 2, 0);
 	T = trans[ 1][153] = settr(158,2,0,0,0,"ATOMIC", 1, 2, 0);
 	T->nxt	= settr(158,2,152,0,0,"ATOMIC", 1, 2, 0);
-	trans[1][152]	= settr(157,0,162,105,105,"entryExitProtocol = (entryExitProtocol+1)", 1, 2, 0);
-	trans[1][163]	= settr(168,0,162,1,0,".(goto)", 0, 2, 0);
-	T = trans[1][162] = settr(167,0,0,0,0,"DO", 0, 2, 0);
-	T = T->nxt	= settr(167,0,158,0,0,"DO", 0, 2, 0);
-	    T->nxt	= settr(167,0,160,0,0,"DO", 0, 2, 0);
-	trans[1][158]	= settr(163,0,159,1,0,"(1)", 0, 2, 0);
-	trans[1][159]	= settr(164,0,162,1,0,"(1)", 0, 2, 0);
-	trans[1][160]	= settr(165,0,165,1,0,"(1)", 0, 2, 0);
-	trans[1][161]	= settr(166,0,165,1,0,"goto :b2", 0, 2, 0);
-	trans[1][164]	= settr(169,0,165,1,0,"break", 0, 2, 0);
-	trans[1][167]	= settr(172,0,168,1,0,"break", 0, 2, 0);
-	trans[1][168]	= settr(173,0,0,106,106,"-end-", 0, 3500, 0);
+	trans[1][152]	= settr(157,0,158,107,107,"entryExitProtocol = (entryExitProtocol+1)", 1, 2, 0);
+	trans[1][160]	= settr(165,0,161,1,0,"break", 0, 2, 0);
+	trans[1][161]	= settr(166,0,0,108,108,"-end-", 0, 3500, 0);
 
 	/* proctype 0: :init: */
 
@@ -369,12 +379,12 @@ settable(void)
 
 	T = trans[ 0][5] = settr(4,2,0,0,0,"ATOMIC", 1, 2, 0);
 	T->nxt	= settr(4,2,1,0,0,"ATOMIC", 1, 2, 0);
-	trans[0][1]	= settr(0,4,6,107,107,"carPID[1] = run Car(2)", 1, 2, 0); /* m: 2 -> 0,6 */
+	trans[0][1]	= settr(0,4,6,109,109,"carPID[1] = run Car(2)", 1, 2, 0); /* m: 2 -> 0,6 */
 	reached0[2] = 1;
 	trans[0][2]	= settr(0,0,0,0,0,"carPID[2] = run Car(2)",0,0,0);
 	trans[0][3]	= settr(0,0,0,0,0,"carPID[5] = run Car(1)",0,0,0);
 	trans[0][4]	= settr(0,0,0,0,0,"carPID[6] = run Car(1)",0,0,0);
-	trans[0][6]	= settr(5,0,0,108,108,"-end-", 0, 3500, 0);
+	trans[0][6]	= settr(5,0,0,110,110,"-end-", 0, 3500, 0);
 	/* np_ demon: */
 	trans[_NP_] = (Trans **) emalloc(2*sizeof(Trans *));
 	T = trans[_NP_][0] = settr(9997,0,1,_T5,0,"(np_)", 1,2,0);

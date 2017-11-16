@@ -143,11 +143,6 @@ exit:
         
         
         
-        do //TODO (*) Is this needed?
-        :: true -> skip;
-        :: true -> break;
-        od;
-        
         
     od;
 }
@@ -158,7 +153,10 @@ exit:
 
 //ltl obl1  { []   ( (Car[carPID[1]]@entry) && [] ( !(Car[carPID[2]]@entry || Car[carPID[3]]@entry || Car[carPID[5]]@entry || Car[carPID[6]]@entry || Car[carPID[7]]@entry) ) -> <> (Car[carPID[1]]@crit)) }  
 
-ltl obl1  { []   ( (Car[carPID[1]]@entry) && [] ( !(Car[carPID[2]]@entry  || Car[carPID[5]]@entry || Car[carPID[6]]@entry) ) -> <> (Car[carPID[1]]@crit)) }  
+ltl test {  (  [] ( !(Car[carPID[2]]@entry  || Car[carPID[5]]@entry || Car[carPID[6]]@entry) ))}
+
+ltl obl1  { []   ( (Car[carPID[1]]@entry) && [] ( !(Car[carPID[2]]@entry  || Car[carPID[5]]@entry || Car[carPID[6]]@entry) ) -> <> (Car[carPID[1]]@crit)) }
+  
 ltl obl2  { []   ( (Car[carPID[2]]@entry) && [] ( !(Car[carPID[1]]@entry  || Car[carPID[5]]@entry || Car[carPID[6]]@entry) ) -> <> (Car[carPID[2]]@crit)) }  
 ltl obl5  { []   ( (Car[carPID[5]]@entry) && [] ( !(Car[carPID[2]]@entry  || Car[carPID[1]]@entry || Car[carPID[6]]@entry) ) -> <> (Car[carPID[5]]@crit)) }  
 ltl obl6  { []   ( (Car[carPID[6]]@entry) && [] ( !(Car[carPID[2]]@entry  || Car[carPID[5]]@entry || Car[carPID[1]]@entry) ) -> <> (Car[carPID[6]]@crit)) }  
