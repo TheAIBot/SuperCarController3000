@@ -28,59 +28,48 @@ class ConcurrencyTests {
         checkForConcurrencyErrors(new Cars());
     }
 
-
     public static void checkForConcurrencyErrors(final Cars carControl) {
         try {
             final Random rand = new Random();
             carControl.setVisible(true);
             final Car[] cars = ((CarControl)carControl.ctr).car;
     
-            final int[] carUnexpectedWaitingForAlley = new int[CarControl.NUMBER_OF_CARS];
             final Pos[] oldCarPositions = new Pos[CarControl.NUMBER_OF_CARS];
             for(int i = 1; i < cars.length; i++) {
                 oldCarPositions[i] = cars[i].curpos;
-                cars[i].setSpeed(10);
+                cars[i].setSpeed(100);
             }
     
     
             carControl.startAll();
-            while (true) {
-                final long startTime = System.nanoTime();
-                boolean isBarrierShuttingdown = false;
-                //first mess around with the cars for a while
-                while (System.nanoTime() - startTime < TEST_RUNTIME) {
-                    Thread.sleep(rand.nextInt(70));
-                    isBarrierShuttingdown = messWithBarrier(rand, carControl, cars, isBarrierShuttingdown);
-                }
-
-                for(int i = 0; i < cars.length; i++) {
-                    carUnexpectedWaitingForAlley[i] = 0;
-                }
-
-                boolean oldDeadlock = false;
-                //then verify that they still work as expected
-                while (System.nanoTime() - startTime < TEST_RUNTIME * 2) {   
+            carControl.startCar(0);
+            new Thread(() ->
+            {
+                try {
+                while (true) {   
                     Thread.sleep(100);
                     
-
-                    final boolean deadlock = areCarsDeadlocked(carControl, cars, oldCarPositions, carUnexpectedWaitingForAlley);
-                    if (deadlock && oldDeadlock) {
+                    if (areCarsDeadlocked(carControl, cars, oldCarPositions)) {
                         carControl.println("Deadlock detected");
-                        for(int i = 1; i < cars.length; i++) {
-                            cars[i].setSpeed(400);
-                        }
-                        Thread.sleep(5000);
-                        for(int i = 1; i < cars.length; i++) {
-                            cars[i].setSpeed(10);
-                        }
-                        //Assert.fail("Deadlock detected");
                     }
-                    oldDeadlock = deadlock;
     
                     //update cars old positions
                     for(int i = 0; i < cars.length; i++) {
                         oldCarPositions[i] = cars[i].curpos;
                     }
+                }
+                } catch (Exception e) {
+                    carControl.println(e.getMessage());
+                    //TODO: handle exception
+                }
+            }).start();
+            while (true) {
+                final long startTime = System.nanoTime();
+                
+                //first mess around with the cars for a while
+                while (System.nanoTime() - startTime < TEST_RUNTIME) {
+                    Thread.sleep(rand.nextInt(70));
+                    messWithBarrier(rand, carControl, cars);
                 }
             }
         } catch (Exception e) {
@@ -89,26 +78,29 @@ class ConcurrencyTests {
         }
     }
 
-    private static boolean messWithBarrier(final Random rand, final Cars carControl, final Car[] cars, boolean isBarrierShuttingdown)
+    private static void messWithBarrier(final Random rand, final Cars carControl, final Car[] cars)
     {
-        final int messWith = rand.nextInt(3);
-        if (messWith == 0) {
+        final int messWith = rand.nextInt(300);
+        if (messWith < 140) {
             carControl.barrierOn();
         }
-        else if (messWith == 1) {
+        else if (messWith < 270) {
             carControl.barrierOff();
         }
-        else if (!isBarrierShuttingdown) {
-            isBarrierShuttingdown = true;
-            carControl.barrierShutDown(null);
+        else {
+            Semaphore e = new Semaphore(0);
+            carControl.barrierShutDown(e);
+            try {
+                e.P();
+            } catch (InterruptedException err) {
+                //TODO: handle exception
+            }
         }
-
-        return isBarrierShuttingdown;
     }
 
     static int uu = 0;
 
-    private static boolean areCarsDeadlocked(final Cars carControl, final Car[] cars, final Pos[] oldCarPositions, final int[] carUnexpectedWaitingForAlley)
+    private static boolean areCarsDeadlocked(final Cars carControl, final Car[] cars, final Pos[] oldCarPositions)
     {
         boolean deadlockDetected = true;
         for(int i = 1; i < cars.length; i++) {
@@ -117,7 +109,6 @@ class ConcurrencyTests {
 
             if (!carNewPos.equals(carOldPos)) {
                 deadlockDetected = false;
-                carUnexpectedWaitingForAlley[i] = 0;
             }
         }
 
