@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 import java.util.Random;
 
-import org.junit.*;
-
 class ConcurrencyTests {
 
     private static final long TEST_RUNTIME = 3_000_000_000l;
@@ -25,8 +23,6 @@ class ConcurrencyTests {
     public static void main(String[] args) {
         checkForConcurrencyErrors();
     }
-
-    @Test
 
     public static void checkForConcurrencyErrors() {
         checkForConcurrencyErrors(new Cars());
@@ -52,7 +48,7 @@ class ConcurrencyTests {
                 final long startTime = System.nanoTime();
                 //first mess around with the cars for a while
                 while (System.nanoTime() - startTime < TEST_RUNTIME) {
-                    Thread.sleep(rand.nextInt(20));
+                    Thread.sleep(rand.nextInt(30));
                     removeOrRestoreCar(rand, carControl, cars, carUnexpectedWaitingForAlley);
                 }
 
@@ -60,11 +56,14 @@ class ConcurrencyTests {
                     carUnexpectedWaitingForAlley[i] = 0;
                 }
 
+                boolean oldDeadlock = false;
                 //then verify that they still work as expected
                 while (System.nanoTime() - startTime < TEST_RUNTIME * 2) {   
                     Thread.sleep(100);
                     
-                    if (areCarsDeadlocked(carControl, cars, oldCarPositions, carUnexpectedWaitingForAlley)) {
+
+                    final boolean deadlock = areCarsDeadlocked(carControl, cars, oldCarPositions, carUnexpectedWaitingForAlley);
+                    if (deadlock && oldDeadlock) {
                         carControl.println("Deadlock detected");
                         for(int i = 1; i < cars.length; i++) {
                             cars[i].setSpeed(400);
@@ -75,6 +74,7 @@ class ConcurrencyTests {
                         }
                         //Assert.fail("Deadlock detected");
                     }
+                    oldDeadlock = deadlock;
     
                     //update cars old positions
                     for(int i = 0; i < cars.length; i++) {
@@ -106,27 +106,30 @@ class ConcurrencyTests {
         }
     }
 
+    static int uu = 0;
+
     private static boolean areCarsDeadlocked(final Cars carControl, final Car[] cars, final Pos[] oldCarPositions, final int[] carUnexpectedWaitingForAlley)
     {
-        final boolean carsInAlley = anyCarsInAlley(carControl, cars);
+        final boolean carsInAlley = anyCarsInAlley(cars);
+        if (!carsInAlley) {
+            carControl.println("no cars in alley" + (uu++));
+        }
         boolean deadlockDetected = true;
         for(int i = 1; i < cars.length; i++) {
             final Pos carOldPos = oldCarPositions[i];
             final Pos carNewPos = cars[i].curpos;
 
             final boolean isCarRunning = ((CarControl)carControl.ctr).getIsCarRunning(i);
-            if (isCarRunning && carOldPos != null) {
-                if (!carOldPos.equals(carNewPos)) {
+            if (isCarRunning) {
+                if (!carNewPos.equals(carOldPos)) {
                     deadlockDetected = false;
                     carUnexpectedWaitingForAlley[i] = 0;
                 }
                 else if (!carsInAlley) {
-                    if (carOldPos.equals(carNewPos)) {
-                        carUnexpectedWaitingForAlley[i]++;
-                        carControl.println(i + " " + carUnexpectedWaitingForAlley[i]);
-                        if (carUnexpectedWaitingForAlley[i] > 3) {
-                            return true;
-                        }
+                    carUnexpectedWaitingForAlley[i]++;
+                    //carControl.println(i + " " + carUnexpectedWaitingForAlley[i]);
+                    if (carUnexpectedWaitingForAlley[i] > 3) {
+                        return true;
                     }
                 }
             }
@@ -135,13 +138,14 @@ class ConcurrencyTests {
         return deadlockDetected;
     }
 
-    private static boolean anyCarsInAlley(final Cars carControl, final Car[] cars) {
+    private static boolean anyCarsInAlley(final Car[] cars) {
         for(int i = 1; i < cars.length; i++) {
             final Pos carNewPos = cars[i].curpos;
 
-            final boolean isCarRunning = ((CarControl)carControl.ctr).getIsCarRunning(i);
-            if (isCarRunning && criticalRegionArea.stream().anyMatch(x -> x.equals(carNewPos))) {
-                return true;
+            for (Pos pos: criticalRegionArea) {
+                if (pos.equals(carNewPos)) {
+                    return true;
+                }
             }
         }
 
