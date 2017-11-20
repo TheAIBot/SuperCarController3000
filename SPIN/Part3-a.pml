@@ -75,7 +75,7 @@ beforeBarrier:
         :: true -> skip; //(*) bare skip. Hvorfor dur det ikke med det?
         :: true -> break;
         od;
-
+	skip;
 barrierEntry: 
 	skip;
         
@@ -181,9 +181,12 @@ proctype Check_noGreaterDifference() { //TODO takes up a lot of space and ressou
     //Make a formula for each car.
     //Hvordan påvirker weak fairness ovenstående? (*) Check op.
 
-    
-    
-    
+ltl test2 {[] ! (Car[carPID[0]]@barrierEntry && Car[carPID[1]]@barrierEntry && Car[carPID[2]]@barrierEntry)}
+
+	//(*) Obligness i denne form burde ikke skulle holde!
+ltl obl0  { []   ( (Car[carPID[0]]@barrierEntry) -> <> (Car[carPID[0]]@afterBarrier)) }  
+    //(*) Is resolution even neccessary?
+//ltl res {[]}
     
 //ltl passBarrier {[] ((Car[carPID[1]]@barrierEntry && Car[carPID[1]]@barrierEntry && [](isOn)) -> <> (Car[carPID[1]]@afterBarrier))} //Wrong. 
 
