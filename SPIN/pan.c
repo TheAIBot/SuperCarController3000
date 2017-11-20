@@ -505,8 +505,8 @@ int _;	/* predefined write-only variable */
 #endif
 
 short src_ln7 [] = {
-	  0,  56,  56,  57,  57,  55,  59,  55, 
-	 61,  61,  60,  63,  60,  63,   0, };
+	  0,  58,  58,  59,  59,  57,  61,  57, 
+	 63,  63,  62,  65,  62,  65,   0, };
 S_F_MAP src_file7 [] = {
 	{ "-", 0, 0 },
 	{ "_spin_nvr.tmp", 1, 13 },
@@ -519,8 +519,8 @@ uchar reached7 [] = {
 uchar *loopstate7;
 
 short src_ln6 [] = {
-	  0,  45,  45,  46,  46,  44,  48,  44, 
-	 50,  50,  49,  52,  49,  52,   0, };
+	  0,  47,  47,  48,  48,  46,  50,  46, 
+	 52,  52,  51,  54,  51,  54,   0, };
 S_F_MAP src_file6 [] = {
 	{ "-", 0, 0 },
 	{ "_spin_nvr.tmp", 1, 13 },
@@ -532,8 +532,8 @@ uchar reached6 [] = {
 uchar *loopstate6;
 
 short src_ln5 [] = {
-	  0,  34,  34,  35,  35,  33,  37,  33, 
-	 39,  39,  38,  41,  38,  41,   0, };
+	  0,  36,  36,  37,  37,  35,  39,  35, 
+	 41,  41,  40,  43,  40,  43,   0, };
 S_F_MAP src_file5 [] = {
 	{ "-", 0, 0 },
 	{ "_spin_nvr.tmp", 1, 13 },
@@ -545,8 +545,8 @@ uchar reached5 [] = {
 uchar *loopstate5;
 
 short src_ln4 [] = {
-	  0,  23,  23,  24,  24,  22,  26,  22, 
-	 28,  28,  27,  30,  27,  30,   0, };
+	  0,  25,  25,  26,  26,  24,  28,  24, 
+	 30,  30,  29,  32,  29,  32,   0, };
 S_F_MAP src_file4 [] = {
 	{ "-", 0, 0 },
 	{ "_spin_nvr.tmp", 1, 13 },
@@ -558,8 +558,8 @@ uchar reached4 [] = {
 uchar *loopstate4;
 
 short src_ln3 [] = {
-	  0,  12,  12,  13,  13,  11,  15,  11, 
-	 17,  17,  16,  19,  16,  19,   0, };
+	  0,  14,  14,  15,  15,  13,  17,  13, 
+	 19,  19,  18,  21,  18,  21,   0, };
 S_F_MAP src_file3 [] = {
 	{ "-", 0, 0 },
 	{ "_spin_nvr.tmp", 1, 13 },
@@ -571,67 +571,67 @@ uchar reached3 [] = {
 uchar *loopstate3;
 
 short src_ln2 [] = {
-	  0,   3,   3,   3,   4,   4,   2,   6, 
-	  2,   7,   8,   0, };
+	  0,   3,   3,   4,   4,   2,   6,   2, 
+	  8,   8,   7,  10,   7,  10,   0, };
 S_F_MAP src_file2 [] = {
 	{ "-", 0, 0 },
-	{ "_spin_nvr.tmp", 1, 10 },
-	{ "-", 11, 12 }
+	{ "_spin_nvr.tmp", 1, 13 },
+	{ "-", 14, 15 }
 };
 uchar reached2 [] = {
-	  0,   1,   0,   1,   1,   1,   0,   1, 
-	  1,   1,   0,   0, };
+	  0,   1,   1,   1,   1,   0,   1,   1, 
+	  1,   1,   0,   1,   1,   0,   0, };
 uchar *loopstate2;
 
 short src_ln1 [] = {
-	  0,  74,  76,  80,  80,  81,  81,  79, 
-	 85,  79,  88,  89,  89,  89,  89,  89, 
-	 90,  91,  92,  93,  93,  94,  94,  94, 
-	 94,  94,  95,  95,  96,  96,  90,  98, 
-	 98,  99, 100, 100, 100, 100, 100, 100, 
-	100, 100, 100, 100, 100, 100, 100, 100, 
-	100, 100, 100, 101, 101, 102, 102, 102, 
-	102, 102, 103, 104, 105, 106, 106, 107, 
-	107, 107, 107, 107, 108, 108, 109, 109, 
-	103, 111, 111, 112, 113, 113, 113, 113, 
-	113, 113, 113, 113, 113, 113, 113, 113, 
-	113, 113, 113, 113, 113, 114,  87, 116, 
-	119, 120, 122, 123, 124, 125, 118, 129, 
-	132, 133, 133, 133, 133, 133, 134, 135, 
-	136, 136, 136, 136, 136, 136, 136, 136, 
-	136, 136, 136, 136, 136, 136, 136, 136, 
-	136, 137, 137, 138, 138, 138, 138, 138, 
-	139, 140, 141, 141, 141, 141, 141, 141, 
-	141, 141, 141, 141, 141, 141, 141, 141, 
-	141, 141, 141, 142, 131, 147,  72, 148, 
-	 72, 148,   0, };
+	  0,  74,  76,  81,  82,  82,  83,  83, 
+	 81,  87,  81,  90,  91,  91,  91,  91, 
+	 91,  92,  93,  94,  95,  95,  96,  96, 
+	 96,  96,  96,  97,  97,  98,  98,  92, 
+	100, 100, 101, 102, 102, 102, 102, 102, 
+	102, 102, 102, 102, 102, 102, 102, 102, 
+	102, 102, 102, 102, 103, 103, 104, 104, 
+	104, 104, 104, 105, 106, 107, 108, 108, 
+	109, 109, 109, 109, 109, 110, 110, 111, 
+	111, 105, 113, 113, 114, 115, 115, 115, 
+	115, 115, 115, 115, 115, 115, 115, 115, 
+	115, 115, 115, 115, 115, 115, 116,  89, 
+	118, 121, 122, 124, 125, 126, 127, 120, 
+	131, 134, 135, 135, 135, 135, 135, 136, 
+	137, 138, 138, 138, 138, 138, 138, 138, 
+	138, 138, 138, 138, 138, 138, 138, 138, 
+	138, 138, 139, 139, 140, 140, 140, 140, 
+	140, 141, 142, 143, 143, 143, 143, 143, 
+	143, 143, 143, 143, 143, 143, 143, 143, 
+	143, 143, 143, 143, 144, 133, 149,  72, 
+	150,  72, 150,   0, };
 S_F_MAP src_file1 [] = {
 	{ "-", 0, 0 },
-	{ "Part2-pretty.pml", 1, 161 },
-	{ "-", 162, 163 }
+	{ "Part2-pretty.pml", 1, 162 },
+	{ "-", 163, 164 }
 };
 uchar reached1 [] = {
-	  0,   1,   1,   1,   1,   1,   1,   0, 
-	  1,   1,   1,   1,   0,   1,   1,   0, 
-	  1,   0,   0,   1,   0,   1,   0,   1, 
-	  1,   0,   1,   1,   1,   0,   0,   1, 
-	  0,   0,   0,   0,   0,   0,   0,   1, 
-	  0,   1,   0,   1,   0,   1,   0,   1, 
-	  1,   0,   0,   1,   1,   1,   0,   1, 
-	  1,   0,   1,   0,   0,   1,   0,   1, 
-	  0,   1,   1,   0,   1,   1,   1,   0, 
-	  0,   1,   0,   0,   0,   0,   0,   0, 
-	  0,   1,   0,   1,   0,   1,   0,   1, 
-	  0,   1,   1,   0,   0,   1,   0,   1, 
-	  1,   0,   1,   1,   0,   1,   0,   1, 
-	  1,   1,   0,   1,   1,   0,   0,   0, 
-	  0,   0,   0,   0,   0,   1,   0,   1, 
-	  0,   1,   0,   1,   0,   1,   1,   0, 
-	  0,   1,   1,   1,   0,   1,   1,   0, 
-	  0,   0,   0,   0,   0,   0,   0,   1, 
-	  0,   1,   0,   1,   0,   1,   0,   1, 
-	  1,   0,   0,   1,   0,   1,   0,   1, 
-	  1,   0,   0, };
+	  0,   1,   0,   0,   1,   1,   1,   1, 
+	  0,   1,   1,   1,   1,   0,   1,   1, 
+	  0,   1,   0,   0,   1,   0,   1,   0, 
+	  1,   1,   0,   1,   1,   1,   0,   0, 
+	  1,   0,   0,   0,   0,   0,   0,   0, 
+	  1,   0,   1,   0,   1,   0,   1,   0, 
+	  1,   1,   0,   0,   1,   1,   1,   0, 
+	  1,   1,   0,   1,   0,   0,   1,   0, 
+	  1,   0,   1,   1,   0,   1,   1,   1, 
+	  0,   0,   1,   0,   0,   0,   0,   0, 
+	  0,   0,   1,   0,   1,   0,   1,   0, 
+	  1,   0,   1,   1,   0,   0,   1,   0, 
+	  1,   1,   0,   1,   1,   0,   1,   0, 
+	  1,   1,   1,   0,   1,   1,   0,   0, 
+	  0,   0,   0,   0,   0,   0,   1,   0, 
+	  1,   0,   1,   0,   1,   0,   1,   1, 
+	  0,   0,   1,   1,   1,   0,   1,   1, 
+	  0,   0,   0,   0,   0,   0,   0,   0, 
+	  1,   0,   1,   0,   1,   0,   1,   0, 
+	  1,   1,   0,   0,   1,   0,   1,   0, 
+	  1,   1,   0,   0, };
 uchar *loopstate1;
 
 short src_ln0 [] = {
@@ -684,7 +684,7 @@ short Air[] = {  (short) Air0, (short) Air1, (short) Air2, (short) Air3, (short)
 char *procname[] = {
    ":init:",
    "Car",
-   "test",
+   "testEternalLoop",
    "obl1",
    "obl2",
    "obl5",
@@ -699,7 +699,7 @@ enum btypes { NONE=0, N_CLAIM=1, I_PROC=2, A_PROC=3, P_PROC=4, E_TRACE=5, N_TRAC
 int Btypes[] = {
    2,	/* :init: */
    4,	/* Car */
-   1,	/* test */
+   1,	/* testEternalLoop */
    1,	/* obl1 */
    1,	/* obl2 */
    1,	/* obl5 */
@@ -995,16 +995,16 @@ addproc(int calling_pid, int priority, int n, int par0)
 		spin_c_typ[4] = 3; /* obl1 */
 		((P9 *)pptr(h))->c_cur[4] = 5;
 		reached3[5]=1;
-		spin_c_typ[5] = 2; /* test */
-		((P9 *)pptr(h))->c_cur[5] = 6;
-		reached2[6]=1;
+		spin_c_typ[5] = 2; /* testEternalLoop */
+		((P9 *)pptr(h))->c_cur[5] = 5;
+		reached2[5]=1;
 		((P9 *)pptr(h))->_t = 2;
-		((P9 *)pptr(h))->_p = 6;
-		((P9 *)pptr(h))->_n = 5; /* test */
+		((P9 *)pptr(h))->_p = 5;
+		((P9 *)pptr(h))->_n = 5; /* testEternalLoop */
 		src_claim = src_ln2;
 #ifndef BFS
 		if (whichclaim == -1 && claimname == NULL)
-			printf("0: Claim test (2), from state 6\n");
+			printf("0: Claim testEternalLoop (2), from state 5\n");
 #endif
 		if (whichclaim != -1)
 		{	select_claim(whichclaim);
@@ -1101,13 +1101,13 @@ addproc(int calling_pid, int priority, int n, int par0)
 		locinit3(h);
 #endif
 		break;
-	case 2:	/* test */
+	case 2:	/* testEternalLoop */
 		((P2 *)pptr(h))->_t = 2;
-		((P2 *)pptr(h))->_p = 6;
+		((P2 *)pptr(h))->_p = 5;
 #ifdef HAS_PRIORITY
 		((P2 *)pptr(h))->_priority = priority; /* was: 1 */
 #endif
-		reached2[6]=1;
+		reached2[5]=1;
 		src_claim = src_ln2;
 		/* params: */
 		/* locals: */
@@ -1119,11 +1119,11 @@ addproc(int calling_pid, int priority, int n, int par0)
 		break;
 	case 1:	/* Car */
 		((P1 *)pptr(h))->_t = 1;
-		((P1 *)pptr(h))->_p = 158;
+		((P1 *)pptr(h))->_p = 159;
 #ifdef HAS_PRIORITY
 		((P1 *)pptr(h))->_priority = priority; /* was: 1 */
 #endif
-		reached1[158]=1;
+		reached1[159]=1;
 		/* params: */
 		((P1 *)pptr(h))->type = par0;
 		/* locals: */
@@ -1131,12 +1131,14 @@ addproc(int calling_pid, int priority, int n, int par0)
 		((P1 *)pptr(h))->condition1 = 0;
 		((P1 *)pptr(h))->condition2 = 0;
 		((P1 *)pptr(h))->condition3 = 0;
+		((P1 *)pptr(h))->kage = 3;
 #ifdef VAR_RANGES
 		logval("Car:condition1", ((P1 *)pptr(h))->condition1);
 		logval("Car:condition2", ((P1 *)pptr(h))->condition2);
 		logval("Car:condition3", ((P1 *)pptr(h))->condition3);
 		logval("Car:type", ((P1 *)pptr(h))->type);
 		logval("Car:temp", ((P1 *)pptr(h))->temp);
+		logval("Car:kage", ((P1 *)pptr(h))->kage);
 #endif
 #ifdef HAS_CODE
 		locinit1(h);
@@ -1334,9 +1336,9 @@ run(void)
 	accpstate[5][10] = 1;
 	accpstate[4][10] = 1;
 	accpstate[3][10] = 1;
-	accpstate[2][9] = 1;
-	visstate[1][102] = 1;
-	visstate[1][94] = 1;
+	accpstate[2][10] = 1;
+	visstate[1][103] = 1;
+	visstate[1][95] = 1;
 	retrans(0, _nstates0, _start0, src_ln0, reached0, loopstate0);
 	retrans(1, _nstates1, _start1, src_ln1, reached1, loopstate1);
 	retrans(2, _nstates2, _start2, src_ln2, reached2, loopstate2);
@@ -14445,6 +14447,7 @@ c_locals(int pid, int tp)
 	printf("	bit    condition1:	%d\n", ((P1 *)pptr(pid))->condition1);
 	printf("	bit    condition2:	%d\n", ((P1 *)pptr(pid))->condition2);
 	printf("	bit    condition3:	%d\n", ((P1 *)pptr(pid))->condition3);
+	printf("	int    kage:	%d\n", ((P1 *)pptr(pid))->kage);
 		break;
 	case 0:
 		/* none */
@@ -14463,7 +14466,7 @@ c_chandump(int unused)
 {	unused++; /* avoid complaints */
 }
 
-Trans *t_id_lkup[242];
+Trans *t_id_lkup[246];
 
 
 #ifdef BFS_PAR

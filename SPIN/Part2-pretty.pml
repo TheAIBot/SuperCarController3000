@@ -76,6 +76,8 @@ gate:   //(*)Hvor langt rækker markoerene?
         skip;
         //Added eternal spinning.
         
+	int kage = 3;
+
         do
         :: true -> skip;
         :: true -> break;
@@ -153,7 +155,9 @@ exit:
 
 //ltl obl1  { []   ( (Car[carPID[1]]@entry) && [] ( !(Car[carPID[2]]@entry || Car[carPID[3]]@entry || Car[carPID[5]]@entry || Car[carPID[6]]@entry || Car[carPID[7]]@entry) ) -> <> (Car[carPID[1]]@crit)) }  
 
-ltl test {  (  [] ( !(Car[carPID[2]]@entry  || Car[carPID[5]]@entry || Car[carPID[6]]@entry) ))}
+ltl testEternalLoop {     []( !( 
+                    		        [] (!(Car[carPID[2]]@entry  || Car[carPID[5]]@entry || Car[carPID[6]]@entry)) 
+                   		      ) )}
 
 ltl obl1  { []   ( (Car[carPID[1]]@entry) && [] ( !(Car[carPID[2]]@entry  || Car[carPID[5]]@entry || Car[carPID[6]]@entry) ) -> <> (Car[carPID[1]]@crit)) }
   

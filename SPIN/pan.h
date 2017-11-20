@@ -102,7 +102,7 @@
 #ifndef NFAIR
 	#define NFAIR	2	/* must be >= 2 */
 #endif
-#define REM_REFS	85
+#define REM_REFS	82
 #define HAS_LTL	1
 #define HAS_CODE	1
 #if defined(RANDSTORE) && !defined(RANDSTOR)
@@ -138,39 +138,39 @@ typedef struct S_F_MAP {
 } S_F_MAP;
 
 #define _nstates7	14	/* res */
-#define minseq7	229
-#define maxseq7	241
+#define minseq7	233
+#define maxseq7	245
 #define _endstate7	13
 
 #define _nstates6	14	/* obl6 */
-#define minseq6	216
-#define maxseq6	228
+#define minseq6	220
+#define maxseq6	232
 #define _endstate6	13
 
 #define _nstates5	14	/* obl5 */
-#define minseq5	203
-#define maxseq5	215
+#define minseq5	207
+#define maxseq5	219
 #define _endstate5	13
 
 #define _nstates4	14	/* obl2 */
-#define minseq4	190
-#define maxseq4	202
+#define minseq4	194
+#define maxseq4	206
 #define _endstate4	13
 
 #define _nstates3	14	/* obl1 */
-#define minseq3	177
-#define maxseq3	189
+#define minseq3	181
+#define maxseq3	193
 #define _endstate3	13
 
-#define _nstates2	11	/* test */
-#define minseq2	167
-#define maxseq2	176
-#define _endstate2	10
+#define _nstates2	14	/* testEternalLoop */
+#define minseq2	168
+#define maxseq2	180
+#define _endstate2	13
 
-#define _nstates1	162	/* Car */
+#define _nstates1	163	/* Car */
 #define minseq1	6
-#define maxseq1	166
-#define _endstate1	161
+#define maxseq1	167
+#define _endstate1	162
 
 #define _nstates0	7	/* :init: */
 #define minseq0	0
@@ -195,8 +195,8 @@ extern S_F_MAP src_file1[];
 extern S_F_MAP src_file0[];
 
 #define T_ID	unsigned char
-#define _T5	111
-#define _T2	112
+#define _T5	112
+#define _T2	113
 #define WS		8 /* word size in bytes */
 #define SYNC	0
 #define ASYNC	0
@@ -261,7 +261,7 @@ typedef struct P3 { /* obl1 */
 } P3;
 #define Air3	(sizeof(P3) - 3)
 
-typedef struct P2 { /* test */
+typedef struct P2 { /* testEternalLoop */
 	unsigned _pid : 8;  /* 0..255 */
 	unsigned _t   : 5; /* proctype */
 	unsigned _p   : 9; /* state    */
@@ -284,8 +284,9 @@ typedef struct P1 { /* Car */
 	unsigned condition3 : 1;
 	uchar type;
 	int temp;
+	int kage;
 } P1;
-#define Air1	(sizeof(P1) - Offsetof(P1, temp) - 1*sizeof(int))
+#define Air1	(sizeof(P1) - Offsetof(P1, kage) - 1*sizeof(int))
 
 #define Pinit	((P0 *)this)
 typedef struct P0 { /* :init: */
@@ -552,8 +553,8 @@ typedef struct TRIX_v6 {
 #define _start5	5
 #define _start4	5
 #define _start3	5
-#define _start2	6
-#define _start1	158
+#define _start2	5
+#define _start1	159
 #define _start0	5
 #ifdef NP
 	#define ACCEPT_LAB	1 /* at least 1 in np_ */
@@ -914,7 +915,7 @@ void qsend(int, int, int);
 #define GLOBAL	7
 #define BAD	8
 #define ALPHA_F	9
-#define NTRANS	113
+#define NTRANS	114
 #if defined(BFS_PAR) || NCORE>1
 	void e_critical(int);
 	void x_critical(int);
