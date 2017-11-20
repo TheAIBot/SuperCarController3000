@@ -245,7 +245,6 @@ public class CarControl implements CarControlI{
     CriticalRegion[][] mapOfCriticalRegions = new CriticalRegion[11][12];
     Semaphore[][] mapOfCars = new Semaphore[11][12];
     boolean[] isCarRunning = new boolean[NUMBER_OF_CARS];
-    Semaphore changeACar = new Semaphore(1);
 
     public CarControl(CarDisplayI cd) {
         this.cd = cd;
@@ -253,19 +252,12 @@ public class CarControl implements CarControlI{
         gate = new Gate[NUMBER_OF_CARS];
         initializeCriticalRegions();
 
-        try {
-            //just to be safe, block here aswell.
-            //you might be able to call other methods while the constructor is running
-            changeACar.P();
-            for (int no = 0; no < NUMBER_OF_CARS; no++) {
-                gate[no] = new Gate(no);
-                car[no]  = new Car(no,cd,gate[no], mapOfCriticalRegions, mapOfCars);
-                car[no].start();
-                isCarRunning[no] = true;
-            } 
-            changeACar.V();   
-        } catch (InterruptedException e) {
-        }
+        for (int no = 0; no < NUMBER_OF_CARS; no++) {
+            gate[no] = new Gate(no);
+            car[no]  = new Car(no,cd,gate[no], mapOfCriticalRegions, mapOfCars);
+            car[no].start();
+            isCarRunning[no] = true;
+        }  
     }
     
     private void initializeCriticalRegions() {
@@ -328,32 +320,18 @@ public class CarControl implements CarControlI{
         cd.println("Setting of bridge limit not implemented in this version");
     }
 
-    public void removeCar(int no) { 
-        try {
-            changeACar.P();
-
-            if(isCarRunning[no]) {
-                car[no].interrupt();
-                isCarRunning[no] = false;
-            }
-
-            changeACar.V();
-        } catch (InterruptedException e) {
+    public synchronized void removeCar(int no) { 
+        if(isCarRunning[no]) {
+            car[no].interrupt();
+            isCarRunning[no] = false;
         }
     }
 
-    public void restoreCar(int no) { 
-        try {
-            changeACar.P();
-
-            if(!isCarRunning[no]) {
-                car[no]  = new Car(no,cd,gate[no], mapOfCriticalRegions, mapOfCars);
-                car[no].start();
-                isCarRunning[no] = true;
-            }
-
-            changeACar.V();
-        } catch (InterruptedException e) {
+    public synchronized void restoreCar(int no) { 
+        if(!isCarRunning[no]) {
+            car[no]  = new Car(no,cd,gate[no], mapOfCriticalRegions, mapOfCars);
+            car[no].start();
+            isCarRunning[no] = true;
         }
     }
 
