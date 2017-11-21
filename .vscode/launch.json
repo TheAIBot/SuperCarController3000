@@ -11,6 +11,13 @@
             "request": "launch",
             "mainClass": "Cars",
             "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Test Cars",
+            "request": "launch",
+            "mainClass": "ConcurrencyTests",
+            "args": ""
         }
     ]
 }
