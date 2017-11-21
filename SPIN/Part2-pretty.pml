@@ -72,12 +72,9 @@ proctype Car(byte type)
     do
     ::
         skip;  //Just to have a place marked as the gate.
-gate:   //(*)Hvor langt rækker markoerene?
+gate:   
         skip;
-        //Added eternal spinning.
-        
-	int kage = 3;
-
+        //The eternal loop is used by the ltl formulas
         do
         :: true -> skip;
         :: true -> break;
@@ -116,7 +113,7 @@ entry:
         fi;
         
 crit:
-
+        //Verifying that the global invariant (safety property) holds.
         if
         :: (type == DOWN) ->
                 assert(noUpCars == 0 && noDownCars>0); //Tillader at 
