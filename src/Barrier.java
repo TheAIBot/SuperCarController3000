@@ -1,70 +1,79 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
-
-/**
- * Based on the code from the book, where semaphores replaceses the normal booleans.
- * It is an implementation of the dissemeniation barrier.
- * TODO remember to describe why it is used, instead of other barriers, like the butterfly barrier.
- * TODO finish description(*)
- * Faa Andreas til at læse begge sektioner i bogen omkring dette.
- * @author jesper
- *
- */
 public class Barrier {
-	
-	//TODO clean up code.
-	
-	private boolean isOn = false; 
-	private int numberCarsAtBarrier = 0;
-	private int numberCarsToAwake = 0;
-	private boolean awaitExitBarrier		= false;
-	private Semaphore entryExitProtocol 	= new Semaphore(1);
-	private Semaphore awaitAllCarsAtBarrier = new Semaphore(0);
-	private Semaphore finishedShutdown = new Semaphore(0);
-	
-	public Barrier() {
-		
-	}
 
-	/** Uses combining tree method. Views the cars as a heap, where car 0 is the root, and so on.
-	 * Ie. a heap based on the arrive array-
-	 * @param carID
-	 * @throws InterruptedException
-	 */
+	//is true if the barrier is online
+	private boolean isOn = false; 
+	//count of the number of cars at the barrier
+	private int numberCarsAtBarrier = 0;
+	//count of the number of cars at the barrier
+	//that haven't left the barrier after it was 
+	//either turned off or all cars arrived at the 
+	//barrier
+	private int numberCarsToAwake = 0;
+	//is true if it's a shutdown that's making the
+	//cars leave the barrier
+	private boolean awaitExitBarrier		= false;
+	//makes sure only one car can enter/exit the barrier at once
+	private Semaphore entryExitProtocol 	= new Semaphore(1);
+	//makes the cars wait for the rest of the cars at the barrier
+	private Semaphore awaitAllCarsAtBarrier = new Semaphore(0);
+	//is here so shutdown can wait for all cars to leave the barrier
+	//before returning from the shutdown method
+	private Semaphore finishedShutdown      = new Semaphore(0);
+	
+
 	public void sync(int carID) throws InterruptedException {
-		//onOffSwitch.P(); //TODO skal barrieren altid kunne switches fra, ie. ikke opleve starvation?
-		//TODO ovenstaaende kode skal tilfoejes til step-3 branchen. Fiks fejlen i den.
 				
+		//no need to no into the barrier if the barrier is off
 		if (!isOn) return;
 		
 		entryExitProtocol.P();
+		//the value if isOn might have changed while the 
+		//car waited to enter the barrier
 		if (!isOn) {
 			entryExitProtocol.V();
-			return; //TODO (*) Maybe better fix?
+			return;
 		}
-		numberCarsAtBarrier++;
 		
+		numberCarsAtBarrier++;
+		//if it's the last car then pass the baton 
+		//to another car and leave the barrier
 		if (numberCarsAtBarrier == CarControl.NUMBER_OF_CARS) {
+			//need to wake up all cars that are in the gate
+			//except this car because it won't wait
+			//and except one more car because
+			//atleast one car will be woken up no matter 
+			//if there is another car or not waiting
 			numberCarsToAwake = numberCarsAtBarrier - 2;
-			numberCarsAtBarrier = 0; //All cars must arrive at the barrier again.
+			numberCarsAtBarrier = 0;
 			awaitAllCarsAtBarrier.V();
-			return; //Does not increment entryExitProtocol, as the baton is passed down to the awoken cars.
+			//doesn't release entryExitProtocol so no cars can
+			//enter the barrier while cars are leaving the barrier
+			return;
 		}
 		entryExitProtocol.V();
+		//wait here until all cars have arrived
 		awaitAllCarsAtBarrier.P();
+		//if more cars need to wake up
+		//then wake up another car
 		if (numberCarsToAwake > 0) {
 			numberCarsToAwake--;
 			awaitAllCarsAtBarrier.V();
 			return; //Passing the entryExitProtocol baton.
 		}
-		if (awaitExitBarrier) { //Only true if one is the last car exiting the barrier, and shutdown is activated.
+		//only the last car out of the barrier should
+		//arrive her. If shutdown is in effect
+		//then turn off the barrier
+		//and release the shutdown semaphore
+		//so the shutdown method can exit again
+		if (awaitExitBarrier) {
 			awaitExitBarrier = false;
 			isOn = false;
 			finishedShutdown.V();
 		}
-		entryExitProtocol.V(); //Does maybe not need to be passed as baton?
+		//only the last car to leave the barrier should arrive
+		//here and after it leaves, other cars should be allowed
+		//into the barrier again
+		entryExitProtocol.V();
 		
 		
 	}
@@ -73,20 +82,18 @@ public class Barrier {
 		entryExitProtocol.P();
 		isOn = true;
 		entryExitProtocol.V();
-		//TODO (*) What if cars already are at the barrier?
 	}
 	
-	public void off() throws InterruptedException { //Takes O(NumberOfCars) time, plus maybe some waiting for cars just leaving or just entering.
+	public void off() throws InterruptedException {
 		entryExitProtocol.P();
 		isOn = false;
 		
 		if (numberCarsAtBarrier > 0) {
-			//Simulates that all cars have arrived:
 			numberCarsToAwake = numberCarsAtBarrier - 1;//All the cars at the barrier must be awoken
 			numberCarsAtBarrier = 0;
 			awaitAllCarsAtBarrier.V();
-			return; //the awoken cars will switch of the entry-exit protocol themself.
-		} else { 
+		} 
+		else { 
 			entryExitProtocol.V();
 		}
 		
@@ -96,40 +103,14 @@ public class Barrier {
 	public void shutdown() throws InterruptedException {
 		entryExitProtocol.P();
 		
-		if (numberCarsAtBarrier > 0) { //TODO remember awaitExitAtBarrier
+		if (numberCarsAtBarrier > 0) {
 			awaitExitBarrier = true;	
 			entryExitProtocol.V();
 			finishedShutdown.P();
-			//TODO doees not work corectly since the removal of onOffSwitch
-		} else {
+		} 
+		else {
 			isOn = false;
 			entryExitProtocol.V();	
 		}		
 	}
-	public boolean atBarrier(Pos startPos, Pos curpos, int num) {
-		switch (num) {
-			case 0:
-				if (curpos.row == 6 && curpos.col == 3) {
-					return true;
-				} else return false;
-			case 1:
-			case 2:
-			case 3:
-			case 4:
-				if (curpos.row == 6 && curpos.col == startPos.col) {
-					return true;
-				} else return false;
-			case 5:
-			case 6:
-			case 7:
-			case 8:
-				if (curpos.row == 5 && curpos.col == startPos.col) {
-					return true;
-				} else return false;
-			default:
-				throw new Error("Switch-case does not handle the case where the carnumber = " + num);
-		}
-	}
-	
-
 }
