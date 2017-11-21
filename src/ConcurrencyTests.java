@@ -88,11 +88,11 @@ class ConcurrencyTests {
 
     private static void messWithBarrier(final Random rand, final Cars playground)
     {
-        final int carToMessWith = rand.nextInt(CarControl.NUMBER_OF_CARS);
-        if (carToMessWith < 140) {
+        final int toDo = rand.nextInt(300);
+        if (toDo < 140) {
             playground.barrierOn();
         }
-        else if (carToMessWith < 270) {
+        else if (toDo < 270) {
             playground.barrierOff();
         }
         else {
@@ -108,16 +108,23 @@ class ConcurrencyTests {
 
     private static boolean areCarsDeadlocked(final Cars playground, final Car[] cars, final Pos[] oldCarPositions)
     {
-        boolean deadlockDetected = true;
         for(int i = 1; i < cars.length; i++) {
             final Pos carOldPos = oldCarPositions[i];
             final Pos carNewPos = cars[i].curpos;
 
             if (!carNewPos.equals(carOldPos)) {
-                deadlockDetected = false;
+                return false;
             }
         }
-        return deadlockDetected;
+        //all cars were not moving
+        //so check if that's because they are all at the barrier
+        for(int i = 1; i < cars.length; i++) {
+            if (cars[i].curpos.equals(cars[i].barpos)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private static boolean anyCarsStuckInTheAlley(final Cars playground, final Car[] cars) {

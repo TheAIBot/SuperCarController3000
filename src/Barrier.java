@@ -56,7 +56,7 @@ public class Barrier {
 		awaitAllCarsAtBarrier.P();
 		if (numberCarsToAwake > 0) {
 			numberCarsToAwake--;
-			//awaitAllCarsAtBarrier.V();
+			awaitAllCarsAtBarrier.V();
 			return; //Passing the entryExitProtocol baton.
 		}
 		if (awaitExitBarrier) { //Only true if one is the last car exiting the barrier, and shutdown is activated.
