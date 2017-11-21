@@ -11,12 +11,10 @@ class Gate {
     Semaphore g = new Semaphore(0);
     Semaphore e = new Semaphore(1);
     
-    Semaphore kage;
     boolean isopen = false;
     boolean hasLeftGates = false;
     
-    public Gate(Semaphore kage, int carID) {
-    	this.kage = kage;
+    public Gate(int carID) {
     	this.carID = carID;
     }
 
@@ -51,9 +49,9 @@ class Car extends Thread {
 
     CarDisplayI cd;                  // GUI part
     
-    CriticalRegion currentCriticalRegion;
-    CriticalRegion[][] mapCriticalRegions;
-    Semaphore[][] mapOfCars;
+    final CriticalRegion[][] mapCriticalRegions;
+    final Semaphore[][] mapOfCars;
+    final Semaphore carStopper;
 
     int num;                          // Car number
     Pos startpos;                    // Startpositon (provided by GUI)
@@ -65,7 +63,7 @@ class Car extends Thread {
     int speed;                       // Current car speed
     Pos curpos;                      // Current position
 
-    public Car(int no, CarDisplayI cd, Gate g, CriticalRegion[][] mapCriticalRegions, Semaphore[][] mapOfCars) {
+    public Car(int no, CarDisplayI cd, Gate g, CriticalRegion[][] mapCriticalRegions, Semaphore[][] mapOfCars, Semaphore carStopper) {
 
         this.num = no;
         this.cd = cd;
@@ -75,6 +73,7 @@ class Car extends Thread {
         
         this.mapCriticalRegions = mapCriticalRegions;
         this.mapOfCars = mapOfCars;
+        this.carStopper = carStopper;
        
         col = chooseColor();
 
@@ -130,13 +129,11 @@ class Car extends Thread {
     
    public void run() {
         try {
-        	//Spørgsmål: Er man garanteret, at bilerne altid kører med den angivne hastighed, konstant, hele vejen rundt?
-        	//Min umiddelbare tanke er nej, da de kører på forskellige tråde.
-        	
         	//Cannot start in a critical region, so that is not neccessary to check here.
             speed = chooseSpeed();
             curpos = startpos;
             cd.mark(curpos,col,num);
+            CriticalRegion currentCriticalRegion = null;
 
             while (true) { 
                 sleep(speed());
@@ -147,19 +144,12 @@ class Car extends Thread {
                 }
 
                 final Pos newpos = nextPos(curpos);
-                
                 final CriticalRegion nextCriticalRegion = mapCriticalRegions[newpos.row][newpos.col];
-                
-                //TODO is this the correct placement of the code?
-                //Entering another critical region:
-                //TODO ville det være bedre at bruge noget kode ligesom med gatesne? I forhold til semaforene
                 if (nextCriticalRegion != null && !nextCriticalRegion.equals(currentCriticalRegion)) {
-                	//System.out.println("Enter car no " + no);
 					nextCriticalRegion.enter(num);
 				}
                 
                 mapOfCars[newpos.row][newpos.col].P();
-                	
                 
                 //  Move to new position 
                 cd.clear(curpos);
@@ -168,19 +158,21 @@ class Car extends Thread {
                 cd.clear(curpos,newpos);
                 cd.mark(newpos,col,num);     
                 
-
                 mapOfCars[curpos.row][curpos.col].V();
                 
                 curpos = newpos;           
+
                 //Must not leave, before having got permission to enter.
                 //Leaving current critical region:
-                
                 if (currentCriticalRegion != null && !currentCriticalRegion.equals(nextCriticalRegion)) {
 					currentCriticalRegion.leave(num);
 				}
 				currentCriticalRegion = nextCriticalRegion;
 				
+                carStopper.P();
+                carStopper.V();
 
+                //cd.println(curpos.toString());
             }
 
         } catch (Exception e) {
@@ -198,16 +190,9 @@ public class CarControl implements CarControlI{
     CarDisplayI cd;           // Reference to GUI
     Car[]  car;               // Cars
     Gate[] gate;              // Gates
-    CriticalRegion[][] mapOfCriticalRegions = new CriticalRegion[11][12];
-    Semaphore[][] mapOfCars = new Semaphore[11][12];
-    
-    
-    
-    Semaphore allowedNoCars	= new Semaphore(1);
-    
-        
-    Semaphore allClockwise	= new Semaphore(0);
-    Semaphore allCounterClockwise = new Semaphore(1);
+    private final CriticalRegion[][] mapOfCriticalRegions = new CriticalRegion[11][12];
+    private final Semaphore[][] mapOfCars = new Semaphore[11][12];
+    private final Semaphore carsStopper = new Semaphore(NUMBER_OF_CARS);
 
     public CarControl(CarDisplayI cd) {
         this.cd = cd;
@@ -216,8 +201,8 @@ public class CarControl implements CarControlI{
         initializeCriticalRegions();
 
         for (int no = 0; no < NUMBER_OF_CARS; no++) {
-            gate[no] = new Gate(allowedNoCars, no);
-            car[no]  = new Car(no,cd,gate[no], mapOfCriticalRegions, mapOfCars);
+            gate[no] = new Gate(no);
+            car[no]  = new Car(no,cd,gate[no], mapOfCriticalRegions, mapOfCars, carsStopper);
             car[no].start();
         } 
     }
@@ -227,22 +212,21 @@ public class CarControl implements CarControlI{
         CriticalRegion alley = new CriticalRegion();
         Pos[] criticalRegionArea = new Pos[]
         {
-            new Pos(0, 1), 
-            new Pos(0, 2), 
-            new Pos(0, 3), 
-            new Pos(0, 4), 
-            new Pos(0, 5),
-            new Pos(0, 6), 
-            new Pos(0, 7), 
-            new Pos(0, 8), 
-            new Pos(0, 9), 
-            //new Pos(0,10),
+            new Pos(1, 0), 
+            new Pos(2, 0), 
+            new Pos(3, 0), 
+            new Pos(4, 0), 
+            new Pos(5, 0),
+            new Pos(6, 0), 
+            new Pos(7, 0), 
+            new Pos(8, 0), 
+            new Pos(9, 0),
             new Pos(1, 1), 
-            new Pos(2, 1)
+            new Pos(1, 2)
         };
 
         for (int i = 0; i < criticalRegionArea.length; i++) {
-			mapOfCriticalRegions[criticalRegionArea[i].col][criticalRegionArea[i].row] = alley;
+			mapOfCriticalRegions[criticalRegionArea[i].row][criticalRegionArea[i].col] = alley;
 		}
 	    
 	    for (int i = 0; i < mapOfCars.length; i++) {
@@ -250,56 +234,76 @@ public class CarControl implements CarControlI{
 				mapOfCars[i][j] = new Semaphore(1);
 			}
 	    }
-	   
-   	}
+    }
+       
+    public void pause()
+    {
+        try {
+            for(int i = 0; i < NUMBER_OF_CARS; i++) {
+                carsStopper.P();
+            }   
+        } catch (Exception e) {
+            cd.println("Error occured when trying to pause all cars");
+        }
+    }
 
-   public void startCar(int no) {
-       gate[no].open();
-   }
+    public void resume()
+    {
+        try {
+            for(int i = 0; i < NUMBER_OF_CARS; i++) {
+                carsStopper.V();
+            }   
+        } catch (Exception e) {
+            cd.println("Error occured when trying to resume all cars");
+        }
+    }
 
-   public void stopCar(int no) {
-       gate[no].close();
-   }
+    public void startCar(int no) {
+        gate[no].open();
+    }
 
-   public void barrierOn() { 
-       cd.println("Barrier On not implemented in this version");
-   }
+    public void stopCar(int no) {
+        gate[no].close();
+    }
 
-   public void barrierOff() { 
-       cd.println("Barrier Off not implemented in this version");
-   }
+    public void barrierOn() { 
+        cd.println("Barrier On not implemented in this version");
+    }
 
-   public void barrierShutDown() { 
-       cd.println("Barrier shut down not implemented in this version");
-       // This sleep is for illustrating how blocking affects the GUI
-       // Remove when shutdown is implemented.
-       try { Thread.sleep(3000); } catch (InterruptedException e) { }
-       // Recommendation: 
-       //   If not implemented call barrier.off() instead to make graphics consistent
-   }
+    public void barrierOff() { 
+        cd.println("Barrier Off not implemented in this version");
+    }
 
-   public void setLimit(int k) { 
-       cd.println("Setting of bridge limit not implemented in this version");
-   }
+    public void barrierShutDown() { 
+        cd.println("Barrier shut down not implemented in this version");
+        // This sleep is for illustrating how blocking affects the GUI
+        // Remove when shutdown is implemented.
+        try { Thread.sleep(3000); } catch (InterruptedException e) { }
+        // Recommendation: 
+        //   If not implemented call barrier.off() instead to make graphics consistent
+    }
 
-   public void removeCar(int no) { 
-       cd.println("Remove Car not implemented in this version");
-   }
+    public void setLimit(int k) { 
+        cd.println("Setting of bridge limit not implemented in this version");
+    }
 
-   public void restoreCar(int no) { 
-       cd.println("Restore Car not implemented in this version");
-   }
+    public void removeCar(int no) { 
+        cd.println("Remove Car not implemented in this version");
+    }
 
-   /* Speed settings for testing purposes */
+    public void restoreCar(int no) { 
+        cd.println("Restore Car not implemented in this version");
+    }
 
-   public void setSpeed(int no, int speed) { 
-       car[no].setSpeed(speed);
-   }
+    /* Speed settings for testing purposes */
 
-   public void setVariation(int no, int var) { 
-       car[no].setVariation(var);
-   }
+    public void setSpeed(int no, int speed) { 
+        car[no].setSpeed(speed);
+    }
 
+    public void setVariation(int no, int var) { 
+        car[no].setVariation(var);
+    }
 }
 
 
