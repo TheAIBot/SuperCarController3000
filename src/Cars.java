@@ -1,10 +1,3 @@
-//Implementation of Graphical User Interface class
-//Mandatory assignment
-//Course 02158 Concurrent Programming, DTU, Fall 2017
-
-//Hans Henrik Lovengreen     Oct 9, 2017
-
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;

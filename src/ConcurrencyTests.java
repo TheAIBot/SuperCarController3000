@@ -74,11 +74,27 @@ class ConcurrencyTests {
                 }
             }).start();
             while (true) {
-                Thread.sleep(rand.nextInt(150));
 
-                stopMessingAround.P();
-                messWithCar(rand, playground, isGateOpen);
-                stopMessingAround.V();
+                long startTime = System.nanoTime();
+                while (System.nanoTime() - startTime >= 3_000_000_000l) {
+                    Thread.sleep(rand.nextInt(150));
+                    
+                    stopMessingAround.P();
+                    messWithCar(rand, playground, isGateOpen);
+                    stopMessingAround.V();
+                }
+
+                startTime = System.nanoTime();
+                while (System.nanoTime() - startTime >= 3_000_000_000l) {
+                    stopMessingAround.P();
+                    if (rand.nextBoolean()) {
+                        carControl.barrierOn();
+                    }
+                    else {
+                        carControl.barrierOff();
+                    }
+                    stopMessingAround.V();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
