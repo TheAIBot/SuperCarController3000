@@ -3,21 +3,19 @@ import java.util.Random;
 
 class ConcurrencyTests {
 
-    private static final long TEST_RUNTIME = 3_000_000_000l;
-
     private static final ArrayList<Pos> criticalRegionArea = new ArrayList<Pos>();
     static {
-        criticalRegionArea.add(new Pos(0, 1));
-        criticalRegionArea.add(new Pos(0, 2));
-        criticalRegionArea.add(new Pos(0, 3));
-        criticalRegionArea.add(new Pos(0, 4));
-        criticalRegionArea.add(new Pos(0, 5));
-        criticalRegionArea.add(new Pos(0, 6));
-        criticalRegionArea.add(new Pos(0, 7));
-        criticalRegionArea.add(new Pos(0, 8));
-        criticalRegionArea.add(new Pos(0, 9));
-        criticalRegionArea.add(new Pos(1, 1));
-        criticalRegionArea.add(new Pos(2, 1));
+        criticalRegionArea.add(new Pos(1, 0));
+        criticalRegionArea.add(new Pos(2, 0)); 
+        criticalRegionArea.add(new Pos(3, 0)); 
+        criticalRegionArea.add(new Pos(4, 0)); 
+        criticalRegionArea.add(new Pos(5, 0));
+        criticalRegionArea.add(new Pos(6, 0)); 
+        criticalRegionArea.add(new Pos(7, 0)); 
+        criticalRegionArea.add(new Pos(8, 0)); 
+        criticalRegionArea.add(new Pos(9, 0));
+        criticalRegionArea.add(new Pos(1, 1)); 
+        criticalRegionArea.add(new Pos(1, 2));
     }
 
     public static void main(String[] args) {
@@ -28,49 +26,59 @@ class ConcurrencyTests {
         checkForConcurrencyErrors(new Cars());
     }
 
-    public static void checkForConcurrencyErrors(final Cars carControl) {
+    public static void checkForConcurrencyErrors(final Cars playground) {
         try {
+            playground.setVisible(true);
+
             final Random rand = new Random();
-            carControl.setVisible(true);
-            final Car[] cars = ((CarControl)carControl.ctr).car;
-    
+            final CarControl carControl = ((CarControl)playground.ctr);
+            final Car[] cars = carControl.car;
+            cars[0].atGate(cars[0].curpos);
+            final Semaphore stopMessingAround = new Semaphore(1);
             final Pos[] oldCarPositions = new Pos[CarControl.NUMBER_OF_CARS];
             for(int i = 1; i < cars.length; i++) {
                 oldCarPositions[i] = cars[i].curpos;
-                cars[i].setSpeed(100);
+                cars[i].setSpeed(10);
             }
     
     
-            carControl.startAll();
-            carControl.startCar(0);
+            playground.startAll();
+            playground.startCar(0);
             new Thread(() ->
             {
                 try {
                 while (true) {   
                     Thread.sleep(100);
                     
-                    if (areCarsDeadlocked(carControl, cars, oldCarPositions)) {
-                        carControl.println("Deadlock detected");
+                    stopMessingAround.P();
+                    carControl.pause();
+
+                    if (areCarsDeadlocked(playground, cars, oldCarPositions)) {
+                        playground.println("Deadlock detected");
+                    }
+
+                    if (anyCarsStuckInTheAlley(playground, cars)) {
+                        playground.println("Alley problem detected");
                     }
     
                     //update cars old positions
                     for(int i = 0; i < cars.length; i++) {
                         oldCarPositions[i] = cars[i].curpos;
                     }
+
+                    stopMessingAround.V();
+                    carControl.resume();
                 }
                 } catch (Exception e) {
-                    carControl.println(e.getMessage());
-                    //TODO: handle exception
+                    playground.println(e.getMessage());
                 }
             }).start();
             while (true) {
-                final long startTime = System.nanoTime();
-                
-                //first mess around with the cars for a while
-                while (System.nanoTime() - startTime < TEST_RUNTIME) {
-                    Thread.sleep(rand.nextInt(70));
-                    messWithBarrier(rand, carControl, cars);
-                }
+                Thread.sleep(rand.nextInt(150));
+
+                stopMessingAround.P();
+                messWithBarrier(rand, playground);
+                stopMessingAround.V();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,29 +86,27 @@ class ConcurrencyTests {
         }
     }
 
-    private static void messWithBarrier(final Random rand, final Cars carControl, final Car[] cars)
+    private static void messWithBarrier(final Random rand, final Cars playground)
     {
-        final int messWith = rand.nextInt(300);
-        if (messWith < 140) {
-            carControl.barrierOn();
+        final int carToMessWith = rand.nextInt(CarControl.NUMBER_OF_CARS);
+        if (carToMessWith < 140) {
+            playground.barrierOn();
         }
-        else if (messWith < 270) {
-            carControl.barrierOff();
+        else if (carToMessWith < 270) {
+            playground.barrierOff();
         }
         else {
-            Semaphore e = new Semaphore(0);
-            carControl.barrierShutDown(e);
+            Semaphore waitForBarrierShutdown = new Semaphore(0);
+            playground.barrierShutDown(waitForBarrierShutdown);
             try {
-                e.P();
+                waitForBarrierShutdown.P();
             } catch (InterruptedException err) {
-                //TODO: handle exception
+                playground.println("Error occured when waiting for the barrier to shutdown");
             }
         }
     }
 
-    static int uu = 0;
-
-    private static boolean areCarsDeadlocked(final Cars carControl, final Car[] cars, final Pos[] oldCarPositions)
+    private static boolean areCarsDeadlocked(final Cars playground, final Car[] cars, final Pos[] oldCarPositions)
     {
         boolean deadlockDetected = true;
         for(int i = 1; i < cars.length; i++) {
@@ -111,7 +117,26 @@ class ConcurrencyTests {
                 deadlockDetected = false;
             }
         }
-
         return deadlockDetected;
+    }
+
+    private static boolean anyCarsStuckInTheAlley(final Cars playground, final Car[] cars) {
+        final boolean[] isCarInAlley = getIsCarsInAlley(cars);
+        final boolean carsFromTop    = isCarInAlley[1] || isCarInAlley[2] || isCarInAlley[3] || isCarInAlley[4];
+        final boolean carsFromBottom = isCarInAlley[5] || isCarInAlley[6] || isCarInAlley[7] || isCarInAlley[8];
+
+        return carsFromTop && carsFromBottom;
+    }
+
+    private static boolean[] getIsCarsInAlley(final Car[] cars)
+    {
+        final boolean[] isCarInAlley = new boolean[cars.length];
+        for(int i = 1; i < isCarInAlley.length; i++)
+        {
+            final Pos curpos = cars[i].curpos;
+            isCarInAlley[i] = criticalRegionArea.stream().anyMatch(x -> x.equals(curpos));
+        }
+
+        return isCarInAlley;
     }
 }

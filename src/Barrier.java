@@ -22,7 +22,7 @@ public class Barrier {
 	private boolean awaitExitBarrier		= false;
 	private Semaphore entryExitProtocol 	= new Semaphore(1);
 	private Semaphore awaitAllCarsAtBarrier = new Semaphore(0);
-	private Semaphore finishedShutdown = new Semaphore(0);
+	private Semaphore finishedShutdown      = new Semaphore(0);
 	
 	public Barrier() {
 		
@@ -106,30 +106,4 @@ public class Barrier {
 			entryExitProtocol.V();	
 		}		
 	}
-	public boolean atBarrier(Pos startPos, Pos curpos, int num) {
-		switch (num) {
-			case 0:
-				if (curpos.row == 6 && curpos.col == 3) {
-					return true;
-				} else return false;
-			case 1:
-			case 2:
-			case 3:
-			case 4:
-				if (curpos.row == 6 && curpos.col == startPos.col) {
-					return true;
-				} else return false;
-			case 5:
-			case 6:
-			case 7:
-			case 8:
-				if (curpos.row == 5 && curpos.col == startPos.col) {
-					return true;
-				} else return false;
-			default:
-				throw new Error("Switch-case does not handle the case where the carnumber = " + num);
-		}
-	}
-	
-
 }
