@@ -53,8 +53,6 @@ class ConcurrencyTests {
                     carControl.pause();
                     stopMessingAround.P();
 
-                    Thread.sleep(1000);
-
                     if (areCarsDeadlocked(playground, cars, oldCarPositions)) {
                         playground.println("Deadlock detected");
                     }
