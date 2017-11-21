@@ -129,32 +129,16 @@ class Car extends Thread {
     
     public void run() {
         try {
-            //Spørgsmål: Er man garanteret, at bilerne altid kører med den angivne hastighed, konstant, hele vejen rundt?
-            //Min umiddelbare tanke er nej, da de kører på forskellige tråde.
-            
-            //Cannot start in a critical region, so that is not neccessary to check here.
             speed = chooseSpeed();
             curpos = startpos;
             cd.mark(curpos,col,num);
             CriticalRegion currentCriticalRegion = null;
 
             while (true) { 
-                try {
-                    sleep(speed());
-                } catch (InterruptedException e) {
-                    cd.clear(curpos);
-                    mapOfCars[curpos.row][curpos.col].V();
-                    break;
-                }
+                sleep(speed());
 
                 if (atGate(curpos)) { 
-                    try {
-                        mygate.pass();
-                    } catch (InterruptedException e) {
-                        cd.clear(curpos);
-                        mapOfCars[curpos.row][curpos.col].V();
-                        break;
-                    }
+                    mygate.pass();
                     speed = chooseSpeed();
                 }
                 
@@ -165,43 +149,18 @@ class Car extends Thread {
 
                 final Pos newpos = nextPos(curpos);
                 final CriticalRegion nextCriticalRegion = mapCriticalRegions[newpos.row][newpos.col];
-                
-                //TODO is this the correct placement of the code?
-                //Entering another critical region:
-                //TODO ville det være bedre at bruge noget kode ligesom med gatesne? I forhold til semaforene
                 if (nextCriticalRegion != null && !nextCriticalRegion.equals(currentCriticalRegion)) {
-                    //System.out.println("Enter car no " + no);
-                    try {
-                        nextCriticalRegion.enter(num);
-                    } catch (InterruptedException e) {
-                        cd.clear(curpos);
-                        mapOfCars[curpos.row][curpos.col].V();
-                        break;
-                    }
+                    nextCriticalRegion.enter(num);
                 }
                 
-                try {
-                    mapOfCars[newpos.row][newpos.col].P();
-                } catch (InterruptedException e) {
-                    cd.clear(curpos);
-                    mapOfCars[curpos.row][curpos.col].V();
-                    break;
-                }                	
+                mapOfCars[newpos.row][newpos.col].P();               	
                 
                 //  Move to new position 
                 cd.clear(curpos);
                 cd.mark(curpos,newpos,col,num);
-                try {
-                    sleep(speed());
-                } catch (InterruptedException e) {
-                    cd.clear(curpos,newpos);
-                    mapOfCars[newpos.row][newpos.col].V();
-                    mapOfCars[curpos.row][curpos.col].V();
-                    break;
-                }
+                sleep(speed());
                 cd.clear(curpos,newpos);
-                cd.mark(newpos,col,num);     
-                
+                cd.mark(newpos,col,num);                     
 
                 mapOfCars[curpos.row][curpos.col].V();
                 
@@ -213,18 +172,9 @@ class Car extends Thread {
                     currentCriticalRegion.leave(num);
                 }
                 currentCriticalRegion = nextCriticalRegion;
-            }
 
-            if (currentCriticalRegion != null) {
-                currentCriticalRegion.leave(num);
-            }
-
-            try {
                 carStopper.P();
-                carStopper.V();   
-            } catch (InterruptedException e) { 
-                //re-throw interrupt if it was caught here
-                this.interrupt();
+                carStopper.V();  
             }
         }
         catch (Exception e) {

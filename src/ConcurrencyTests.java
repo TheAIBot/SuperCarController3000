@@ -33,7 +33,6 @@ class ConcurrencyTests {
             final Random rand = new Random();
             final CarControl carControl = ((CarControl)playground.ctr);
             final Car[] cars = carControl.car;
-            cars[0].atGate(cars[0].curpos);
             final boolean[] isGateOpen = new boolean[CarControl.NUMBER_OF_CARS];
             final Semaphore stopMessingAround = new Semaphore(1);
             final Pos[] oldCarPositions = new Pos[CarControl.NUMBER_OF_CARS];
@@ -53,6 +52,8 @@ class ConcurrencyTests {
                     
                     carControl.pause();
                     stopMessingAround.P();
+
+                    Thread.sleep(1000);
 
                     if (areCarsDeadlocked(playground, cars, oldCarPositions)) {
                         playground.println("Deadlock detected");
@@ -78,7 +79,7 @@ class ConcurrencyTests {
                 Thread.sleep(rand.nextInt(150));
 
                 stopMessingAround.P();
-                messWithBarrier(rand, playground, isGateOpen);
+                messWithCar(rand, playground, isGateOpen);
                 stopMessingAround.V();
             }
         } catch (Exception e) {
@@ -87,7 +88,7 @@ class ConcurrencyTests {
         }
     }
 
-    private static void messWithBarrier(final Random rand, final Cars playground, final boolean[] isGateOpen)
+    private static void messWithCar(final Random rand, final Cars playground, final boolean[] isGateOpen)
     {
         final int carToMessWith = rand.nextInt(CarControl.NUMBER_OF_CARS);
         if (isGateOpen[carToMessWith]) {
