@@ -1,15 +1,26 @@
 public class CriticalRegion {
-	//TODO one could make the critical region fair.
-	private int upCarsCount   = 0; //Invariant: (noUpCars == 0 || noDownCars == 0)
-	private int downCarsCount = 0; //Implemented as a variant of the reader/writer problem, with passing the baton.
+	//Invariant: (noUpCars == 0 || noDownCars == 0)
+	//Implemented as a variant of the reader/writer problem, with passing the baton.
+
+	//number of cars from directino that are in the alley
+	private int upCarsCount   = 0; 
+	private int downCarsCount = 0; 
+
+	//number of cars from direction that's waiting to enter the alley
 	private int delayedDownCarsCount = 0;
 	private int delayedUpCarsCount   = 0;
+
+	//makes sure that only one car can enter the alley at a time
 	private final Semaphore entryExitProtocol = new Semaphore(1);
+
+	//cars will wait on these objects until they are allowed inside the alley
 	private final Semaphore waitUpCars 		  = new Semaphore(0);
 	private final Semaphore waitDownCars 	  = new Semaphore(0);
 	
-	public void enter(int num) throws InterruptedException {
-		if (num  <= 4) {
+	
+	public void enter(int carNumber) throws InterruptedException {
+		//separate car types from car number
+		if (carNumber  <= 4) {
 			enterUpCar();
 		} else {
 			enterDownCar();
@@ -40,8 +51,9 @@ public class CriticalRegion {
         signal();
 	}
 
-	public void leave(int num) throws InterruptedException  {
-		if (num <= 4) {
+	public void leave(int carNumber) throws InterruptedException  {
+		//separate car types from car number
+		if (carNumber <= 4) {
 			leaveUpCar();
 		} else {
             leaveDownCar();
@@ -63,13 +75,18 @@ public class CriticalRegion {
 	}
 
 	private void signal() {
+		//no cars in alley and there are cars from down that are waiting
 		if (upCarsCount == 0 && delayedDownCarsCount > 0) {
 			delayedDownCarsCount--;
 			waitDownCars.V();
-		} else if (downCarsCount == 0 && delayedUpCarsCount > 0) {
+		} 
+		//no cars in the alley and there are cars from up that are waiting
+		else if (downCarsCount == 0 && delayedUpCarsCount > 0) {
 			delayedUpCarsCount--;
 			waitUpCars.V();
-		} else {
+		} 
+		//no cars waiting to enter the alley
+		else {
 			entryExitProtocol.V();
 		}
 	}

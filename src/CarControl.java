@@ -1,8 +1,3 @@
-//Prototype implementation of Car Control
-//Mandatory assignment
-//Course 02158 Concurrent Programming, DTU, Fall 2017
-
-
 import java.awt.Color;
 
 class Gate {
@@ -145,10 +140,13 @@ class Car extends Thread {
 
                 final Pos newpos = nextPos(curpos);
                 final CriticalRegion nextCriticalRegion = mapCriticalRegions[newpos.row][newpos.col];
+                //if at critical region then enter it before reserving the tile. otherwise a deadlock
+                //can occur
                 if (nextCriticalRegion != null && !nextCriticalRegion.equals(currentCriticalRegion)) {
 					nextCriticalRegion.enter(num);
 				}
                 
+                //reserve next tile
                 mapOfCars[newpos.row][newpos.col].P();
                 
                 //  Move to new position 
@@ -158,21 +156,20 @@ class Car extends Thread {
                 cd.clear(curpos,newpos);
                 cd.mark(newpos,col,num);     
                 
+                //release old tile
                 mapOfCars[curpos.row][curpos.col].V();
                 
                 curpos = newpos;           
 
-                //Must not leave, before having got permission to enter.
-                //Leaving current critical region:
+                //if leaving a critical region then leave it
                 if (currentCriticalRegion != null && !currentCriticalRegion.equals(nextCriticalRegion)) {
 					currentCriticalRegion.leave(num);
 				}
 				currentCriticalRegion = nextCriticalRegion;
-				
+                
+                //here for testing purposes
                 carStopper.P();
                 carStopper.V();
-
-                //cd.println(curpos.toString());
             }
 
         } catch (Exception e) {
@@ -190,14 +187,20 @@ public class CarControl implements CarControlI{
     CarDisplayI cd;           // Reference to GUI
     Car[]  car;               // Cars
     Gate[] gate;              // Gates
+
+    //a map showing where different critical sections are located
     private final CriticalRegion[][] mapOfCriticalRegions = new CriticalRegion[11][12];
+    //used to make sure that the car don't run into each other
     private final Semaphore[][] mapOfCars = new Semaphore[11][12];
+    //is here for testing purposes.
+    //makes it possible to pause all the cars and then resume
     private final Semaphore carsStopper = new Semaphore(NUMBER_OF_CARS);
 
     public CarControl(CarDisplayI cd) {
         this.cd = cd;
         car  = new  Car[NUMBER_OF_CARS];
         gate = new Gate[NUMBER_OF_CARS];
+        //create the critical regions that are on the playground
         initializeCriticalRegions();
 
         for (int no = 0; no < NUMBER_OF_CARS; no++) {
@@ -209,7 +212,6 @@ public class CarControl implements CarControlI{
     
     private void initializeCriticalRegions() {
 
-        CriticalRegion alley = new CriticalRegion();
         Pos[] criticalRegionArea = new Pos[]
         {
             new Pos(1, 0), 
@@ -225,10 +227,16 @@ public class CarControl implements CarControlI{
             new Pos(1, 2)
         };
 
+        //in this case there is only a single critical region.
+        //for each tile the critical region is part of, give a reference to the
+        //critical region.
+        //Tiles that aren't part of a critical region, should be null.
+        CriticalRegion alley = new CriticalRegion();
         for (int i = 0; i < criticalRegionArea.length; i++) {
 			mapOfCriticalRegions[criticalRegionArea[i].row][criticalRegionArea[i].col] = alley;
 		}
-	    
+        
+        //should be refactored, to it's own method
 	    for (int i = 0; i < mapOfCars.length; i++) {
 	    	for (int j = 0; j < mapOfCars[i].length; j++) {
 				mapOfCars[i][j] = new Semaphore(1);
@@ -236,6 +244,8 @@ public class CarControl implements CarControlI{
 	    }
     }
        
+    //used by tests to stop all cars by having them wait
+    //on a semaphore
     public void pause()
     {
         try {
@@ -247,6 +257,7 @@ public class CarControl implements CarControlI{
         }
     }
 
+    //used by tests to resume all cars
     public void resume()
     {
         try {
