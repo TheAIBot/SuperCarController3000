@@ -50,8 +50,8 @@ class ConcurrencyTests {
                 while (true) {   
                     Thread.sleep(100);
                     
-                    carControl.pause();
                     stopMessingAround.P();
+                    carControl.pause();
 
                     if (areCarsDeadlocked(playground, cars, oldCarPositions)) {
                         playground.println("Deadlock detected");
@@ -66,8 +66,8 @@ class ConcurrencyTests {
                         oldCarPositions[i] = cars[i].curpos;
                     }
 
-                    carControl.resume();
                     stopMessingAround.V();
+                    carControl.resume();
                 }
                 } catch (Exception e) {
                     playground.println(e.getMessage());
@@ -76,16 +76,16 @@ class ConcurrencyTests {
             while (true) {
 
                 long startTime = System.nanoTime();
-                while (System.nanoTime() - startTime >= 3_000_000_000l) {
+                while (System.nanoTime() - startTime < 3_000_000_000l) {
                     Thread.sleep(rand.nextInt(150));
                     
                     stopMessingAround.P();
-                    messWithCar(rand, playground, isGateOpen);
+                    messWithBarrier(rand, playground);
                     stopMessingAround.V();
                 }
 
                 startTime = System.nanoTime();
-                while (System.nanoTime() - startTime >= 3_000_000_000l) {
+                while (System.nanoTime() - startTime < 3_000_000_000l) {
                     stopMessingAround.P();
                     if (rand.nextBoolean()) {
                         carControl.barrierOn();
@@ -102,16 +102,23 @@ class ConcurrencyTests {
         }
     }
 
-    private static void messWithCar(final Random rand, final Cars playground, final boolean[] isGateOpen)
+    private static void messWithBarrier(final Random rand, final Cars playground)
     {
-        final int carToMessWith = rand.nextInt(CarControl.NUMBER_OF_CARS);
-        if (isGateOpen[carToMessWith]) {
-            playground.stopCar(carToMessWith);
-            isGateOpen[carToMessWith] = false;
+        final int toDo = rand.nextInt(300);
+        if (toDo < 140) {
+            playground.barrierOn();
+        }
+        else if (toDo < 270) {
+            playground.barrierOff();
         }
         else {
-            playground.startCar(carToMessWith);
-            isGateOpen[carToMessWith] = true;
+            Semaphore waitForBarrierShutdown = new Semaphore(0);
+            playground.barrierShutDown(waitForBarrierShutdown);
+            try {
+                waitForBarrierShutdown.P();
+            } catch (InterruptedException err) {
+                playground.println("Error occured when waiting for the barrier to shutdown");
+            }
         }
     }
 
