@@ -27,7 +27,6 @@ public class CarTest extends Thread {
             case 1:
                 sleep(10);
                 ConcurrencyTests.checkForConcurrencyErrors(((CarTestWrapper)cars).cars);
-                //new Thread(() -> ConcurrencyTests.checkForConcurrencyErrors(((CarTestWrapper)cars).cars));
                 break;
             case 19:
                 // Demonstration of speed setting.
