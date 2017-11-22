@@ -137,7 +137,6 @@ class Car extends Thread {
                     speed = chooseSpeed();
                 }
                 
-                //If the car is at the barrier
                 if (barpos.equals(curpos)) {
                 	barrier.sync();
 				}
@@ -200,19 +199,12 @@ public class CarControl implements CarControlI{
         gate = new Gate[NUMBER_OF_CARS];
         initializeCriticalRegions();
 
-        try {
-            //just to be safe, block here aswell.
-            //you might be able to call other methods while the constructor is running
-            changeACar.P();
-            for (int no = 0; no < NUMBER_OF_CARS; no++) {
-                gate[no] = new Gate(no);
-                car[no]  = new Car(no,cd,gate[no], mapOfCriticalRegions, mapOfCars, carsStopper, barrier);
-                car[no].start();
-                isCarRunning[no] = true;
-            } 
-            changeACar.V();   
-        } catch (InterruptedException e) {
-        }
+        for (int no = 0; no < NUMBER_OF_CARS; no++) {
+            gate[no] = new Gate(no);
+            car[no]  = new Car(no,cd,gate[no], mapOfCriticalRegions, mapOfCars, carsStopper, barrier);
+            car[no].start();
+            isCarRunning[no] = true;
+        } 
     }
     
     private void initializeCriticalRegions() {
