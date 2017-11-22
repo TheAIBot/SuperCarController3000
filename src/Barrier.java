@@ -88,8 +88,10 @@ public class Barrier {
 		entryExitProtocol.P();
 		isOn = false;
 		
+		//if any cars are still in the barrier
+		//then release them by passing the baton
 		if (numberCarsAtBarrier > 0) {
-			numberCarsToAwake = numberCarsAtBarrier - 1;//All the cars at the barrier must be awoken
+			numberCarsToAwake = numberCarsAtBarrier - 1;
 			numberCarsAtBarrier = 0;
 			awaitAllCarsAtBarrier.V();
 		} 
@@ -103,6 +105,9 @@ public class Barrier {
 	public void shutdown() throws InterruptedException {
 		entryExitProtocol.P();
 		
+		//if any cars are in the barrier then wait
+		//for all cars to enter and exit it before
+		//exiting this method
 		if (numberCarsAtBarrier > 0) {
 			awaitExitBarrier = true;	
 			entryExitProtocol.V();
