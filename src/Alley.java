@@ -1,6 +1,4 @@
-import java.util.Arrays;
-
-public class CriticalRegion {
+public class Alley {
 	private int upCarsCount   = 0; //Invariant: (noUpCars == 0 || noDownCars == 0)
 	private int downCarsCount = 0; //Implemented as a variant of the reader/writer problem, with passing the baton.
 	private int delayedDownCarsCount = 0;

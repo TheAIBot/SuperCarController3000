@@ -33,7 +33,6 @@ class ConcurrencyTests {
             final Random rand = new Random();
             final CarControl carControl = ((CarControl)playground.ctr);
             final Car[] cars = carControl.car;
-            cars[0].atGate(cars[0].curpos);
             final Semaphore stopMessingAround = new Semaphore(1);
             final Pos[] oldCarPositions = new Pos[CarControl.NUMBER_OF_CARS];
             for(int i = 1; i < cars.length; i++) {
