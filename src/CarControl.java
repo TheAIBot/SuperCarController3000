@@ -44,7 +44,7 @@ class Car extends Thread {
 
     CarDisplayI cd;                  // GUI part
     
-    final CriticalRegion[][] mapCriticalRegions;
+    final Alley[][] mapCriticalRegions;
     final Semaphore[][] mapOfCars;
     final Semaphore carStopper;
     final Barrier barrier;
@@ -59,7 +59,7 @@ class Car extends Thread {
     int speed;                       // Current car speed
     Pos curpos;                      // Current position
 
-    public Car(int no, CarDisplayI cd, Gate g, CriticalRegion[][] mapCriticalRegions, Semaphore[][] mapOfCars, Semaphore carStopper,  Barrier barrier) {
+    public Car(int no, CarDisplayI cd, Gate g, Alley[][] mapCriticalRegions, Semaphore[][] mapOfCars, Semaphore carStopper,  Barrier barrier) {
 
         this.num = no;
         this.cd = cd;
@@ -127,7 +127,7 @@ class Car extends Thread {
             speed = chooseSpeed();
             curpos = startpos;
             cd.mark(curpos,col,num);
-            CriticalRegion currentCriticalRegion = null;
+            Alley currentCriticalRegion = null;
 
             while (true) { 
                 sleep(speed());
@@ -142,7 +142,7 @@ class Car extends Thread {
 				}
 
                 final Pos newpos = nextPos(curpos);
-                final CriticalRegion nextCriticalRegion = mapCriticalRegions[newpos.row][newpos.col];
+                final Alley nextCriticalRegion = mapCriticalRegions[newpos.row][newpos.col];
                 if (nextCriticalRegion != null && !nextCriticalRegion.equals(currentCriticalRegion)) {
                     nextCriticalRegion.enter(num);
                 }
@@ -186,7 +186,7 @@ public class CarControl implements CarControlI{
     CarDisplayI cd;           // Reference to GUI
     Car[]  car;               // Cars
     Gate[] gate;              // Gates
-    final CriticalRegion[][] mapOfCriticalRegions = new CriticalRegion[11][12];
+    final Alley[][] mapOfCriticalRegions = new Alley[11][12];
     final Semaphore[][] mapOfCars = new Semaphore[11][12];
     final Semaphore carsStopper = new Semaphore(NUMBER_OF_CARS);
     final boolean[] isCarRunning = new boolean[NUMBER_OF_CARS];
@@ -209,7 +209,7 @@ public class CarControl implements CarControlI{
     
     private void initializeCriticalRegions() {
 
-        CriticalRegion alley = new CriticalRegion();
+        Alley alley = new Alley();
         Pos[] criticalRegionArea = new Pos[]
         {
             new Pos(1, 0), 
