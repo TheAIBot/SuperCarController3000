@@ -33,7 +33,6 @@ class ConcurrencyTests {
             final Random rand = new Random();
             final CarControl carControl = ((CarControl)playground.ctr);
             final Car[] cars = carControl.car;
-            final boolean[] isGateOpen = new boolean[CarControl.NUMBER_OF_CARS];
             final Semaphore stopMessingAround = new Semaphore(1);
             final Pos[] oldCarPositions = new Pos[CarControl.NUMBER_OF_CARS];
             for(int i = 1; i < cars.length; i++) {
