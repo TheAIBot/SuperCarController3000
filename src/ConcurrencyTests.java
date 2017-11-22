@@ -97,6 +97,7 @@ class ConcurrencyTests {
         }
         else {
             playground.restoreCar(carToMessWith);
+            //a new car was created, so set the speed of the car
             if (carToMessWith != 0) {
                 cars[carToMessWith].setSpeed(10);
             }

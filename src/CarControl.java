@@ -133,6 +133,14 @@ class Car extends Thread {
             curpos = startpos;
             cd.mark(curpos,col,num);
             CriticalRegion currentCriticalRegion = null;
+            //even though two cars can't spawn at the same position
+            //then it's possible that the sleep right below will crash
+            //at the first iteration of the loop. if that happens and
+            //the tile wasn't locked, then the s value of the car would
+            //go up by 1. If this happens (2^31) times then the int in
+            //the semaphore will overflow and the car will then be stuck
+            //for ever in that spot. To prevent that, the lock of the
+            //tile is taken here.
             try {
                 mapOfCars[curpos.row][curpos.col].P();
             } catch (InterruptedException e) {
@@ -145,7 +153,9 @@ class Car extends Thread {
                     sleep(speed());
                 } catch (InterruptedException e) {
                     cd.clear(curpos);
+                    //from current or previous interation of the loop
                     mapOfCars[curpos.row][curpos.col].V();
+                    //from previous iteration of the loop
                     if (currentCriticalRegion != null) {
                         currentCriticalRegion.leave(num);
                     }
@@ -157,7 +167,9 @@ class Car extends Thread {
                         mygate.pass();
                     } catch (InterruptedException e) {
                         cd.clear(curpos);
+                        //from current or previous interation of the loop
                         mapOfCars[curpos.row][curpos.col].V();
+                        //from previous iteration of the loop
                         if (currentCriticalRegion != null) {
                             currentCriticalRegion.leave(num);
                         }
@@ -173,7 +185,9 @@ class Car extends Thread {
                         nextCriticalRegion.enter(num);
                     } catch (InterruptedException e) {
                         cd.clear(curpos);
+                        //from current or previous interation of the loop
                         mapOfCars[curpos.row][curpos.col].V();
+                        //from previous iteration of the loop
                         if (currentCriticalRegion != null) {
                             currentCriticalRegion.leave(num);
                         }
@@ -185,10 +199,13 @@ class Car extends Thread {
                     mapOfCars[newpos.row][newpos.col].P();
                 } catch (InterruptedException e) {
                     cd.clear(curpos);
+                    //from current or previous interation of the loop
                     mapOfCars[curpos.row][curpos.col].V();
+                    //from current iteration of the loop
                     if (nextCriticalRegion != null) {
                         nextCriticalRegion.leave(num);
                     }
+                    //from previous iteration of the loop
                     if (currentCriticalRegion != null && currentCriticalRegion != nextCriticalRegion) {
                         currentCriticalRegion.leave(num);
                     }
@@ -202,11 +219,15 @@ class Car extends Thread {
                     sleep(speed());
                 } catch (InterruptedException e) {
                     cd.clear(curpos,newpos);
+                    //from current iteration of the loop
                     mapOfCars[newpos.row][newpos.col].V();
+                    //from previous iteration of the loop
                     mapOfCars[curpos.row][curpos.col].V();
+                    //from current iteration of the loop
                     if (nextCriticalRegion != null) {
                         nextCriticalRegion.leave(num);
                     }
+                    //from previous iteration of the loop
                     if (currentCriticalRegion != null && currentCriticalRegion != nextCriticalRegion) {
                         currentCriticalRegion.leave(num);
                     }
@@ -230,6 +251,9 @@ class Car extends Thread {
                     carStopper.V();   
                 } catch (InterruptedException e) { 
                     //re-throw interrupt if it was caught here
+                    //because the test isn't supposed to interfere
+                    //with the behavior of the car, so something
+                    //else will have catch the interrupt
                     this.interrupt();
                 }
             }
@@ -353,14 +377,21 @@ public class CarControl implements CarControlI{
     }
 
     public synchronized void removeCar(int no) { 
+        //can't remove a car if it's already removed
         if(isCarRunning[no]) {
+            //stop the car by iterrupting it
             car[no].interrupt();
             isCarRunning[no] = false;
         }
     }
 
     public synchronized void restoreCar(int no) { 
+        //itøs not allowed to add a car
+        //that's already on the track
         if(!isCarRunning[no]) {
+            //car was stopped by iterrupting
+            //so a new car has to be created to add
+            //back onto the track
             car[no] = new Car(no,cd,gate[no], mapOfCriticalRegions, mapOfCars, carsStopper);
             car[no].start();
             isCarRunning[no] = true;
