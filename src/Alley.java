@@ -1,4 +1,4 @@
-public class CriticalRegion {
+public class Alley {
 	private int dirCarCount = 0;
 	private static final int UP = 1;
 	private static final int DOWN = -1;
