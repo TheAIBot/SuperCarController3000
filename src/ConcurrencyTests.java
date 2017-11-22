@@ -89,7 +89,7 @@ class ConcurrencyTests {
                     playground.println(e.getMessage());
                 }
             }).start();
-            //preiodicly turn mess with the cars by randomly
+            //periodicly turn mess with the cars by randomly
             //turning on/off random gates.
             while (true) {
                 Thread.sleep(rand.nextInt(150));
