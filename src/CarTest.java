@@ -24,7 +24,10 @@ public class CarTest extends Thread {
                 sleep(3000);
                 cars.stopAll();
                 break;
-
+            case 1:
+                sleep(10);
+                ConcurrencyTests.checkForConcurrencyErrors(((CarTestWrapper)cars).cars);
+                break;
             case 19:
                 // Demonstration of speed setting.
                 // Change speed to double of default values
