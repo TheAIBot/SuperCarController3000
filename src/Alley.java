@@ -1,4 +1,4 @@
-public class CriticalRegion {
+public class Alley {
 	//is a counter of how many cars are in the alley
 	//and which direction they are from.
 	//if there are 3 cars in the alley and they are
