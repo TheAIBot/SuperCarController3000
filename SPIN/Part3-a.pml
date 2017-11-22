@@ -13,11 +13,11 @@ fi }
 #define V(X) atomic{X = (X+1)}
 
 
-//We do not care about car 0, as it does not affect other cars
-pid carPID[NUMBER_OF_CARS]; //TODO (*) change back to size 9
+pid carPID[NUMBER_OF_CARS]; //carPID[i] is the PID of car i.
+bool isInBarrier[NUMBER_OF_CARS]; //isInBarrier[i] is true, iff a car is in the barrier at that state.
 
 //State variables, to signal where cars are:
-int roundCount[NUMBER_OF_CARS]; //TODO (*) correct?
+int roundCount[NUMBER_OF_CARS]; //roundCount[i] is the number of times car i have arrived at the barrier.
 
 //togles:
 bool isOn                   = true;
@@ -37,14 +37,15 @@ init{
         carPID[0]   = run Car(UP, 0); 
         carPID[1]   = run Car(UP, 1);
         carPID[2]   = run Car(UP, 2);
+        //carPID[3] = run Car(UP, 3);
+isInBarrier[0]      = false;
+isInBarrier[1]      = false;
+isInBarrier[2]      = false;
+//isInBarrier[3]      = false;
 roundCount[0]       = 0;
 roundCount[1]       = 0;
 roundCount[2]       = 0;
-        //carPID[3] = run Car(UP, 3);
-        //carPID[4] = run Car(DOWN,4);
-        //carPID[5] = run Car(DOWN,5);
-        //carPID[6] = run Car(DOWN,6);
-        //carPID[7] = run Car(DOWN,7);
+//roundCount[3]       = 0;
     }
 }
 
@@ -59,7 +60,7 @@ proctype Car(byte type; byte num)
 beforeBarrier:   
         
         do
-        :: true -> skip; //(*) bare skip. Hvorfor dur det ikke med det?
+        :: true -> skip; 
         :: true -> break;
         od;
         
@@ -71,6 +72,7 @@ barrierEntry:
         //Using goto returnBarrier instead of an actual return
 
         roundCount[num]++; //Allowed to be atomic.
+        isInBarrier[num] = true;
         
         if
         :: !isOn -> goto returnBarrier;
@@ -113,20 +115,18 @@ barrierEntry:
         
 
 returnBarrier:
-        skip;	
+        skip;
+		isInBarrier[num] = false;
+		skip;
 		
 afterBarrier:
-        
-        do
-        :: true -> skip;
-        :: true -> break;
-        od;
+        skip;
         
         
     od;
 }
 
 
-ltl safetyProperty{[]( !( (roundCount[0] > roundCount[1] || roundCount[0] > roundCount[2]) &&  Car[carPID[0]]@afterBarrier) )}
+//ltl safetyProperty{[]( !( (roundCount[0] > roundCount[1] || roundCount[0] > roundCount[2]) &&  Car[carPID[0]]@afterBarrier) )}
 
-ltl livenessProperty{[] (((Car[carPID[0]]@barrierEntry && Car[carPID[1]]@barrierEntry && Car[carPID[2]]@barrierEntry) &&  (roundCount[0] == roundCount[1] && roundCount[1] == roundCount[2])) -> ((<> (Car[carPID[0]]@afterBarrier)) && (<> (Car[carPID[1]]@afterBarrier)) && (<> (Car[carPID[2]]@afterBarrier))) )}  
+ltl livenessProperty{[] ( ( (isInBarrier[0] && isInBarrier[1] && isInBarrier[2]) &&  (roundCount[0] == roundCount[1] && roundCount[0] == roundCount[2])) -> ((<> (Car[carPID[0]]@afterBarrier)) && (<> (Car[carPID[1]]@afterBarrier)) && (<> (Car[carPID[2]]@afterBarrier)) ) )}  

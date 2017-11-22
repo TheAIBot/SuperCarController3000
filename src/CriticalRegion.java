@@ -1,7 +1,6 @@
 import java.util.Arrays;
 
 public class CriticalRegion {
-	//TODO one could make the critical region fair.
 	private int upCarsCount   = 0; //Invariant: (noUpCars == 0 || noDownCars == 0)
 	private int downCarsCount = 0; //Implemented as a variant of the reader/writer problem, with passing the baton.
 	private int delayedDownCarsCount = 0;
@@ -11,7 +10,6 @@ public class CriticalRegion {
 	private final Semaphore waitDownCars 	  = new Semaphore(0);
 	
 	public void enter(int num) throws InterruptedException {
-		//TODO it is a variant of the reader/writer problem. It is implemented with the passing the baton technique.
 		if (num  <= 4) {
 			enterUpCar();
 		} else {
