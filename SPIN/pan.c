@@ -493,91 +493,89 @@ int _;	/* predefined write-only variable */
 #endif
 
 short src_ln4 [] = {
-	  0,  12,  12,  13,  13,  11,  15,  11, 
-	 17,  17,  16,  19,  16,  19,   0, };
+	  0,  33,  33,  33,  34,  34,  32,  36, 
+	 32,  37,  38,   0, };
 S_F_MAP src_file4 [] = {
-	{ "-", 0, 0 },
-	{ "_spin_nvr.tmp", 1, 13 },
-	{ "-", 14, 15 }
-};
-short *src_claim;
-uchar reached4 [] = {
-	  0,   1,   1,   1,   1,   0,   1,   1, 
-	  1,   1,   0,   1,   1,   0,   0, };
-uchar *loopstate4;
-
-short src_ln3 [] = {
-	  0,   3,   3,   3,   4,   4,   2,   6, 
-	  2,   7,   8,   0, };
-S_F_MAP src_file3 [] = {
 	{ "-", 0, 0 },
 	{ "_spin_nvr.tmp", 1, 10 },
 	{ "-", 11, 12 }
 };
-uchar reached3 [] = {
+short *src_claim;
+uchar reached4 [] = {
 	  0,   1,   0,   1,   1,   1,   0,   1, 
 	  1,   1,   0,   0, };
+uchar *loopstate4;
+
+short src_ln3 [] = {
+	  0,  12,  12,  13,  13,  14,  14,  15, 
+	 15,  11,  17,  11,  19,  19,  18,  21, 
+	 18,  23,  23,  22,  25,  22,  27,  27, 
+	 26,  29,  26,  29,   0, };
+S_F_MAP src_file3 [] = {
+	{ "-", 0, 0 },
+	{ "_spin_nvr.tmp", 1, 27 },
+	{ "-", 28, 29 }
+};
+uchar reached3 [] = {
+	  0,   1,   1,   1,   1,   1,   1,   1, 
+	  1,   0,   1,   1,   1,   1,   0,   1, 
+	  1,   1,   1,   0,   1,   1,   1,   1, 
+	  0,   1,   1,   0,   0, };
 uchar *loopstate3;
 
 short src_ln2 [] = {
-	  0, 147, 148, 149, 149, 149, 151, 151, 
-	152, 152, 153, 153, 150, 155, 149, 155, 
-	155, 155, 156, 155, 156, 145, 144, 159, 
-	144, 159,   0, };
+	  0,   3,   3,   3,   4,   4,   2,   6, 
+	  2,   7,   8,   0, };
 S_F_MAP src_file2 [] = {
 	{ "-", 0, 0 },
-	{ "Part3-a.pml", 1, 25 },
-	{ "-", 26, 27 }
+	{ "_spin_nvr.tmp", 1, 10 },
+	{ "-", 11, 12 }
 };
 uchar reached2 [] = {
-	  0,   1,   0,   0,   0,   1,   1,   0, 
-	  1,   0,   1,   0,   0,   1,   0,   1, 
-	  1,   0,   1,   1,   0,   1,   0,   1, 
-	  1,   0,   0, };
+	  0,   1,   0,   1,   1,   1,   0,   1, 
+	  1,   1,   0,   0, };
 uchar *loopstate2;
 
 short src_ln1 [] = {
-	  0,  65,  68,  68,  69,  69,  67,  72, 
-	 67,  75,  75,  76,  76,  74,  78,  74, 
-	 78,  80,  84,  87,  87,  88,  88,  86, 
-	 91,  91,  91,  91,  91,  91,  93,  94, 
-	 94,  95,  96,  96,  92,  99,  99, 100, 
-	101, 104, 105, 106, 107, 108, 108, 109, 
-	110, 110, 103, 113, 113, 113, 114, 114, 
-	114, 114, 114, 116, 117, 118, 119, 119, 
-	120, 121, 121, 115, 124, 124, 124, 128, 
-	132, 135, 135, 136, 136, 134, 140, 134, 
-	 63, 141,  63, 141,   0, };
+	  0,  58,  62,  62,  63,  63,  61,  66, 
+	 61,  66,  68,  73,  76,  76,  77,  77, 
+	 75,  80,  80,  80,  80,  80,  80,  82, 
+	 83,  83,  84,  85,  85,  81,  88,  88, 
+	 89,  92,  93,  94,  95,  96,  96,  97, 
+	 98,  98,  91, 101, 101, 101, 102, 102, 
+	102, 102, 102, 104, 105, 106, 107, 107, 
+	108, 109, 109, 103, 112, 112, 112, 116, 
+	121, 121, 122, 122, 120, 126, 120,  56, 
+	127,  56, 127,   0, };
 S_F_MAP src_file1 [] = {
 	{ "-", 0, 0 },
-	{ "Part3-a.pml", 1, 83 },
-	{ "-", 84, 85 }
+	{ "Part3-a.pml", 1, 74 },
+	{ "-", 75, 76 }
 };
 uchar reached1 [] = {
 	  0,   1,   1,   1,   1,   1,   0,   1, 
-	  1,   1,   1,   1,   1,   0,   1,   1, 
-	  1,   1,   0,   1,   1,   1,   1,   0, 
-	  1,   1,   0,   1,   1,   0,   1,   1, 
-	  0,   1,   1,   1,   0,   1,   0,   0, 
+	  1,   1,   1,   0,   1,   1,   1,   1, 
+	  0,   1,   1,   0,   1,   1,   0,   1, 
+	  1,   0,   1,   1,   1,   0,   1,   0, 
 	  0,   1,   0,   0,   0,   1,   0,   1, 
 	  1,   1,   0,   1,   1,   0,   1,   0, 
 	  1,   1,   0,   1,   0,   0,   1,   0, 
 	  1,   1,   1,   0,   1,   1,   0,   1, 
-	  0,   1,   1,   1,   1,   0,   1,   1, 
-	  0,   1,   1,   0,   0, };
+	  1,   1,   1,   1,   0,   1,   1,   0, 
+	  1,   1,   0,   0, };
 uchar *loopstate1;
 
 short src_ln0 [] = {
-	  0,  40,  41,  42,  43,  44,  45,  46, 
-	 47,  48,  54,  38,  56,   0, };
+	  0,  37,  38,  39,  40,  41,  42,  35, 
+	 49,   0, };
 S_F_MAP src_file0 [] = {
 	{ "-", 0, 0 },
-	{ "Part3-a.pml", 1, 12 },
-	{ "-", 13, 14 }
+	{ "Part3-a.pml", 1, 8 },
+	{ "-", 9, 10 }
 };
 uchar reached0 [] = {
 	  0,   1,   0,   0,   0,   0,   0,   0, 
-	  0,   0,   0,   0,   0,   0, };
+	  0,   0, };
 uchar *loopstate0;
 uchar reached5[3];  /* np_ */
 uchar *loopstate5;  /* np_ */
@@ -613,9 +611,9 @@ short Air[] = {  (short) Air0, (short) Air1, (short) Air2, (short) Air3, (short)
 char *procname[] = {
    ":init:",
    "Car",
-   "Check_noGreaterDifference",
-   "test2",
-   "obl0",
+   "safetyProperty",
+   "livenessProperty",
+   "test",
    ":np_:",
 	0
 };
@@ -625,9 +623,9 @@ enum btypes { NONE=0, N_CLAIM=1, I_PROC=2, A_PROC=3, P_PROC=4, E_TRACE=5, N_TRAC
 int Btypes[] = {
    2,	/* :init: */
    4,	/* Car */
-   4,	/* Check_noGreaterDifference */
-   1,	/* test2 */
-   1,	/* obl0 */
+   1,	/* safetyProperty */
+   1,	/* livenessProperty */
+   1,	/* test */
    0	/* :np_: */
 };
 
@@ -900,19 +898,22 @@ addproc(int calling_pid, int priority, int n, int par0, int par1)
 	switch (n) {
 #ifndef NOCLAIM
 	case 6:	/* claim select */
-		spin_c_typ[0] = 4; /* obl0 */
-		((P6 *)pptr(h))->c_cur[0] = 5;
-		reached4[5]=1;
-		spin_c_typ[1] = 3; /* test2 */
-		((P6 *)pptr(h))->c_cur[1] = 6;
-		reached3[6]=1;
-		((P6 *)pptr(h))->_t = 3;
+		spin_c_typ[0] = 4; /* test */
+		((P6 *)pptr(h))->c_cur[0] = 6;
+		reached4[6]=1;
+		spin_c_typ[1] = 3; /* livenessProperty */
+		((P6 *)pptr(h))->c_cur[1] = 9;
+		reached3[9]=1;
+		spin_c_typ[2] = 2; /* safetyProperty */
+		((P6 *)pptr(h))->c_cur[2] = 6;
+		reached2[6]=1;
+		((P6 *)pptr(h))->_t = 2;
 		((P6 *)pptr(h))->_p = 6;
-		((P6 *)pptr(h))->_n = 1; /* test2 */
-		src_claim = src_ln3;
+		((P6 *)pptr(h))->_n = 2; /* safetyProperty */
+		src_claim = src_ln2;
 #ifndef BFS
 		if (whichclaim == -1 && claimname == NULL)
-			printf("0: Claim test2 (3), from state 6\n");
+			printf("0: Claim safetyProperty (2), from state 6\n");
 #endif
 		if (whichclaim != -1)
 		{	select_claim(whichclaim);
@@ -929,13 +930,13 @@ addproc(int calling_pid, int priority, int n, int par0, int par1)
 		reached5[0] = 1;
 		accpstate[5][1] = 1;
 		break;
-	case 4:	/* obl0 */
+	case 4:	/* test */
 		((P4 *)pptr(h))->_t = 4;
-		((P4 *)pptr(h))->_p = 5;
+		((P4 *)pptr(h))->_p = 6;
 #ifdef HAS_PRIORITY
 		((P4 *)pptr(h))->_priority = priority; /* was: 1 */
 #endif
-		reached4[5]=1;
+		reached4[6]=1;
 		src_claim = src_ln4;
 		/* params: */
 		/* locals: */
@@ -945,13 +946,13 @@ addproc(int calling_pid, int priority, int n, int par0, int par1)
 		locinit4(h);
 #endif
 		break;
-	case 3:	/* test2 */
+	case 3:	/* livenessProperty */
 		((P3 *)pptr(h))->_t = 3;
-		((P3 *)pptr(h))->_p = 6;
+		((P3 *)pptr(h))->_p = 9;
 #ifdef HAS_PRIORITY
 		((P3 *)pptr(h))->_priority = priority; /* was: 1 */
 #endif
-		reached3[6]=1;
+		reached3[9]=1;
 		src_claim = src_ln3;
 		/* params: */
 		/* locals: */
@@ -961,22 +962,17 @@ addproc(int calling_pid, int priority, int n, int par0, int par1)
 		locinit3(h);
 #endif
 		break;
-	case 2:	/* Check_noGreaterDifference */
+	case 2:	/* safetyProperty */
 		((P2 *)pptr(h))->_t = 2;
-		((P2 *)pptr(h))->_p = 22;
+		((P2 *)pptr(h))->_p = 6;
 #ifdef HAS_PRIORITY
 		((P2 *)pptr(h))->_priority = priority; /* was: 1 */
 #endif
-		reached2[22]=1;
+		reached2[6]=1;
+		src_claim = src_ln2;
 		/* params: */
 		/* locals: */
-		((P2 *)pptr(h))->_3_9_minValue = 2147483647;
-		((P2 *)pptr(h))->_3_9_maxValue = 0;
-		((P2 *)pptr(h))->_3_9_i = 0;
 #ifdef VAR_RANGES
-		logval("Check_noGreaterDifference:minValue", ((P2 *)pptr(h))->_3_9_minValue);
-		logval("Check_noGreaterDifference:maxValue", ((P2 *)pptr(h))->_3_9_maxValue);
-		logval("Check_noGreaterDifference:i", ((P2 *)pptr(h))->_3_9_i);
 #endif
 #ifdef HAS_CODE
 		locinit2(h);
@@ -984,11 +980,11 @@ addproc(int calling_pid, int priority, int n, int par0, int par1)
 		break;
 	case 1:	/* Car */
 		((P1 *)pptr(h))->_t = 1;
-		((P1 *)pptr(h))->_p = 80;
+		((P1 *)pptr(h))->_p = 71;
 #ifdef HAS_PRIORITY
 		((P1 *)pptr(h))->_priority = priority; /* was: 1 */
 #endif
-		reached1[80]=1;
+		reached1[71]=1;
 		/* params: */
 		((P1 *)pptr(h))->type = par0;
 		((P1 *)pptr(h))->num = par1;
@@ -1005,11 +1001,11 @@ addproc(int calling_pid, int priority, int n, int par0, int par1)
 		break;
 	case 0:	/* :init: */
 		((P0 *)pptr(h))->_t = 0;
-		((P0 *)pptr(h))->_p = 11;
+		((P0 *)pptr(h))->_p = 7;
 #ifdef HAS_PRIORITY
 		((P0 *)pptr(h))->_priority = priority; /* was: 1 */
 #endif
-		reached0[11]=1;
+		reached0[7]=1;
 		/* params: */
 		/* locals: */
 #ifdef VAR_RANGES
@@ -1157,10 +1153,13 @@ run(void)
 	if ((Maxbody % WS) != 0)
 		Maxbody += WS - (Maxbody % WS);
 
-	accpstate[4][10] = 1;
-	accpstate[3][9] = 1;
-	visstate[1][72] = 1;
-	visstate[1][17] = 1;
+	accpstate[4][9] = 1;
+	accpstate[3][24] = 1;
+	accpstate[3][19] = 1;
+	accpstate[3][14] = 1;
+	accpstate[2][9] = 1;
+	visstate[1][68] = 1;
+	visstate[1][10] = 1;
 	retrans(0, _nstates0, _start0, src_ln0, reached0, loopstate0);
 	retrans(1, _nstates1, _start1, src_ln1, reached1, loopstate1);
 	retrans(2, _nstates2, _start2, src_ln2, reached2, loopstate2);
@@ -12491,12 +12490,6 @@ do_reach(void)
 void
 iniglobals(int calling_pid)
 {
-	{	int l_in;
-		for (l_in = 0; l_in < 3; l_in++)
-		{
-			isInBarrier[l_in] = 0;
-		}
-	}
 		now.isOn = 1;
 	{	int l_in;
 		for (l_in = 0; l_in < 3; l_in++)
@@ -14260,10 +14253,7 @@ c_locals(int pid, int tp)
 		/* none */
 		break;
 	case 2:
-		printf("local vars proc %d (Check_noGreaterDifference):\n", pid);
-	printf("	int    minValue:	%d\n", ((P2 *)pptr(pid))->_3_9_minValue);
-	printf("	int    maxValue:	%d\n", ((P2 *)pptr(pid))->_3_9_maxValue);
-	printf("	int    i:	%d\n", ((P2 *)pptr(pid))->_3_9_i);
+		/* none */
 		break;
 	case 1:
 		printf("local vars proc %d (Car):\n", pid);
@@ -14288,7 +14278,7 @@ c_chandump(int unused)
 {	unused++; /* avoid complaints */
 }
 
-Trans *t_id_lkup[143];
+Trans *t_id_lkup[129];
 
 
 #ifdef BFS_PAR

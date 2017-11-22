@@ -1,20 +1,39 @@
-never test2 {    /* !([] (! ((((Car[carPID[0]]@barrierEntry)) && ((Car[carPID[1]]@barrierEntry))) && ((Car[carPID[2]]@barrierEntry))))) */
+never safetyProperty {    /* !([] (! ((((roundCount[0]>roundCount[1])) || ((roundCount[0]>roundCount[2]))) && ((Car[carPID[0]]@afterBarrier))))) */
 T0_init:
 	do
-	:: atomic { (! ((! ((((Car[carPID[0]]@barrierEntry)) && ((Car[carPID[1]]@barrierEntry))) && ((Car[carPID[2]]@barrierEntry)))))) -> assert(!(! ((! ((((Car[carPID[0]]@barrierEntry)) && ((Car[carPID[1]]@barrierEntry))) && ((Car[carPID[2]]@barrierEntry))))))) }
+	:: atomic { (! ((! ((((roundCount[0]>roundCount[1])) || ((roundCount[0]>roundCount[2]))) && ((Car[carPID[0]]@afterBarrier)))))) -> assert(!(! ((! ((((roundCount[0]>roundCount[1])) || ((roundCount[0]>roundCount[2]))) && ((Car[carPID[0]]@afterBarrier))))))) }
 	:: (1) -> goto T0_init
 	od;
 accept_all:
 	skip
 }
-never obl0 {    /* !([] ((! ((Car[carPID[0]]@barrierEntry))) || (<> ((Car[carPID[0]]@afterBarrier))))) */
+never livenessProperty {    /* !([] ((! (((((Car[carPID[0]]@barrierEntry)) && ((Car[carPID[1]]@barrierEntry))) && ((Car[carPID[2]]@barrierEntry))) && (((roundCount[0]==roundCount[1])) && ((roundCount[1]==roundCount[2]))))) || (((<> ((Car[carPID[0]]@afterBarrier))) && (<> ((Car[carPID[1]]@afterBarrier)))) && (<> ((Car[carPID[2]]@afterBarrier)))))) */
 T0_init:
 	do
-	:: (! ((! ((Car[carPID[0]]@barrierEntry)))) && ! (((Car[carPID[0]]@afterBarrier)))) -> goto accept_S4
+	:: (! ((! (((((Car[carPID[0]]@barrierEntry)) && ((Car[carPID[1]]@barrierEntry))) && ((Car[carPID[2]]@barrierEntry))) && (((roundCount[0]==roundCount[1])) && ((roundCount[1]==roundCount[2])))))) && ! (((Car[carPID[2]]@afterBarrier)))) -> goto accept_S6
+	:: (! ((! (((((Car[carPID[0]]@barrierEntry)) && ((Car[carPID[1]]@barrierEntry))) && ((Car[carPID[2]]@barrierEntry))) && (((roundCount[0]==roundCount[1])) && ((roundCount[1]==roundCount[2])))))) && ! (((Car[carPID[1]]@afterBarrier)))) -> goto accept_S11
+	:: (! ((! (((((Car[carPID[0]]@barrierEntry)) && ((Car[carPID[1]]@barrierEntry))) && ((Car[carPID[2]]@barrierEntry))) && (((roundCount[0]==roundCount[1])) && ((roundCount[1]==roundCount[2])))))) && ! (((Car[carPID[0]]@afterBarrier)))) -> goto accept_S16
 	:: (1) -> goto T0_init
 	od;
-accept_S4:
+accept_S6:
 	do
-	:: (! (((Car[carPID[0]]@afterBarrier)))) -> goto accept_S4
+	:: (! (((Car[carPID[2]]@afterBarrier)))) -> goto accept_S6
 	od;
+accept_S11:
+	do
+	:: (! (((Car[carPID[1]]@afterBarrier)))) -> goto accept_S11
+	od;
+accept_S16:
+	do
+	:: (! (((Car[carPID[0]]@afterBarrier)))) -> goto accept_S16
+	od;
+}
+never test {    /* !([] (! (((((Car[carPID[0]]@barrierEntry)) && ((Car[carPID[1]]@barrierEntry))) && ((Car[carPID[2]]@barrierEntry))) && (((roundCount[0]==roundCount[1])) && ((roundCount[1]==roundCount[2])))))) */
+T0_init:
+	do
+	:: atomic { (! ((! (((((Car[carPID[0]]@barrierEntry)) && ((Car[carPID[1]]@barrierEntry))) && ((Car[carPID[2]]@barrierEntry))) && (((roundCount[0]==roundCount[1])) && ((roundCount[1]==roundCount[2]))))))) -> assert(!(! ((! (((((Car[carPID[0]]@barrierEntry)) && ((Car[carPID[1]]@barrierEntry))) && ((Car[carPID[2]]@barrierEntry))) && (((roundCount[0]==roundCount[1])) && ((roundCount[1]==roundCount[2])))))))) }
+	:: (1) -> goto T0_init
+	od;
+accept_all:
+	skip
 }
