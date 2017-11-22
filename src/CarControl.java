@@ -44,7 +44,7 @@ class Car extends Thread {
 
     CarDisplayI cd;                  // GUI part
     
-    final CriticalRegion[][] mapCriticalRegions;
+    final Alley[][] mapCriticalRegions;
     final Semaphore[][] mapOfCars;
     final Semaphore carStopper;
 
@@ -58,7 +58,7 @@ class Car extends Thread {
     int speed;                       // Current car speed
     Pos curpos;                      // Current position
 
-    public Car(int no, CarDisplayI cd, Gate g, CriticalRegion[][] mapCriticalRegions, Semaphore[][] mapOfCars, Semaphore carStopper) {
+    public Car(int no, CarDisplayI cd, Gate g, Alley[][] mapCriticalRegions, Semaphore[][] mapOfCars, Semaphore carStopper) {
 
         this.num = no;
         this.cd = cd;
@@ -128,7 +128,7 @@ class Car extends Thread {
             speed = chooseSpeed();
             curpos = startpos;
             cd.mark(curpos,col,num);
-            CriticalRegion currentCriticalRegion = null;
+            Alley currentCriticalRegion = null;
 
             while (true) { 
                 sleep(speed());
@@ -139,7 +139,7 @@ class Car extends Thread {
                 }
 
                 final Pos newpos = nextPos(curpos);
-                final CriticalRegion nextCriticalRegion = mapCriticalRegions[newpos.row][newpos.col];
+                final Alley nextCriticalRegion = mapCriticalRegions[newpos.row][newpos.col];
                 //if at critical region then enter it before reserving the tile. otherwise a deadlock
                 //can occur
                 if (nextCriticalRegion != null && !nextCriticalRegion.equals(currentCriticalRegion)) {
@@ -189,7 +189,7 @@ public class CarControl implements CarControlI{
     Gate[] gate;              // Gates
 
     //a map showing where different critical sections are located
-    private final CriticalRegion[][] mapOfCriticalRegions = new CriticalRegion[11][12];
+    private final Alley[][] mapOfCriticalRegions = new Alley[11][12];
     //used to make sure that the car don't run into each other
     private final Semaphore[][] mapOfCars = new Semaphore[11][12];
     //is here for testing purposes.
@@ -231,7 +231,7 @@ public class CarControl implements CarControlI{
         //for each tile the critical region is part of, give a reference to the
         //critical region.
         //Tiles that aren't part of a critical region, should be null.
-        CriticalRegion alley = new CriticalRegion();
+        Alley alley = new Alley();
         for (int i = 0; i < criticalRegionArea.length; i++) {
 			mapOfCriticalRegions[criticalRegionArea[i].row][criticalRegionArea[i].col] = alley;
 		}

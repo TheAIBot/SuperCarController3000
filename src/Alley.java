@@ -1,4 +1,4 @@
-public class CriticalRegion {
+public class Alley {
 	//Invariant: (noUpCars == 0 || noDownCars == 0)
 	//Implemented as a variant of the reader/writer problem, with passing the baton.
 
