@@ -74,6 +74,12 @@ class ConcurrencyTests {
                 }
             }).start();
             while (true) {
+                //instead of only messing withthe barrier
+                //here will also be a period where
+                //the barrier is quickly turn on/off
+                //this is done to detect errors where
+                //a race condition is introduced by quickly 
+                //turning on and off the barrier
                 long startTime = System.nanoTime();
                 while (System.nanoTime() - startTime < 3_000_000_000l) {
                     Thread.sleep(rand.nextInt(150));
@@ -104,6 +110,8 @@ class ConcurrencyTests {
     private static void messWithBarrier(final Random rand, final Cars playground)
     {
         final int toDo = rand.nextInt(300);
+        //only a low chance to shutdown
+        //because shutdown is a slow blocking call
         if (toDo < 140) {
             playground.barrierOn();
         }
